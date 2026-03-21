@@ -42,7 +42,7 @@ _ACK_LATENCY_WARN_THRESHOLD_S = 2.0 / float(REQUESTED_HZ)
 
 def _resolve_wrapper_version() -> str:
     try:
-        return importlib_metadata.version("hackarena3-wrapper")
+        return importlib_metadata.version("hackarena3")
     except importlib_metadata.PackageNotFoundError:
         return "dev"
 
