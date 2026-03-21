@@ -1,0 +1,26 @@
+[project]
+name = "hackarena3-wrapper"
+version = "0.1.0-beta.1"
+description = "HackArena 3.0 Python API Wrapper"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "KN init"}]
+license = {file = "LICENSE"}
+dependencies = [
+    "grpcio>=1.62,<2",
+    "protobuf>=7.34.1,<8",
+    "tomli>=2.0.1; python_version < '3.11'",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+hackarena3 = ["py.typed", "proto/**/*.pyi"]

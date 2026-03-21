@@ -1,0 +1,19 @@
+schema = 1
+
+[wrapper]
+language = "python"
+
+[runtime]
+engine = "python"
+version = "3.10"
+
+[run]
+entrypoint = ["python", "-m", "bot"]
+source_dir = "user/src"
+
+[submit]
+include = ["user/src"]
+exclude = [
+  "**/__pycache__/**",
+  "**/*.pyc"
+]
