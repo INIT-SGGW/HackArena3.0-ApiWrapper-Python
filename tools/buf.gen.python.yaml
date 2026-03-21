@@ -1,0 +1,10 @@
+version: v1
+
+plugins:
+  - plugin: buf.build/protocolbuffers/python
+    out: .
+  - plugin: buf.build/grpc/python
+    out: .
+  - name: mypy
+    out: .
+    path: protoc-gen-mypy
