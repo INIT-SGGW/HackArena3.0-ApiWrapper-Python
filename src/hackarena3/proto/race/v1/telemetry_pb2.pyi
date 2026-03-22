@@ -118,6 +118,80 @@ PITSTOP_ZONE_FLAG_EXIT: PitstopZoneFlag.ValueType  # 4
 """Bit 2 (4): vehicle overlaps pitstop exit zone."""
 Global___PitstopZoneFlag: _TypeAlias = PitstopZoneFlag  # noqa: Y015
 
+class _TireType:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _TireTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_TireType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    TIRE_TYPE_UNSPECIFIED: _TireType.ValueType  # 0
+    TIRE_TYPE_HARD: _TireType.ValueType  # 1
+    TIRE_TYPE_SOFT: _TireType.ValueType  # 2
+    TIRE_TYPE_WET: _TireType.ValueType  # 3
+
+class TireType(_TireType, metaclass=_TireTypeEnumTypeWrapper):
+    """Installed tire compound for a vehicle."""
+
+TIRE_TYPE_UNSPECIFIED: TireType.ValueType  # 0
+TIRE_TYPE_HARD: TireType.ValueType  # 1
+TIRE_TYPE_SOFT: TireType.ValueType  # 2
+TIRE_TYPE_WET: TireType.ValueType  # 3
+Global___TireType: _TypeAlias = TireType  # noqa: Y015
+
+@_typing.final
+class TireWearPerWheel(_message.Message):
+    """Per-wheel tire wear values normalized to range [0.0, 1.0]."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    FRONT_LEFT_FIELD_NUMBER: _builtins.int
+    FRONT_RIGHT_FIELD_NUMBER: _builtins.int
+    REAR_LEFT_FIELD_NUMBER: _builtins.int
+    REAR_RIGHT_FIELD_NUMBER: _builtins.int
+    front_left: _builtins.float
+    front_right: _builtins.float
+    rear_left: _builtins.float
+    rear_right: _builtins.float
+    def __init__(
+        self,
+        *,
+        front_left: _builtins.float = ...,
+        front_right: _builtins.float = ...,
+        rear_left: _builtins.float = ...,
+        rear_right: _builtins.float = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["front_left", b"front_left", "front_right", b"front_right", "rear_left", b"rear_left", "rear_right", b"rear_right"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TireWearPerWheel: _TypeAlias = TireWearPerWheel  # noqa: Y015
+
+@_typing.final
+class TireTemperaturePerWheel(_message.Message):
+    """Per-wheel tire temperature in degrees Celsius."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    FRONT_LEFT_CELSIUS_FIELD_NUMBER: _builtins.int
+    FRONT_RIGHT_CELSIUS_FIELD_NUMBER: _builtins.int
+    REAR_LEFT_CELSIUS_FIELD_NUMBER: _builtins.int
+    REAR_RIGHT_CELSIUS_FIELD_NUMBER: _builtins.int
+    front_left_celsius: _builtins.float
+    front_right_celsius: _builtins.float
+    rear_left_celsius: _builtins.float
+    rear_right_celsius: _builtins.float
+    def __init__(
+        self,
+        *,
+        front_left_celsius: _builtins.float = ...,
+        front_right_celsius: _builtins.float = ...,
+        rear_left_celsius: _builtins.float = ...,
+        rear_right_celsius: _builtins.float = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["front_left_celsius", b"front_left_celsius", "front_right_celsius", b"front_right_celsius", "rear_left_celsius", b"rear_left_celsius", "rear_right_celsius", b"rear_right_celsius"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TireTemperaturePerWheel: _TypeAlias = TireTemperaturePerWheel  # noqa: Y015
+
 @_typing.final
 class GhostModeState(_message.Message):
     """Runtime ghost mode state for a single vehicle.
@@ -201,6 +275,9 @@ class CarParticipantState(_message.Message):
     GHOST_MODE_FIELD_NUMBER: _builtins.int
     PITSTOP_ZONE_FLAGS_FIELD_NUMBER: _builtins.int
     WHEELS_IN_PITSTOP_FIELD_NUMBER: _builtins.int
+    TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    TIRE_WEAR_FIELD_NUMBER: _builtins.int
+    TIRE_TEMPERATURE_CELSIUS_FIELD_NUMBER: _builtins.int
     last_applied_client_seq: _builtins.int
     speed_mps: _builtins.float
     engine_rpm: _builtins.float
@@ -217,9 +294,19 @@ class CarParticipantState(_message.Message):
     """
     wheels_in_pitstop: _builtins.int
     """Number of wheels currently inside pitstop zones (range 0..4)."""
+    tire_type: Global___TireType.ValueType
+    """Installed tire compound."""
     @_builtins.property
     def ghost_mode(self) -> Global___GhostModeState:
         """Runtime ghost mode state for this vehicle."""
+
+    @_builtins.property
+    def tire_wear(self) -> Global___TireWearPerWheel:
+        """Tire wear per wheel, normalized to [0.0, 1.0]."""
+
+    @_builtins.property
+    def tire_temperature_celsius(self) -> Global___TireTemperaturePerWheel:
+        """Tire temperature per wheel in degrees Celsius."""
 
     def __init__(
         self,
@@ -233,10 +320,13 @@ class CarParticipantState(_message.Message):
         ghost_mode: Global___GhostModeState | None = ...,
         pitstop_zone_flags: _builtins.int = ...,
         wheels_in_pitstop: _builtins.int = ...,
+        tire_type: Global___TireType.ValueType = ...,
+        tire_wear: Global___TireWearPerWheel | None = ...,
+        tire_temperature_celsius: Global___TireTemperaturePerWheel | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake_applied", b"brake_applied", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "throttle_applied", b"throttle_applied", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake_applied", b"brake_applied", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "throttle_applied", b"throttle_applied", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___CarParticipantState: _TypeAlias = CarParticipantState  # noqa: Y015

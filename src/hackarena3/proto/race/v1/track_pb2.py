@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from hackarena3.proto.race.v1 import common_pb2 as race_dot_v1_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13race/v1/track.proto\x12\x07race.v1\x1a\x14race/v1/common.proto\"\xc7\x01\n\tTrackData\x12\x15\n\x06map_id\x18\x01 \x01(\tR\x05mapId\x12 \n\x0clap_length_m\x18\x02 \x01(\x01R\nlapLengthM\x12H\n\x12\x63\x65nterline_samples\x18\x03 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x11\x63\x65nterlineSamples\x12\x37\n\x0cpitstop_data\x18\x04 \x01(\x0b\x32\x14.race.v1.PitstopDataR\x0bpitstopData\"\xa1\x02\n\x0bPitstopData\x12S\n\x18\x65nter_centerline_samples\x18\x01 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x16\x65nterCenterlineSamples\x12O\n\x16\x66ix_centerline_samples\x18\x02 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x14\x66ixCenterlineSamples\x12Q\n\x17\x65xit_centerline_samples\x18\x03 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x15\x65xitCenterlineSamples\x12\x19\n\x08length_m\x18\x04 \x01(\x02R\x07lengthM\"\xf2\x02\n\x10\x43\x65nterlineSample\x12\x0f\n\x03s_m\x18\x01 \x01(\x01R\x02sM\x12,\n\x08position\x18\x02 \x01(\x0b\x32\x10.race.v1.Vector3R\x08position\x12*\n\x07tangent\x18\x03 \x01(\x0b\x32\x10.race.v1.Vector3R\x07tangent\x12(\n\x06normal\x18\x04 \x01(\x0b\x32\x10.race.v1.Vector3R\x06normal\x12&\n\x05right\x18\x05 \x01(\x0b\x32\x10.race.v1.Vector3R\x05right\x12 \n\x0cleft_width_m\x18\x06 \x01(\x02R\nleftWidthM\x12\"\n\rright_width_m\x18\x07 \x01(\x02R\x0brightWidthM\x12#\n\rcurvature_1pm\x18\x08 \x01(\x02R\x0c\x63urvature1pm\x12\x1b\n\tgrade_rad\x18\t \x01(\x02R\x08gradeRad\x12\x19\n\x08\x62\x61nk_rad\x18\n \x01(\x02R\x07\x62\x61nkRad\",\n\x13GetTrackDataRequest\x12\x15\n\x06map_id\x18\x01 \x01(\tR\x05mapId\"@\n\x14GetTrackDataResponse\x12(\n\x05track\x18\x01 \x01(\x0b\x32\x12.race.v1.TrackDataR\x05track2[\n\x0cTrackService\x12K\n\x0cGetTrackData\x12\x1c.race.v1.GetTrackDataRequest\x1a\x1d.race.v1.GetTrackDataResponseB\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13race/v1/track.proto\x12\x07race.v1\x1a\x14race/v1/common.proto\"\xc7\x01\n\tTrackData\x12\x15\n\x06map_id\x18\x01 \x01(\tR\x05mapId\x12 \n\x0clap_length_m\x18\x02 \x01(\x01R\nlapLengthM\x12H\n\x12\x63\x65nterline_samples\x18\x03 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x11\x63\x65nterlineSamples\x12\x37\n\x0cpitstop_data\x18\x04 \x01(\x0b\x32\x14.race.v1.PitstopDataR\x0bpitstopData\"\xa1\x02\n\x0bPitstopData\x12S\n\x18\x65nter_centerline_samples\x18\x01 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x16\x65nterCenterlineSamples\x12O\n\x16\x66ix_centerline_samples\x18\x02 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x14\x66ixCenterlineSamples\x12Q\n\x17\x65xit_centerline_samples\x18\x03 \x03(\x0b\x32\x19.race.v1.CenterlineSampleR\x15\x65xitCenterlineSamples\x12\x19\n\x08length_m\x18\x04 \x01(\x02R\x07lengthM\"\\\n\x0bGroundWidth\x12\x17\n\x07width_m\x18\x01 \x01(\x02R\x06widthM\x12\x34\n\x0bground_type\x18\x02 \x01(\x0e\x32\x13.race.v1.GroundTypeR\ngroundType\"\xba\x04\n\x10\x43\x65nterlineSample\x12\x0f\n\x03s_m\x18\x01 \x01(\x01R\x02sM\x12,\n\x08position\x18\x02 \x01(\x0b\x32\x10.race.v1.Vector3R\x08position\x12*\n\x07tangent\x18\x03 \x01(\x0b\x32\x10.race.v1.Vector3R\x07tangent\x12(\n\x06normal\x18\x04 \x01(\x0b\x32\x10.race.v1.Vector3R\x06normal\x12&\n\x05right\x18\x05 \x01(\x0b\x32\x10.race.v1.Vector3R\x05right\x12 \n\x0cleft_width_m\x18\x06 \x01(\x02R\nleftWidthM\x12\"\n\rright_width_m\x18\x07 \x01(\x02R\x0brightWidthM\x12#\n\rcurvature_1pm\x18\x08 \x01(\x02R\x0c\x63urvature1pm\x12\x1b\n\tgrade_rad\x18\t \x01(\x02R\x08gradeRad\x12\x19\n\x08\x62\x61nk_rad\x18\n \x01(\x02R\x07\x62\x61nkRad\x12\'\n\x10max_left_width_m\x18\x0b \x01(\x02R\rmaxLeftWidthM\x12)\n\x11max_right_width_m\x18\x0c \x01(\x02R\x0emaxRightWidthM\x12\x37\n\x0cleft_grounds\x18\r \x03(\x0b\x32\x14.race.v1.GroundWidthR\x0bleftGrounds\x12\x39\n\rright_grounds\x18\x0e \x03(\x0b\x32\x14.race.v1.GroundWidthR\x0crightGrounds\",\n\x13GetTrackDataRequest\x12\x15\n\x06map_id\x18\x01 \x01(\tR\x05mapId\"@\n\x14GetTrackDataResponse\x12(\n\x05track\x18\x01 \x01(\x0b\x32\x12.race.v1.TrackDataR\x05track*\x80\x01\n\nGroundType\x12\x17\n\x13GROUND_TYPE_ASPHALT\x10\x00\x12\x15\n\x11GROUND_TYPE_GRASS\x10\x01\x12\x16\n\x12GROUND_TYPE_GRAVEL\x10\x02\x12\x14\n\x10GROUND_TYPE_WALL\x10\x03\x12\x14\n\x10GROUND_TYPE_KERB\x10\x04\x32[\n\x0cTrackService\x12K\n\x0cGetTrackData\x12\x1c.race.v1.GetTrackDataRequest\x1a\x1d.race.v1.GetTrackDataResponseB\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,16 +33,20 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'race.v1.track_pb2', _global
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\021HA3.Proto.Race.V1'
+  _globals['_GROUNDTYPE']._serialized_start=1328
+  _globals['_GROUNDTYPE']._serialized_end=1456
   _globals['_TRACKDATA']._serialized_start=55
   _globals['_TRACKDATA']._serialized_end=254
   _globals['_PITSTOPDATA']._serialized_start=257
   _globals['_PITSTOPDATA']._serialized_end=546
-  _globals['_CENTERLINESAMPLE']._serialized_start=549
-  _globals['_CENTERLINESAMPLE']._serialized_end=919
-  _globals['_GETTRACKDATAREQUEST']._serialized_start=921
-  _globals['_GETTRACKDATAREQUEST']._serialized_end=965
-  _globals['_GETTRACKDATARESPONSE']._serialized_start=967
-  _globals['_GETTRACKDATARESPONSE']._serialized_end=1031
-  _globals['_TRACKSERVICE']._serialized_start=1033
-  _globals['_TRACKSERVICE']._serialized_end=1124
+  _globals['_GROUNDWIDTH']._serialized_start=548
+  _globals['_GROUNDWIDTH']._serialized_end=640
+  _globals['_CENTERLINESAMPLE']._serialized_start=643
+  _globals['_CENTERLINESAMPLE']._serialized_end=1213
+  _globals['_GETTRACKDATAREQUEST']._serialized_start=1215
+  _globals['_GETTRACKDATAREQUEST']._serialized_end=1259
+  _globals['_GETTRACKDATARESPONSE']._serialized_start=1261
+  _globals['_GETTRACKDATARESPONSE']._serialized_end=1325
+  _globals['_TRACKSERVICE']._serialized_start=1458
+  _globals['_TRACKSERVICE']._serialized_end=1549
 # @@protoc_insertion_point(module_scope)

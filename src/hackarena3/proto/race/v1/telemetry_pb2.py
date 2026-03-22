@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from hackarena3.proto.race.v1 import common_pb2 as race_dot_v1_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17race/v1/telemetry.proto\x12\x07race.v1\x1a\x14race/v1/common.proto\"\xd5\x01\n\x0eGhostModeState\x12&\n\x0f\x63\x61n_collide_now\x18\x01 \x01(\x08R\rcanCollideNow\x12-\n\x05phase\x18\x02 \x01(\x0e\x32\x17.race.v1.GhostModePhaseR\x05phase\x12\x35\n\x08\x62lockers\x18\x03 \x03(\x0e\x32\x19.race.v1.GhostModeBlockerR\x08\x62lockers\x12\x35\n\x17\x65xit_delay_remaining_ms\x18\x04 \x01(\rR\x14\x65xitDelayRemainingMs\"t\n\rCarKinematics\x12,\n\x08position\x18\x01 \x01(\x0b\x32\x10.race.v1.Vector3R\x08position\x12\x35\n\x0borientation\x18\x02 \x01(\x0b\x32\x13.race.v1.QuaternionR\x0borientation\"\xfe\x02\n\x13\x43\x61rParticipantState\x12\x35\n\x17last_applied_client_seq\x18\x01 \x01(\x04R\x14lastAppliedClientSeq\x12\x1b\n\tspeed_mps\x18\x02 \x01(\x02R\x08speedMps\x12\x1d\n\nengine_rpm\x18\x03 \x01(\x02R\tengineRpm\x12\x12\n\x04gear\x18\x04 \x01(\x05R\x04gear\x12)\n\x10throttle_applied\x18\x05 \x01(\x02R\x0fthrottleApplied\x12#\n\rbrake_applied\x18\x06 \x01(\x02R\x0c\x62rakeApplied\x12\x36\n\nghost_mode\x18\x07 \x01(\x0b\x32\x17.race.v1.GhostModeStateR\tghostMode\x12,\n\x12pitstop_zone_flags\x18\x08 \x01(\rR\x10pitstopZoneFlags\x12*\n\x11wheels_in_pitstop\x18\t \x01(\rR\x0fwheelsInPitstop\"\xdb\x01\n\x0e\x43\x61rRenderState\x12\x37\n\x0cwheel_speeds\x18\x01 \x01(\x0b\x32\x14.race.v1.WheelSpeedsR\x0bwheelSpeeds\x12\x46\n front_left_wheel_orientation_rad\x18\x02 \x01(\x02R\x1c\x66rontLeftWheelOrientationRad\x12H\n!front_right_wheel_orientation_rad\x18\x03 \x01(\x02R\x1d\x66rontRightWheelOrientationRad\"\xd2\x01\n\x14\x46rontendCarFullState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12:\n\ttelemetry\x18\x03 \x01(\x0b\x32\x1c.race.v1.CarParticipantStateR\ttelemetry\x12/\n\x06render\x18\x04 \x01(\x0b\x32\x17.race.v1.CarRenderStateR\x06render\"S\n\x1a\x46rontendSpectatorDebugInfo\x12\x35\n\x17\x65ngine_race_elapsed_sec\x18\x01 \x01(\x02R\x14\x65ngineRaceElapsedSec\"\xc3\x01\n\x19\x46rontendSpectatorSnapshot\x12\x12\n\x04tick\x18\x01 \x01(\x04R\x04tick\x12$\n\x0eserver_time_ms\x18\x02 \x01(\x04R\x0cserverTimeMs\x12\x31\n\x04\x63\x61rs\x18\x03 \x03(\x0b\x32\x1d.race.v1.FrontendCarFullStateR\x04\x63\x61rs\x12\x39\n\x05\x64\x65\x62ug\x18\x04 \x01(\x0b\x32#.race.v1.FrontendSpectatorDebugInfoR\x05\x64\x65\x62ug\"\xa1\x01\n\x14ParticipantSelfState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12:\n\ttelemetry\x18\x03 \x01(\x0b\x32\x1c.race.v1.CarParticipantStateR\ttelemetry\"\xa1\x01\n\x18ParticipantOpponentState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12\x36\n\nghost_mode\x18\x03 \x01(\x0b\x32\x17.race.v1.GhostModeStateR\tghostMode\"\xc3\x01\n\x13ParticipantSnapshot\x12\x12\n\x04tick\x18\x01 \x01(\x04R\x04tick\x12$\n\x0eserver_time_ms\x18\x02 \x01(\x04R\x0cserverTimeMs\x12\x31\n\x04self\x18\x03 \x01(\x0b\x32\x1d.race.v1.ParticipantSelfStateR\x04self\x12?\n\topponents\x18\x04 \x03(\x0b\x32!.race.v1.ParticipantOpponentStateR\topponents*\x91\x01\n\x0eGhostModePhase\x12 \n\x1cGHOST_MODE_PHASE_UNSPECIFIED\x10\x00\x12\x1d\n\x19GHOST_MODE_PHASE_INACTIVE\x10\x01\x12\x1b\n\x17GHOST_MODE_PHASE_ACTIVE\x10\x02\x12!\n\x1dGHOST_MODE_PHASE_PENDING_EXIT\x10\x03*\xbe\x02\n\x10GhostModeBlocker\x12\"\n\x1eGHOST_MODE_BLOCKER_UNSPECIFIED\x10\x00\x12/\n+GHOST_MODE_BLOCKER_LAPS_REQUIREMENT_NOT_MET\x10\x01\x12)\n%GHOST_MODE_BLOCKER_EXIT_SPEED_NOT_MET\x10\x02\x12)\n%GHOST_MODE_BLOCKER_EXIT_DELAY_RUNNING\x10\x03\x12-\n)GHOST_MODE_BLOCKER_VEHICLE_OVERLAP_ACTIVE\x10\x04\x12\x31\n-GHOST_MODE_BLOCKER_OVERLAP_EXIT_DELAY_RUNNING\x10\x05\x12\x1d\n\x19GHOST_MODE_BLOCKER_IN_PIT\x10\x06*\x88\x01\n\x0fPitstopZoneFlag\x12!\n\x1dPITSTOP_ZONE_FLAG_UNSPECIFIED\x10\x00\x12\x1b\n\x17PITSTOP_ZONE_FLAG_ENTER\x10\x01\x12\x19\n\x15PITSTOP_ZONE_FLAG_FIX\x10\x02\x12\x1a\n\x16PITSTOP_ZONE_FLAG_EXIT\x10\x04\x42\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x17race/v1/telemetry.proto\x12\x07race.v1\x1a\x14race/v1/common.proto\"\x8e\x01\n\x10TireWearPerWheel\x12\x1d\n\nfront_left\x18\x01 \x01(\x02R\tfrontLeft\x12\x1f\n\x0b\x66ront_right\x18\x02 \x01(\x02R\nfrontRight\x12\x1b\n\trear_left\x18\x03 \x01(\x02R\x08rearLeft\x12\x1d\n\nrear_right\x18\x04 \x01(\x02R\trearRight\"\xd1\x01\n\x17TireTemperaturePerWheel\x12,\n\x12\x66ront_left_celsius\x18\x01 \x01(\x02R\x10\x66rontLeftCelsius\x12.\n\x13\x66ront_right_celsius\x18\x02 \x01(\x02R\x11\x66rontRightCelsius\x12*\n\x11rear_left_celsius\x18\x03 \x01(\x02R\x0frearLeftCelsius\x12,\n\x12rear_right_celsius\x18\x04 \x01(\x02R\x10rearRightCelsius\"\xd5\x01\n\x0eGhostModeState\x12&\n\x0f\x63\x61n_collide_now\x18\x01 \x01(\x08R\rcanCollideNow\x12-\n\x05phase\x18\x02 \x01(\x0e\x32\x17.race.v1.GhostModePhaseR\x05phase\x12\x35\n\x08\x62lockers\x18\x03 \x03(\x0e\x32\x19.race.v1.GhostModeBlockerR\x08\x62lockers\x12\x35\n\x17\x65xit_delay_remaining_ms\x18\x04 \x01(\rR\x14\x65xitDelayRemainingMs\"t\n\rCarKinematics\x12,\n\x08position\x18\x01 \x01(\x0b\x32\x10.race.v1.Vector3R\x08position\x12\x35\n\x0borientation\x18\x02 \x01(\x0b\x32\x13.race.v1.QuaternionR\x0borientation\"\xc2\x04\n\x13\x43\x61rParticipantState\x12\x35\n\x17last_applied_client_seq\x18\x01 \x01(\x04R\x14lastAppliedClientSeq\x12\x1b\n\tspeed_mps\x18\x02 \x01(\x02R\x08speedMps\x12\x1d\n\nengine_rpm\x18\x03 \x01(\x02R\tengineRpm\x12\x12\n\x04gear\x18\x04 \x01(\x05R\x04gear\x12)\n\x10throttle_applied\x18\x05 \x01(\x02R\x0fthrottleApplied\x12#\n\rbrake_applied\x18\x06 \x01(\x02R\x0c\x62rakeApplied\x12\x36\n\nghost_mode\x18\x07 \x01(\x0b\x32\x17.race.v1.GhostModeStateR\tghostMode\x12,\n\x12pitstop_zone_flags\x18\x08 \x01(\rR\x10pitstopZoneFlags\x12*\n\x11wheels_in_pitstop\x18\t \x01(\rR\x0fwheelsInPitstop\x12.\n\ttire_type\x18\n \x01(\x0e\x32\x11.race.v1.TireTypeR\x08tireType\x12\x36\n\ttire_wear\x18\x0b \x01(\x0b\x32\x19.race.v1.TireWearPerWheelR\x08tireWear\x12Z\n\x18tire_temperature_celsius\x18\x0c \x01(\x0b\x32 .race.v1.TireTemperaturePerWheelR\x16tireTemperatureCelsius\"\xdb\x01\n\x0e\x43\x61rRenderState\x12\x37\n\x0cwheel_speeds\x18\x01 \x01(\x0b\x32\x14.race.v1.WheelSpeedsR\x0bwheelSpeeds\x12\x46\n front_left_wheel_orientation_rad\x18\x02 \x01(\x02R\x1c\x66rontLeftWheelOrientationRad\x12H\n!front_right_wheel_orientation_rad\x18\x03 \x01(\x02R\x1d\x66rontRightWheelOrientationRad\"\xd2\x01\n\x14\x46rontendCarFullState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12:\n\ttelemetry\x18\x03 \x01(\x0b\x32\x1c.race.v1.CarParticipantStateR\ttelemetry\x12/\n\x06render\x18\x04 \x01(\x0b\x32\x17.race.v1.CarRenderStateR\x06render\"S\n\x1a\x46rontendSpectatorDebugInfo\x12\x35\n\x17\x65ngine_race_elapsed_sec\x18\x01 \x01(\x02R\x14\x65ngineRaceElapsedSec\"\xc3\x01\n\x19\x46rontendSpectatorSnapshot\x12\x12\n\x04tick\x18\x01 \x01(\x04R\x04tick\x12$\n\x0eserver_time_ms\x18\x02 \x01(\x04R\x0cserverTimeMs\x12\x31\n\x04\x63\x61rs\x18\x03 \x03(\x0b\x32\x1d.race.v1.FrontendCarFullStateR\x04\x63\x61rs\x12\x39\n\x05\x64\x65\x62ug\x18\x04 \x01(\x0b\x32#.race.v1.FrontendSpectatorDebugInfoR\x05\x64\x65\x62ug\"\xa1\x01\n\x14ParticipantSelfState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12:\n\ttelemetry\x18\x03 \x01(\x0b\x32\x1c.race.v1.CarParticipantStateR\ttelemetry\"\xa1\x01\n\x18ParticipantOpponentState\x12\x15\n\x06\x63\x61r_id\x18\x01 \x01(\x04R\x05\x63\x61rId\x12\x36\n\nkinematics\x18\x02 \x01(\x0b\x32\x16.race.v1.CarKinematicsR\nkinematics\x12\x36\n\nghost_mode\x18\x03 \x01(\x0b\x32\x17.race.v1.GhostModeStateR\tghostMode\"\xc3\x01\n\x13ParticipantSnapshot\x12\x12\n\x04tick\x18\x01 \x01(\x04R\x04tick\x12$\n\x0eserver_time_ms\x18\x02 \x01(\x04R\x0cserverTimeMs\x12\x31\n\x04self\x18\x03 \x01(\x0b\x32\x1d.race.v1.ParticipantSelfStateR\x04self\x12?\n\topponents\x18\x04 \x03(\x0b\x32!.race.v1.ParticipantOpponentStateR\topponents*\x91\x01\n\x0eGhostModePhase\x12 \n\x1cGHOST_MODE_PHASE_UNSPECIFIED\x10\x00\x12\x1d\n\x19GHOST_MODE_PHASE_INACTIVE\x10\x01\x12\x1b\n\x17GHOST_MODE_PHASE_ACTIVE\x10\x02\x12!\n\x1dGHOST_MODE_PHASE_PENDING_EXIT\x10\x03*\xbe\x02\n\x10GhostModeBlocker\x12\"\n\x1eGHOST_MODE_BLOCKER_UNSPECIFIED\x10\x00\x12/\n+GHOST_MODE_BLOCKER_LAPS_REQUIREMENT_NOT_MET\x10\x01\x12)\n%GHOST_MODE_BLOCKER_EXIT_SPEED_NOT_MET\x10\x02\x12)\n%GHOST_MODE_BLOCKER_EXIT_DELAY_RUNNING\x10\x03\x12-\n)GHOST_MODE_BLOCKER_VEHICLE_OVERLAP_ACTIVE\x10\x04\x12\x31\n-GHOST_MODE_BLOCKER_OVERLAP_EXIT_DELAY_RUNNING\x10\x05\x12\x1d\n\x19GHOST_MODE_BLOCKER_IN_PIT\x10\x06*\x88\x01\n\x0fPitstopZoneFlag\x12!\n\x1dPITSTOP_ZONE_FLAG_UNSPECIFIED\x10\x00\x12\x1b\n\x17PITSTOP_ZONE_FLAG_ENTER\x10\x01\x12\x19\n\x15PITSTOP_ZONE_FLAG_FIX\x10\x02\x12\x1a\n\x16PITSTOP_ZONE_FLAG_EXIT\x10\x04*`\n\x08TireType\x12\x19\n\x15TIRE_TYPE_UNSPECIFIED\x10\x00\x12\x12\n\x0eTIRE_TYPE_HARD\x10\x01\x12\x12\n\x0eTIRE_TYPE_SOFT\x10\x02\x12\x11\n\rTIRE_TYPE_WET\x10\x03\x42\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,30 +33,36 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'race.v1.telemetry_pb2', _gl
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\021HA3.Proto.Race.V1'
-  _globals['_GHOSTMODEPHASE']._serialized_start=2022
-  _globals['_GHOSTMODEPHASE']._serialized_end=2167
-  _globals['_GHOSTMODEBLOCKER']._serialized_start=2170
-  _globals['_GHOSTMODEBLOCKER']._serialized_end=2488
-  _globals['_PITSTOPZONEFLAG']._serialized_start=2491
-  _globals['_PITSTOPZONEFLAG']._serialized_end=2627
-  _globals['_GHOSTMODESTATE']._serialized_start=59
-  _globals['_GHOSTMODESTATE']._serialized_end=272
-  _globals['_CARKINEMATICS']._serialized_start=274
-  _globals['_CARKINEMATICS']._serialized_end=390
-  _globals['_CARPARTICIPANTSTATE']._serialized_start=393
-  _globals['_CARPARTICIPANTSTATE']._serialized_end=775
-  _globals['_CARRENDERSTATE']._serialized_start=778
-  _globals['_CARRENDERSTATE']._serialized_end=997
-  _globals['_FRONTENDCARFULLSTATE']._serialized_start=1000
-  _globals['_FRONTENDCARFULLSTATE']._serialized_end=1210
-  _globals['_FRONTENDSPECTATORDEBUGINFO']._serialized_start=1212
-  _globals['_FRONTENDSPECTATORDEBUGINFO']._serialized_end=1295
-  _globals['_FRONTENDSPECTATORSNAPSHOT']._serialized_start=1298
-  _globals['_FRONTENDSPECTATORSNAPSHOT']._serialized_end=1493
-  _globals['_PARTICIPANTSELFSTATE']._serialized_start=1496
-  _globals['_PARTICIPANTSELFSTATE']._serialized_end=1657
-  _globals['_PARTICIPANTOPPONENTSTATE']._serialized_start=1660
-  _globals['_PARTICIPANTOPPONENTSTATE']._serialized_end=1821
-  _globals['_PARTICIPANTSNAPSHOT']._serialized_start=1824
-  _globals['_PARTICIPANTSNAPSHOT']._serialized_end=2019
+  _globals['_GHOSTMODEPHASE']._serialized_start=2575
+  _globals['_GHOSTMODEPHASE']._serialized_end=2720
+  _globals['_GHOSTMODEBLOCKER']._serialized_start=2723
+  _globals['_GHOSTMODEBLOCKER']._serialized_end=3041
+  _globals['_PITSTOPZONEFLAG']._serialized_start=3044
+  _globals['_PITSTOPZONEFLAG']._serialized_end=3180
+  _globals['_TIRETYPE']._serialized_start=3182
+  _globals['_TIRETYPE']._serialized_end=3278
+  _globals['_TIREWEARPERWHEEL']._serialized_start=59
+  _globals['_TIREWEARPERWHEEL']._serialized_end=201
+  _globals['_TIRETEMPERATUREPERWHEEL']._serialized_start=204
+  _globals['_TIRETEMPERATUREPERWHEEL']._serialized_end=413
+  _globals['_GHOSTMODESTATE']._serialized_start=416
+  _globals['_GHOSTMODESTATE']._serialized_end=629
+  _globals['_CARKINEMATICS']._serialized_start=631
+  _globals['_CARKINEMATICS']._serialized_end=747
+  _globals['_CARPARTICIPANTSTATE']._serialized_start=750
+  _globals['_CARPARTICIPANTSTATE']._serialized_end=1328
+  _globals['_CARRENDERSTATE']._serialized_start=1331
+  _globals['_CARRENDERSTATE']._serialized_end=1550
+  _globals['_FRONTENDCARFULLSTATE']._serialized_start=1553
+  _globals['_FRONTENDCARFULLSTATE']._serialized_end=1763
+  _globals['_FRONTENDSPECTATORDEBUGINFO']._serialized_start=1765
+  _globals['_FRONTENDSPECTATORDEBUGINFO']._serialized_end=1848
+  _globals['_FRONTENDSPECTATORSNAPSHOT']._serialized_start=1851
+  _globals['_FRONTENDSPECTATORSNAPSHOT']._serialized_end=2046
+  _globals['_PARTICIPANTSELFSTATE']._serialized_start=2049
+  _globals['_PARTICIPANTSELFSTATE']._serialized_end=2210
+  _globals['_PARTICIPANTOPPONENTSTATE']._serialized_start=2213
+  _globals['_PARTICIPANTOPPONENTSTATE']._serialized_end=2374
+  _globals['_PARTICIPANTSNAPSHOT']._serialized_start=2377
+  _globals['_PARTICIPANTSNAPSHOT']._serialized_end=2572
 # @@protoc_insertion_point(module_scope)

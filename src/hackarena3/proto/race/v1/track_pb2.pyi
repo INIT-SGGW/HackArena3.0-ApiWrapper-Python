@@ -7,6 +7,7 @@ from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from hackarena3.proto.race.v1 import common_pb2 as _common_pb2
 import builtins as _builtins
 import sys
@@ -18,6 +19,28 @@ else:
     from typing_extensions import TypeAlias as _TypeAlias
 
 DESCRIPTOR: _descriptor.FileDescriptor
+
+class _GroundType:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _GroundTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_GroundType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    GROUND_TYPE_ASPHALT: _GroundType.ValueType  # 0
+    GROUND_TYPE_GRASS: _GroundType.ValueType  # 1
+    GROUND_TYPE_GRAVEL: _GroundType.ValueType  # 2
+    GROUND_TYPE_WALL: _GroundType.ValueType  # 3
+    GROUND_TYPE_KERB: _GroundType.ValueType  # 4
+
+class GroundType(_GroundType, metaclass=_GroundTypeEnumTypeWrapper):
+    """Ground surface classification for off-centerline lateral segments."""
+
+GROUND_TYPE_ASPHALT: GroundType.ValueType  # 0
+GROUND_TYPE_GRASS: GroundType.ValueType  # 1
+GROUND_TYPE_GRAVEL: GroundType.ValueType  # 2
+GROUND_TYPE_WALL: GroundType.ValueType  # 3
+GROUND_TYPE_KERB: GroundType.ValueType  # 4
+Global___GroundType: _TypeAlias = GroundType  # noqa: Y015
 
 @_typing.final
 class TrackData(_message.Message):
@@ -99,6 +122,30 @@ class PitstopData(_message.Message):
 Global___PitstopData: _TypeAlias = PitstopData  # noqa: Y015
 
 @_typing.final
+class GroundWidth(_message.Message):
+    """Continuous lateral segment from centerline outward with one surface type."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WIDTH_M_FIELD_NUMBER: _builtins.int
+    GROUND_TYPE_FIELD_NUMBER: _builtins.int
+    width_m: _builtins.float
+    """Segment width in meters.
+    Must be >= 0.
+    """
+    ground_type: Global___GroundType.ValueType
+    def __init__(
+        self,
+        *,
+        width_m: _builtins.float = ...,
+        ground_type: Global___GroundType.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ground_type", b"ground_type", "width_m", b"width_m"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GroundWidth: _TypeAlias = GroundWidth  # noqa: Y015
+
+@_typing.final
 class CenterlineSample(_message.Message):
     """Centerline sample with local frame and derived geometry."""
 
@@ -114,6 +161,10 @@ class CenterlineSample(_message.Message):
     CURVATURE_1PM_FIELD_NUMBER: _builtins.int
     GRADE_RAD_FIELD_NUMBER: _builtins.int
     BANK_RAD_FIELD_NUMBER: _builtins.int
+    MAX_LEFT_WIDTH_M_FIELD_NUMBER: _builtins.int
+    MAX_RIGHT_WIDTH_M_FIELD_NUMBER: _builtins.int
+    LEFT_GROUNDS_FIELD_NUMBER: _builtins.int
+    RIGHT_GROUNDS_FIELD_NUMBER: _builtins.int
     s_m: _builtins.float
     """Distance along centerline in meters in [0, lap_length_m)."""
     left_width_m: _builtins.float
@@ -140,6 +191,14 @@ class CenterlineSample(_message.Message):
     """Crossfall/banking angle in radians around tangent.
     Positive when the right side of the track is lower.
     """
+    max_left_width_m: _builtins.float
+    """Maximum lateral bound to track-left from centerline, measured to outer barrier.
+    Must be >= left_width_m.
+    """
+    max_right_width_m: _builtins.float
+    """Maximum lateral bound to track-right from centerline, measured to outer barrier.
+    Must be >= right_width_m.
+    """
     @_builtins.property
     def position(self) -> _common_pb2.Vector3:
         """World-space centerline position in 3D track geometry."""
@@ -161,6 +220,18 @@ class CenterlineSample(_message.Message):
         tangent/normal/right are mutually orthogonal.
         """
 
+    @_builtins.property
+    def left_grounds(self) -> _containers.RepeatedCompositeFieldContainer[Global___GroundWidth]:
+        """Left-side ground segments ordered from centerline outward.
+        Sum(width_m) should be <= max_left_width_m.
+        """
+
+    @_builtins.property
+    def right_grounds(self) -> _containers.RepeatedCompositeFieldContainer[Global___GroundWidth]:
+        """Right-side ground segments ordered from centerline outward.
+        Sum(width_m) should be <= max_right_width_m.
+        """
+
     def __init__(
         self,
         *,
@@ -174,10 +245,14 @@ class CenterlineSample(_message.Message):
         curvature_1pm: _builtins.float = ...,
         grade_rad: _builtins.float = ...,
         bank_rad: _builtins.float = ...,
+        max_left_width_m: _builtins.float = ...,
+        max_right_width_m: _builtins.float = ...,
+        left_grounds: _abc.Iterable[Global___GroundWidth] | None = ...,
+        right_grounds: _abc.Iterable[Global___GroundWidth] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["normal", b"normal", "position", b"position", "right", b"right", "tangent", b"tangent"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["bank_rad", b"bank_rad", "curvature_1pm", b"curvature_1pm", "grade_rad", b"grade_rad", "left_width_m", b"left_width_m", "normal", b"normal", "position", b"position", "right", b"right", "right_width_m", b"right_width_m", "s_m", b"s_m", "tangent", b"tangent"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["bank_rad", b"bank_rad", "curvature_1pm", b"curvature_1pm", "grade_rad", b"grade_rad", "left_grounds", b"left_grounds", "left_width_m", b"left_width_m", "max_left_width_m", b"max_left_width_m", "max_right_width_m", b"max_right_width_m", "normal", b"normal", "position", b"position", "right", b"right", "right_grounds", b"right_grounds", "right_width_m", b"right_width_m", "s_m", b"s_m", "tangent", b"tangent"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___CenterlineSample: _TypeAlias = CenterlineSample  # noqa: Y015

@@ -134,6 +134,60 @@ PARTICIPANT_WRAPPER_TYPE_GO: ParticipantWrapperType.ValueType  # 7
 PARTICIPANT_WRAPPER_TYPE_OTHER: ParticipantWrapperType.ValueType  # 8
 Global___ParticipantWrapperType: _TypeAlias = ParticipantWrapperType  # noqa: Y015
 
+class _ParticipantCommandType:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _ParticipantCommandTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ParticipantCommandType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    PARTICIPANT_COMMAND_TYPE_UNSPECIFIED: _ParticipantCommandType.ValueType  # 0
+    PARTICIPANT_COMMAND_TYPE_BACK_TO_TRACK: _ParticipantCommandType.ValueType  # 1
+    PARTICIPANT_COMMAND_TYPE_TO_PITSTOP: _ParticipantCommandType.ValueType  # 2
+
+class ParticipantCommandType(_ParticipantCommandType, metaclass=_ParticipantCommandTypeEnumTypeWrapper):
+    """Participant command kind used by command acknowledgements."""
+
+PARTICIPANT_COMMAND_TYPE_UNSPECIFIED: ParticipantCommandType.ValueType  # 0
+PARTICIPANT_COMMAND_TYPE_BACK_TO_TRACK: ParticipantCommandType.ValueType  # 1
+PARTICIPANT_COMMAND_TYPE_TO_PITSTOP: ParticipantCommandType.ValueType  # 2
+Global___ParticipantCommandType: _TypeAlias = ParticipantCommandType  # noqa: Y015
+
+class _ParticipantCommandStatus:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _ParticipantCommandStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ParticipantCommandStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    PARTICIPANT_COMMAND_STATUS_UNSPECIFIED: _ParticipantCommandStatus.ValueType  # 0
+    PARTICIPANT_COMMAND_STATUS_ACCEPTED: _ParticipantCommandStatus.ValueType  # 1
+    PARTICIPANT_COMMAND_STATUS_REJECTED: _ParticipantCommandStatus.ValueType  # 2
+
+class ParticipantCommandStatus(_ParticipantCommandStatus, metaclass=_ParticipantCommandStatusEnumTypeWrapper):
+    """Result status for participant command processing."""
+
+PARTICIPANT_COMMAND_STATUS_UNSPECIFIED: ParticipantCommandStatus.ValueType  # 0
+PARTICIPANT_COMMAND_STATUS_ACCEPTED: ParticipantCommandStatus.ValueType  # 1
+PARTICIPANT_COMMAND_STATUS_REJECTED: ParticipantCommandStatus.ValueType  # 2
+Global___ParticipantCommandStatus: _TypeAlias = ParticipantCommandStatus  # noqa: Y015
+
+class _ParticipantCommandRejectReason:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _ParticipantCommandRejectReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ParticipantCommandRejectReason.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    PARTICIPANT_COMMAND_REJECT_REASON_UNSPECIFIED: _ParticipantCommandRejectReason.ValueType  # 0
+    PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: _ParticipantCommandRejectReason.ValueType  # 1
+    PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: _ParticipantCommandRejectReason.ValueType  # 2
+
+class ParticipantCommandRejectReason(_ParticipantCommandRejectReason, metaclass=_ParticipantCommandRejectReasonEnumTypeWrapper):
+    """Reject reason for participant one-shot commands."""
+
+PARTICIPANT_COMMAND_REJECT_REASON_UNSPECIFIED: ParticipantCommandRejectReason.ValueType  # 0
+PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: ParticipantCommandRejectReason.ValueType  # 1
+PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: ParticipantCommandRejectReason.ValueType  # 2
+Global___ParticipantCommandRejectReason: _TypeAlias = ParticipantCommandRejectReason  # noqa: Y015
+
 @_typing.final
 class QuickJoinDevRequest(_message.Message):
     """Development-only quick join request for entering an active sandbox session."""
@@ -308,6 +362,44 @@ class ParticipantControlsInput(_message.Message):
 Global___ParticipantControlsInput: _TypeAlias = ParticipantControlsInput  # noqa: Y015
 
 @_typing.final
+class ParticipantBackToTrackCommand(_message.Message):
+    """One-shot command requesting teleport/resume back to track."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CLIENT_SEQ_FIELD_NUMBER: _builtins.int
+    client_seq: _builtins.int
+    """Client-side command sequence for ack correlation."""
+    def __init__(
+        self,
+        *,
+        client_seq: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["client_seq", b"client_seq"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ParticipantBackToTrackCommand: _TypeAlias = ParticipantBackToTrackCommand  # noqa: Y015
+
+@_typing.final
+class ParticipantToPitstopCommand(_message.Message):
+    """One-shot command requesting teleport to pitstop area."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CLIENT_SEQ_FIELD_NUMBER: _builtins.int
+    client_seq: _builtins.int
+    """Client-side command sequence for ack correlation."""
+    def __init__(
+        self,
+        *,
+        client_seq: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["client_seq", b"client_seq"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ParticipantToPitstopCommand: _TypeAlias = ParticipantToPitstopCommand  # noqa: Y015
+
+@_typing.final
 class ParticipantClientMessage(_message.Message):
     """Envelope for participant->server stream payloads.
     Protocol rules:
@@ -319,21 +411,29 @@ class ParticipantClientMessage(_message.Message):
 
     INIT_FIELD_NUMBER: _builtins.int
     CONTROLS_FIELD_NUMBER: _builtins.int
+    BACK_TO_TRACK_FIELD_NUMBER: _builtins.int
+    TO_PITSTOP_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def init(self) -> Global___ParticipantStreamInit: ...
     @_builtins.property
     def controls(self) -> Global___ParticipantControlsInput: ...
+    @_builtins.property
+    def back_to_track(self) -> Global___ParticipantBackToTrackCommand: ...
+    @_builtins.property
+    def to_pitstop(self) -> Global___ParticipantToPitstopCommand: ...
     def __init__(
         self,
         *,
         init: Global___ParticipantStreamInit | None = ...,
         controls: Global___ParticipantControlsInput | None = ...,
+        back_to_track: Global___ParticipantBackToTrackCommand | None = ...,
+        to_pitstop: Global___ParticipantToPitstopCommand | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["controls", b"controls", "init", b"init", "payload", b"payload"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "init", b"init", "payload", b"payload", "to_pitstop", b"to_pitstop"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["controls", b"controls", "init", b"init", "payload", b"payload"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "init", b"init", "payload", b"payload", "to_pitstop", b"to_pitstop"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["init", "controls"]  # noqa: Y015
+    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["init", "controls", "back_to_track", "to_pitstop"]  # noqa: Y015
     _WhichOneofArgType_payload: _TypeAlias = _typing.Literal["payload", b"payload"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
 
@@ -381,6 +481,39 @@ class ParticipantControlsAck(_message.Message):
 Global___ParticipantControlsAck: _TypeAlias = ParticipantControlsAck  # noqa: Y015
 
 @_typing.final
+class ParticipantCommandAck(_message.Message):
+    """Server acknowledgement for one-shot participant commands."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CLIENT_SEQ_FIELD_NUMBER: _builtins.int
+    COMMAND_TYPE_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
+    REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    client_seq: _builtins.int
+    """Echoed client sequence from command input."""
+    command_type: Global___ParticipantCommandType.ValueType
+    status: Global___ParticipantCommandStatus.ValueType
+    applies_from_tick: _builtins.int
+    """Tick from which accepted command effects are applied."""
+    rejected_reason: Global___ParticipantCommandRejectReason.ValueType
+    """Must be set only when status is REJECTED."""
+    def __init__(
+        self,
+        *,
+        client_seq: _builtins.int = ...,
+        command_type: Global___ParticipantCommandType.ValueType = ...,
+        status: Global___ParticipantCommandStatus.ValueType = ...,
+        applies_from_tick: _builtins.int = ...,
+        rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq", "command_type", b"command_type", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ParticipantCommandAck: _TypeAlias = ParticipantCommandAck  # noqa: Y015
+
+@_typing.final
 class ParticipantServerEvent(_message.Message):
     """Envelope for server->participant stream events.
     After successful init, server sends settings and then emits ack/snapshot asynchronously.
@@ -392,6 +525,7 @@ class ParticipantServerEvent(_message.Message):
     SETTINGS_FIELD_NUMBER: _builtins.int
     ACK_FIELD_NUMBER: _builtins.int
     SNAPSHOT_FIELD_NUMBER: _builtins.int
+    COMMAND_ACK_FIELD_NUMBER: _builtins.int
     server_seq: _builtins.int
     """Monotonic per-stream server sequence number."""
     @_builtins.property
@@ -400,6 +534,8 @@ class ParticipantServerEvent(_message.Message):
     def ack(self) -> Global___ParticipantControlsAck: ...
     @_builtins.property
     def snapshot(self) -> _telemetry_pb2.ParticipantSnapshot: ...
+    @_builtins.property
+    def command_ack(self) -> Global___ParticipantCommandAck: ...
     def __init__(
         self,
         *,
@@ -407,12 +543,13 @@ class ParticipantServerEvent(_message.Message):
         settings: Global___StreamSettings | None = ...,
         ack: Global___ParticipantControlsAck | None = ...,
         snapshot: _telemetry_pb2.ParticipantSnapshot | None = ...,
+        command_ack: Global___ParticipantCommandAck | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "payload", b"payload", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "command_ack", b"command_ack", "payload", b"payload", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "payload", b"payload", "server_seq", b"server_seq", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "command_ack", b"command_ack", "payload", b"payload", "server_seq", b"server_seq", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["settings", "ack", "snapshot"]  # noqa: Y015
+    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["settings", "ack", "snapshot", "command_ack"]  # noqa: Y015
     _WhichOneofArgType_payload: _TypeAlias = _typing.Literal["payload", b"payload"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
 
