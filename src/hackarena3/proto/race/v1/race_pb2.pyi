@@ -189,6 +189,48 @@ PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: ParticipantCommandRejectReason.V
 Global___ParticipantCommandRejectReason: _TypeAlias = ParticipantCommandRejectReason  # noqa: Y015
 
 @_typing.final
+class LocalSandboxJoinRequest(_message.Message):
+    """Request for joining an active local sandbox session."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SANDBOX_ID_FIELD_NUMBER: _builtins.int
+    sandbox_id: _builtins.str
+    """Target active local sandbox identifier to join."""
+    def __init__(
+        self,
+        *,
+        sandbox_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["sandbox_id", b"sandbox_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalSandboxJoinRequest: _TypeAlias = LocalSandboxJoinRequest  # noqa: Y015
+
+@_typing.final
+class LocalSandboxJoinResponse(_message.Message):
+    """Join response with assigned participant vehicle data."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CAR_ID_FIELD_NUMBER: _builtins.int
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    car_id: _builtins.int
+    """Assigned participant vehicle identifier."""
+    map_id: _builtins.str
+    """Map identifier of the joined sandbox session."""
+    def __init__(
+        self,
+        *,
+        car_id: _builtins.int = ...,
+        map_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "map_id", b"map_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalSandboxJoinResponse: _TypeAlias = LocalSandboxJoinResponse  # noqa: Y015
+
+@_typing.final
 class QuickJoinDevRequest(_message.Message):
     """Development-only quick join request for entering an active sandbox session."""
 

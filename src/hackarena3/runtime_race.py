@@ -50,7 +50,7 @@ def fetch_track_data(
 ) -> track_pb2.TrackData:
     if not map_id.strip():
         raise RuntimeErrorWrapper(
-            "QuickJoinDev returned empty map_id; cannot fetch track data."
+            "LocalSandboxJoin returned empty map_id; cannot fetch track data."
         )
 
     request = track_pb2.GetTrackDataRequest(map_id=map_id)

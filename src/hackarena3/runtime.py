@@ -13,12 +13,12 @@ from hackarena3.runtime_common import (
     RPC_TIMEOUT_SECONDS,
     RuntimeErrorWrapper,
 )
+from hackarena3.runtime_convert import build_track_layout
 from hackarena3.runtime_discovery import (
     choose_sandbox,
     create_broker_api,
     discover_team_sandboxes,
 )
-from hackarena3.runtime_convert import build_track_layout
 from hackarena3.runtime_loop import run_participant_loop
 from hackarena3.runtime_race import create_backend_api, fetch_track_data, race_metadata
 from hackarena3.types import BotContext
@@ -52,26 +52,27 @@ def run_runtime(bot: BotProtocol, config: RuntimeConfig) -> None:
             token_provider.refresh()
         except GameTokenError as exc:
             raise RuntimeErrorWrapper(
-                f"Failed to obtain game token before QuickJoinDev: {exc}"
+                f"Failed to obtain game token before LocalSandboxJoin: {exc}"
             ) from exc
 
         api = create_backend_api(selected.backend)
 
-        # TODO: Do not use QuickJoinDev
         try:
-            join_response = api.race.QuickJoinDev(  # type: ignore
-                race_pb2.QuickJoinDevRequest(sandbox_id=selected.sandbox_id),
+            join_response = api.participant.LocalSandboxJoin(  # type: ignore
+                race_pb2.LocalSandboxJoinRequest(sandbox_id=selected.sandbox_id),
                 metadata=race_metadata(token_provider),
                 timeout=RPC_TIMEOUT_SECONDS,
             )
         except grpc.RpcError as exc:
             if exc.code() == grpc.StatusCode.UNIMPLEMENTED:
                 raise RuntimeErrorWrapper(
-                    "QuickJoinDev unavailable (UNIMPLEMENTED). Check backend/api compatibility."
+                    "LocalSandboxJoin unavailable (UNIMPLEMENTED). Check backend/api compatibility."
                 ) from exc
             raise RuntimeErrorWrapper(
-                f"QuickJoinDev failed: {exc.code().name} {exc.details()}"
+                f"LocalSandboxJoin failed: {exc.code().name} {exc.details()}"
             ) from exc
+
+        assert isinstance(join_response, race_pb2.LocalSandboxJoinResponse)
 
         track = fetch_track_data(api, token_provider, join_response.map_id)
         try:

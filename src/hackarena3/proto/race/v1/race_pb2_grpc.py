@@ -21,6 +21,11 @@ class RaceParticipantServiceStub(object):
                 request_serializer=race_dot_v1_dot_race__pb2.ParticipantClientMessage.SerializeToString,
                 response_deserializer=race_dot_v1_dot_race__pb2.ParticipantServerEvent.FromString,
                 _registered_method=True)
+        self.LocalSandboxJoin = channel.unary_unary(
+                '/race.v1.RaceParticipantService/LocalSandboxJoin',
+                request_serializer=race_dot_v1_dot_race__pb2.LocalSandboxJoinRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.LocalSandboxJoinResponse.FromString,
+                _registered_method=True)
 
 
 class RaceParticipantServiceServicer(object):
@@ -34,6 +39,13 @@ class RaceParticipantServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def LocalSandboxJoin(self, request, context):
+        """Joins an active local sandbox.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RaceParticipantServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -41,6 +53,11 @@ def add_RaceParticipantServiceServicer_to_server(servicer, server):
                     servicer.Stream,
                     request_deserializer=race_dot_v1_dot_race__pb2.ParticipantClientMessage.FromString,
                     response_serializer=race_dot_v1_dot_race__pb2.ParticipantServerEvent.SerializeToString,
+            ),
+            'LocalSandboxJoin': grpc.unary_unary_rpc_method_handler(
+                    servicer.LocalSandboxJoin,
+                    request_deserializer=race_dot_v1_dot_race__pb2.LocalSandboxJoinRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.LocalSandboxJoinResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -72,6 +89,33 @@ class RaceParticipantService(object):
             '/race.v1.RaceParticipantService/Stream',
             race_dot_v1_dot_race__pb2.ParticipantClientMessage.SerializeToString,
             race_dot_v1_dot_race__pb2.ParticipantServerEvent.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def LocalSandboxJoin(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceParticipantService/LocalSandboxJoin',
+            race_dot_v1_dot_race__pb2.LocalSandboxJoinRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.LocalSandboxJoinResponse.FromString,
             options,
             channel_credentials,
             insecure,
