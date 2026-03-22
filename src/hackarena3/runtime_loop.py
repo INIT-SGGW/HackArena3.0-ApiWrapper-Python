@@ -4,6 +4,7 @@ import queue
 import sys
 import threading
 import time
+from collections import deque
 from dataclasses import dataclass, field
 from importlib import metadata as importlib_metadata
 from typing import TYPE_CHECKING
@@ -24,7 +25,6 @@ from hackarena3.runtime_race import race_metadata
 from hackarena3.types import (
     Controls,
     GearShift,
-    NotSupportedError,
     RaceSnapshot,
 )
 
@@ -36,7 +36,6 @@ if TYPE_CHECKING:
 
 _RUNTIME_POLL_SECONDS = 0.2
 _TOKEN_REFRESH_SKEW_SECONDS = 30
-_PIT_NOT_SUPPORTED_MESSAGE = "request_pit is not supported by current backend proto."
 _ACK_LATENCY_WARN_THRESHOLD_S = 2.0 / float(REQUESTED_HZ)
 
 
@@ -56,17 +55,27 @@ class _PendingAck:
 
 
 @dataclass(slots=True)
+class _PendingCommandAck:
+    started_monotonic: float
+    command_kind: str
+
+
+@dataclass(slots=True)
 class _SessionState:
     stop_event: threading.Event = field(default_factory=threading.Event)
     snapshot_event: threading.Event = field(default_factory=threading.Event)
-    controls_event: threading.Event = field(default_factory=threading.Event)
+    outbound_event: threading.Event = field(default_factory=threading.Event)
     lock: threading.Lock = field(default_factory=threading.Lock)
     latest_snapshot: RaceSnapshot | None = None
     latest_snapshot_version: int = 0
     desired_controls: Controls | None = None
     controls_dirty: bool = False
+    pending_commands: deque[str] = field(default_factory=deque[str])
     next_client_seq: int = 0
-    pending_acks: dict[int, _PendingAck] = field(default_factory=dict)
+    pending_acks: dict[int, _PendingAck] = field(default_factory=dict[int, _PendingAck])
+    pending_command_acks: dict[int, _PendingCommandAck] = field(
+        default_factory=dict[int, _PendingCommandAck]
+    )
     stream_error: grpc.RpcError | None = None
     fatal_error: RuntimeErrorWrapper | None = None
 
@@ -155,11 +164,13 @@ def _set_desired_controls(
     with state.lock:
         state.desired_controls = controls
         state.controls_dirty = True
-    state.controls_event.set()
+    state.outbound_event.set()
 
 
-def _unsupported_request_pit(*_args: object, **_kwargs: object) -> None:
-    raise NotSupportedError(_PIT_NOT_SUPPORTED_MESSAGE)
+def _enqueue_command(state: _SessionState, command_kind: str) -> None:
+    with state.lock:
+        state.pending_commands.append(command_kind)
+    state.outbound_event.set()
 
 
 def _handle_ack(state: _SessionState, ack: race_pb2.ParticipantControlsAck) -> None:
@@ -176,6 +187,51 @@ def _handle_ack(state: _SessionState, ack: race_pb2.ParticipantControlsAck) -> N
             f"seq={int(ack.client_seq)} "
             f"rtt_ms={elapsed_s * 1000.0:.1f} "
             f"threshold_ms={_ACK_LATENCY_WARN_THRESHOLD_S * 1000.0:.1f}",
+            file=sys.stderr,
+        )
+
+
+def _enum_name(enum_obj: object, value: int) -> str:
+    try:
+        return str(getattr(enum_obj, "Name")(value))
+    except Exception:
+        return str(value)
+
+
+def _handle_command_ack(
+    state: _SessionState,
+    ack: race_pb2.ParticipantCommandAck,
+) -> None:
+    pending: _PendingCommandAck | None
+    client_seq = int(ack.client_seq)
+    with state.lock:
+        pending = state.pending_command_acks.pop(client_seq, None)
+
+    if pending is None:
+        return
+
+    elapsed_s = max(0.0, time.monotonic() - pending.started_monotonic)
+    if elapsed_s > _ACK_LATENCY_WARN_THRESHOLD_S:
+        print(
+            "[ha3-wrapper] Command ack latency warning: "
+            f"seq={client_seq} command={pending.command_kind} "
+            f"rtt_ms={elapsed_s * 1000.0:.1f} "
+            f"threshold_ms={_ACK_LATENCY_WARN_THRESHOLD_S * 1000.0:.1f}",
+            file=sys.stderr,
+        )
+
+    if int(ack.status) == int(race_pb2.PARTICIPANT_COMMAND_STATUS_REJECTED):
+        command_type = _enum_name(
+            race_pb2.ParticipantCommandType, int(ack.command_type)
+        )
+        rejected_reason = _enum_name(
+            race_pb2.ParticipantCommandRejectReason,
+            int(ack.rejected_reason),
+        )
+        print(
+            "[ha3-wrapper] Participant command rejected: "
+            f"seq={client_seq} command={pending.command_kind} "
+            f"command_type={command_type} reason={rejected_reason}",
             file=sys.stderr,
         )
 
@@ -197,10 +253,7 @@ def _reader_loop(
                 ctx.effective_hz = effective_hz if effective_hz > 0 else None
                 if event.settings.map_id:
                     ctx.map_id = event.settings.map_id
-                if (
-                    last_effective_hz != ctx.effective_hz
-                    or last_map_id != ctx.map_id
-                ):
+                if last_effective_hz != ctx.effective_hz or last_map_id != ctx.map_id:
                     map_suffix = f" map_id={ctx.map_id}" if ctx.map_id else ""
                     print(
                         f"[ha3-wrapper] Stream settings: effective_hz={ctx.effective_hz}{map_suffix}",
@@ -212,6 +265,10 @@ def _reader_loop(
 
             if payload_name == "ack":
                 _handle_ack(state, event.ack)
+                continue
+
+            if payload_name == "command_ack":
+                _handle_command_ack(state, event.command_ack)
                 continue
 
             if payload_name != "snapshot":
@@ -232,11 +289,13 @@ def _reader_loop(
             state.stop_event.set()
     else:
         if not state.stop_event.is_set():
-            state.fatal_error = RuntimeErrorWrapper("Participant stream ended unexpectedly.")
+            state.fatal_error = RuntimeErrorWrapper(
+                "Participant stream ended unexpectedly."
+            )
             state.stop_event.set()
     finally:
         state.snapshot_event.set()
-        state.controls_event.set()
+        state.outbound_event.set()
 
 
 def _callback_loop(
@@ -262,11 +321,6 @@ def _callback_loop(
 
         try:
             result = bot.on_tick(snapshot, ctx)
-        except NotSupportedError as exc:
-            if not state.stop_event.is_set():
-                state.fatal_error = RuntimeErrorWrapper(str(exc))
-                state.stop_event.set()
-            break
         except Exception as exc:
             if not state.stop_event.is_set():
                 state.fatal_error = RuntimeErrorWrapper(f"Bot on_tick failed: {exc}")
@@ -287,52 +341,90 @@ def _writer_loop(
     state: _SessionState,
 ) -> None:
     while not state.stop_event.is_set():
-        state.controls_event.wait(_RUNTIME_POLL_SECONDS)
-        state.controls_event.clear()
+        state.outbound_event.wait(_RUNTIME_POLL_SECONDS)
+        state.outbound_event.clear()
         if state.stop_event.is_set():
             break
 
-        with state.lock:
-            controls = state.desired_controls
-            if controls is None:
-                continue
-            send_controls = controls
-            if send_controls.gear_shift is not None:
-                controls = Controls(
-                    throttle=controls.throttle,
-                    brake=controls.brake,
-                    steering=controls.steering,
-                    gear_shift=None,
-                )
-                state.desired_controls = controls
-            if not state.controls_dirty and send_controls.gear_shift is None:
-                continue
-            state.controls_dirty = False
-            state.next_client_seq += 1
-            client_seq = state.next_client_seq
+        while not state.stop_event.is_set():
+            message: race_pb2.ParticipantClientMessage | None = None
+            with state.lock:
+                if state.pending_commands:
+                    command_kind = state.pending_commands.popleft()
+                    state.next_client_seq += 1
+                    client_seq = state.next_client_seq
+                    state.pending_command_acks[client_seq] = _PendingCommandAck(
+                        started_monotonic=time.monotonic(),
+                        command_kind=command_kind,
+                    )
+                    if command_kind == "to_pitstop":
+                        message = race_pb2.ParticipantClientMessage(
+                            to_pitstop=race_pb2.ParticipantToPitstopCommand(
+                                client_seq=client_seq
+                            )
+                        )
+                    elif command_kind == "back_to_track":
+                        message = race_pb2.ParticipantClientMessage(
+                            back_to_track=race_pb2.ParticipantBackToTrackCommand(
+                                client_seq=client_seq
+                            )
+                        )
+                    else:
+                        if not state.stop_event.is_set():
+                            state.fatal_error = RuntimeErrorWrapper(
+                                f"Unsupported participant command kind: {command_kind}"
+                            )
+                            state.stop_event.set()
+                        break
+                else:
+                    controls = state.desired_controls
+                    if controls is None:
+                        break
+                    send_controls = controls
+                    if send_controls.gear_shift is not None:
+                        controls = Controls(
+                            throttle=controls.throttle,
+                            brake=controls.brake,
+                            steering=controls.steering,
+                            gear_shift=None,
+                        )
+                        state.desired_controls = controls
+                    if not state.controls_dirty and send_controls.gear_shift is None:
+                        break
+                    state.controls_dirty = False
+                    state.next_client_seq += 1
+                    client_seq = state.next_client_seq
 
-        try:
-            normalized = _normalize_controls(send_controls)
-        except RuntimeErrorWrapper as exc:
-            if not state.stop_event.is_set():
-                state.fatal_error = exc
-                state.stop_event.set()
-            break
+                    try:
+                        normalized = _normalize_controls(send_controls)
+                    except RuntimeErrorWrapper as exc:
+                        if not state.stop_event.is_set():
+                            state.fatal_error = exc
+                            state.stop_event.set()
+                        break
 
-        message = race_pb2.ParticipantClientMessage(
-            controls=race_pb2.ParticipantControlsInput(
-                client_seq=client_seq,
-                throttle=normalized.throttle,
-                brake=normalized.brake,
-                steering=normalized.steering,
-                gear_shift=_normalize_gear_shift(normalized.gear_shift),
-            )
-        )
-        with state.lock:
-            state.pending_acks[client_seq] = _PendingAck(
-                started_monotonic=time.monotonic(),
-            )
-        outbound.put(message)
+                    message = race_pb2.ParticipantClientMessage(
+                        controls=race_pb2.ParticipantControlsInput(
+                            client_seq=client_seq,
+                            throttle=normalized.throttle,
+                            brake=normalized.brake,
+                            steering=normalized.steering,
+                            gear_shift=_normalize_gear_shift(normalized.gear_shift),
+                        )
+                    )
+                    state.pending_acks[client_seq] = _PendingAck(
+                        started_monotonic=time.monotonic(),
+                    )
+
+            if message is None:
+                break
+            if state.stop_event.is_set():
+                break
+            outbound.put(message)
+
+            with state.lock:
+                if state.pending_commands or state.controls_dirty:
+                    state.outbound_event.set()
 
 
 def _stream_init_message() -> race_pb2.ParticipantClientMessage:
@@ -364,10 +456,17 @@ def run_participant_loop(
             latest_controls = controls
             _set_desired_controls(state, controls)
 
+        def _request_pit_impl(state_ref: _SessionState = state) -> None:
+            _enqueue_command(state_ref, "to_pitstop")
+
+        def _request_back_to_track_impl(state_ref: _SessionState = state) -> None:
+            _enqueue_command(state_ref, "back_to_track")
+
         ctx._set_controls_impl = _set_controls_impl
-        ctx._request_pit_impl = _unsupported_request_pit
+        ctx._request_pit_impl = _request_pit_impl
+        ctx._request_back_to_track_impl = _request_back_to_track_impl
         if state.controls_dirty:
-            state.controls_event.set()
+            state.outbound_event.set()
 
         outbound = _OutboundMessageIterator()
         outbound.put(_stream_init_message())
@@ -459,4 +558,6 @@ def run_participant_loop(
             time.sleep(delay)
             continue
 
-        raise RuntimeErrorWrapper(f"gRPC error {code.name}: {details}") from stream_error
+        raise RuntimeErrorWrapper(
+            f"gRPC error {code.name}: {details}"
+        ) from stream_error

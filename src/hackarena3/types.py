@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import TYPE_CHECKING, Any, Callable, Protocol
 
-from hackarena3.proto.race.v1 import race_pb2
+from hackarena3.proto.race.v1 import race_pb2, telemetry_pb2, track_pb2
 
 if TYPE_CHECKING:
     from hackarena3.proto.race.v1.telemetry_pb2 import ParticipantSnapshot
@@ -30,11 +30,33 @@ class DriveGear(IntEnum):
     EIGHTH = 8
 
 
+class TireType(IntEnum):
+    UNSPECIFIED = int(telemetry_pb2.TIRE_TYPE_UNSPECIFIED)
+    HARD = int(telemetry_pb2.TIRE_TYPE_HARD)
+    SOFT = int(telemetry_pb2.TIRE_TYPE_SOFT)
+    WET = int(telemetry_pb2.TIRE_TYPE_WET)
+
+
+class GroundType(IntEnum):
+    ASPHALT = int(track_pb2.GROUND_TYPE_ASPHALT)
+    GRASS = int(track_pb2.GROUND_TYPE_GRASS)
+    GRAVEL = int(track_pb2.GROUND_TYPE_GRAVEL)
+    WALL = int(track_pb2.GROUND_TYPE_WALL)
+    KERB = int(track_pb2.GROUND_TYPE_KERB)
+
+
 @dataclass(frozen=True, slots=True)
 class Vec3:
     x: float
     y: float
     z: float
+
+
+@dataclass(frozen=True, slots=True)
+class GroundWidth:
+    width_m: float
+    ground_type_raw: int
+    ground_type: GroundType | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +71,10 @@ class CenterlinePoint:
     curvature_1pm: float
     grade_rad: float
     bank_rad: float
+    max_left_width_m: float
+    max_right_width_m: float
+    left_grounds: tuple[GroundWidth, ...]
+    right_grounds: tuple[GroundWidth, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -75,10 +101,6 @@ class Controls:
     gear_shift: GearShift | None = None
 
 
-class NotSupportedError(RuntimeError):
-    pass
-
-
 @dataclass(frozen=True, slots=True)
 class Quaternion:
     x: float
@@ -100,6 +122,22 @@ class GhostModeState:
 
 
 @dataclass(frozen=True, slots=True)
+class TireWearPerWheel:
+    front_left: float
+    front_right: float
+    rear_left: float
+    rear_right: float
+
+
+@dataclass(frozen=True, slots=True)
+class TireTemperaturePerWheel:
+    front_left_celsius: float
+    front_right_celsius: float
+    rear_left_celsius: float
+    rear_right_celsius: float
+
+
+@dataclass(frozen=True, slots=True)
 class CarState:
     car_id: int
     position: Vec3
@@ -113,15 +151,15 @@ class CarState:
     last_applied_client_seq: int
     pitstop_zone_flags: int
     wheels_in_pitstop: int
-    ghost_mode: GhostModeState | None = None
+    ghost_mode: GhostModeState | None
+    tire_type_raw: int
+    tire_type: TireType
+    tire_wear: TireWearPerWheel
+    tire_temperature_celsius: TireTemperaturePerWheel
 
     @property
     def speed_kmh(self) -> float:
         return self.speed_mps * 3.6
-
-    @property
-    def in_pitstop(self) -> bool:
-        return self.wheels_in_pitstop > 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -129,7 +167,7 @@ class OpponentState:
     car_id: int
     position: Vec3
     orientation: Quaternion
-    ghost_mode: GhostModeState | None = None
+    ghost_mode: GhostModeState | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -138,6 +176,10 @@ class RaceSnapshot:
     server_time_ms: int
     car: CarState
     opponents: tuple[OpponentState, ...]
+    tire_type_raw: int
+    tire_type: TireType
+    tire_wear: TireWearPerWheel
+    tire_temperature_celsius: TireTemperaturePerWheel
     raw: ParticipantSnapshot
 
 
@@ -148,6 +190,14 @@ class RuntimeConfig:
     sandbox_id: str | None = None
 
 
+def _unbound_set_controls(_controls: Controls) -> None:
+    raise RuntimeError("BotContext is not attached to active runtime.")
+
+
+def _unbound_command() -> None:
+    raise RuntimeError("BotContext is not attached to active runtime.")
+
+
 @dataclass(slots=True)
 class BotContext:
     car_id: int
@@ -155,15 +205,19 @@ class BotContext:
     requested_hz: int
     track_data: TrackData
     track: TrackLayout
-    effective_hz: int | None = None
-    tick: int = 0
-    raw: Any | None = None
-    _set_controls_impl: Callable[[Controls], None] | None = field(
-        default=None,
+    effective_hz: int | None
+    tick: int
+    raw: Any
+    _set_controls_impl: Callable[[Controls], None] = field(
+        default=_unbound_set_controls,
         repr=False,
     )
-    _request_pit_impl: Callable[..., None] | None = field(
-        default=None,
+    _request_pit_impl: Callable[[], None] = field(
+        default=_unbound_command,
+        repr=False,
+    )
+    _request_back_to_track_impl: Callable[[], None] = field(
+        default=_unbound_command,
         repr=False,
     )
 
@@ -175,8 +229,6 @@ class BotContext:
         steer: float,
         gear_shift: GearShift | None = None,
     ) -> None:
-        if self._set_controls_impl is None:
-            raise RuntimeError("BotContext is not attached to active runtime.")
         self._set_controls_impl(
             Controls(
                 throttle=throttle,
@@ -186,12 +238,11 @@ class BotContext:
             )
         )
 
-    def request_pit(self, *_args: Any, **_kwargs: Any) -> None:
-        if self._request_pit_impl is None:
-            raise NotSupportedError(
-                "request_pit is not supported by current backend proto."
-            )
-        self._request_pit_impl(*_args, **_kwargs)
+    def request_pit(self) -> None:
+        self._request_pit_impl()
+
+    def request_back_to_track(self) -> None:
+        self._request_back_to_track_impl()
 
 
 class BotProtocol(Protocol):

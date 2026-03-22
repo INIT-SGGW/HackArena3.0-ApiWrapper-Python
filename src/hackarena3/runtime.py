@@ -97,6 +97,8 @@ def run_runtime(bot: BotProtocol, config: RuntimeConfig) -> None:
             requested_hz=REQUESTED_HZ,
             track_data=track,
             track=track_layout,
+            effective_hz=None,
+            tick=0,
             raw={},
         )
         run_participant_loop(bot, api, token_provider, ctx)

@@ -226,9 +226,6 @@ def _fetch_local_runtime_sandboxes(
     finally:
         channel.close()
 
-    if not response.HasField("state"):
-        return []
-
     discovered: list[DiscoveredSandbox] = []
     for sandbox in response.state.active_sandboxes:
         discovered.append(

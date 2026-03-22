@@ -45,10 +45,9 @@ def _normalize_grpc_target(api_addr: str) -> str:
 
 
 def _extract_exp_epoch(response: game_token_issuer_pb2.IssueGameTokenResponse) -> int:
-    if response.HasField("token") and response.token.HasField("exp_utc"):
-        exp_seconds = int(response.token.exp_utc.seconds)
-        if exp_seconds > 0:
-            return exp_seconds
+    exp_seconds = int(response.token.exp_utc.seconds)
+    if exp_seconds > 0:
+        return exp_seconds
     raise GameTokenError(
         "Game token response is missing a valid token.exp_utc timestamp."
     )
@@ -117,9 +116,6 @@ class GameTokenProvider:
                 "Game token gRPC request failed: "
                 f"{_ISSUE_METHOD}; code={exc.code().name}; details={exc.details() or 'no details'}"
             ) from exc
-
-        if not response.HasField("token"):
-            raise GameTokenError("Game token gRPC response is missing `token` payload.")
 
         token_jwt = response.token.jwt.strip()
         if not token_jwt:

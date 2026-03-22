@@ -65,8 +65,5 @@ def fetch_track_data(
             f"GetTrackData failed: {exc.code().name} {exc.details()}"
         ) from exc
 
-    if not response.HasField("track"):
-        raise RuntimeErrorWrapper(
-            f"GetTrackData returned empty track payload for map_id={map_id!r}."
-        )
+    assert isinstance(response, track_pb2.GetTrackDataResponse)
     return response.track

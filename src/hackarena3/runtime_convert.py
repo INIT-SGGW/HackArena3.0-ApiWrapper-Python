@@ -6,11 +6,16 @@ from hackarena3.types import (
     CarState,
     CenterlinePoint,
     DriveGear,
+    GroundType,
+    GroundWidth,
     GhostModeState,
     OpponentState,
     PitstopLayout,
     Quaternion,
     RaceSnapshot,
+    TireTemperaturePerWheel,
+    TireType,
+    TireWearPerWheel,
     TrackLayout,
     Vec3,
 )
@@ -36,6 +41,16 @@ def _centerline_point_from_proto(sample: object) -> CenterlinePoint:
         curvature_1pm=float(getattr(sample, "curvature_1pm", 0.0)),
         grade_rad=float(getattr(sample, "grade_rad", 0.0)),
         bank_rad=float(getattr(sample, "bank_rad", 0.0)),
+        max_left_width_m=float(getattr(sample, "max_left_width_m", 0.0)),
+        max_right_width_m=float(getattr(sample, "max_right_width_m", 0.0)),
+        left_grounds=tuple(
+            _ground_width_from_proto(ground)
+            for ground in getattr(sample, "left_grounds", ())
+        ),
+        right_grounds=tuple(
+            _ground_width_from_proto(ground)
+            for ground in getattr(sample, "right_grounds", ())
+        ),
     )
 
 
@@ -64,16 +79,53 @@ def _drive_gear_from_raw(value: int) -> DriveGear:
         raise ValueError(f"Unknown drive gear value from backend: {value}")
 
 
+def _ground_type_from_raw(value: int) -> GroundType | None:
+    try:
+        return GroundType(value)
+    except ValueError:
+        return None
+
+
+def _tire_type_from_raw(value: int) -> TireType:
+    try:
+        return TireType(value)
+    except ValueError:
+        raise ValueError(f"Unknown tire type value from backend: {value}")
+
+
+def _ground_width_from_proto(value: object) -> GroundWidth:
+    ground_type_raw = int(getattr(value, "ground_type", 0))
+    return GroundWidth(
+        width_m=float(getattr(value, "width_m", 0.0)),
+        ground_type_raw=ground_type_raw,
+        ground_type=_ground_type_from_raw(ground_type_raw),
+    )
+
+
+def _tire_wear_from_proto(value: object) -> TireWearPerWheel:
+    return TireWearPerWheel(
+        front_left=float(getattr(value, "front_left", 0.0)),
+        front_right=float(getattr(value, "front_right", 0.0)),
+        rear_left=float(getattr(value, "rear_left", 0.0)),
+        rear_right=float(getattr(value, "rear_right", 0.0)),
+    )
+
+
+def _tire_temperature_from_proto(value: object) -> TireTemperaturePerWheel:
+    return TireTemperaturePerWheel(
+        front_left_celsius=float(getattr(value, "front_left_celsius", 0.0)),
+        front_right_celsius=float(getattr(value, "front_right_celsius", 0.0)),
+        rear_left_celsius=float(getattr(value, "rear_left_celsius", 0.0)),
+        rear_right_celsius=float(getattr(value, "rear_right_celsius", 0.0)),
+    )
+
+
 def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
-    self_ghost: GhostModeState | None = None
-    if raw.self.telemetry.HasField("ghost_mode"):
-        self_ghost = _ghost_mode_from_proto(raw.self.telemetry.ghost_mode)
+    self_ghost = _ghost_mode_from_proto(raw.self.telemetry.ghost_mode)
 
     opponents: list[OpponentState] = []
     for opponent in raw.opponents:
-        opponent_ghost: GhostModeState | None = None
-        if opponent.HasField("ghost_mode"):
-            opponent_ghost = _ghost_mode_from_proto(opponent.ghost_mode)
+        opponent_ghost = _ghost_mode_from_proto(opponent.ghost_mode)
         opponents.append(
             OpponentState(
                 car_id=int(opponent.car_id),
@@ -82,6 +134,13 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
                 ghost_mode=opponent_ghost,
             )
         )
+
+    tire_type_raw = int(raw.self.telemetry.tire_type)
+    tire_type = _tire_type_from_raw(tire_type_raw)
+    tire_wear = _tire_wear_from_proto(raw.self.telemetry.tire_wear)
+    tire_temp = _tire_temperature_from_proto(
+        raw.self.telemetry.tire_temperature_celsius
+    )
 
     return RaceSnapshot(
         tick=int(raw.tick),
@@ -100,8 +159,16 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             pitstop_zone_flags=int(raw.self.telemetry.pitstop_zone_flags),
             wheels_in_pitstop=int(raw.self.telemetry.wheels_in_pitstop),
             ghost_mode=self_ghost,
+            tire_type_raw=tire_type_raw,
+            tire_type=tire_type,
+            tire_wear=tire_wear,
+            tire_temperature_celsius=tire_temp,
         ),
         opponents=tuple(opponents),
+        tire_type_raw=tire_type_raw,
+        tire_type=tire_type,
+        tire_wear=tire_wear,
+        tire_temperature_celsius=tire_temp,
         raw=raw,
     )
 
@@ -111,8 +178,6 @@ def build_track_layout(track_data: TrackData) -> TrackLayout:
         _centerline_point_from_proto(sample) for sample in track_data.centerline_samples
     )
 
-    if not track_data.HasField("pitstop_data"):
-        raise ValueError("TrackData is missing required pitstop_data.")
     pit = track_data.pitstop_data
     pitstop = PitstopLayout(
         enter=tuple(
