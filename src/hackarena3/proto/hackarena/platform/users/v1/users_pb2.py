@@ -23,9 +23,10 @@ _sym_db = _symbol_database.Default()
 
 
 from hackarena3.proto.hackarena.platform.common.v1 import types_pb2 as hackarena_dot_platform_dot_common_dot_v1_dot_types__pb2
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'hackarena/platform/users/v1/users.proto\x12\x1bhackarena.platform.users.v1\x1a(hackarena/platform/common/v1/types.proto\"\xf4\x01\n\x04User\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x14\n\x05\x65mail\x18\x02 \x01(\tR\x05\x65mail\x12!\n\x0c\x64isplay_name\x18\x03 \x01(\tR\x0b\x64isplayName\x12\x14\n\x05roles\x18\x04 \x03(\tR\x05roles\x12\x16\n\x06locale\x18\x05 \x01(\tR\x06locale\x12\x16\n\x06issuer\x18\x14 \x01(\tR\x06issuer\x12-\n\x12preferred_username\x18\x15 \x01(\tR\x11preferredUsernameJ\x04\x08\x06\x10\x14J\x04\x08\x16\x10\x32\"\x0e\n\x0cGetMeRequest\"B\n\rGetMeResponse\x12\x31\n\x02me\x18\x01 \x01(\x0b\x32!.hackarena.platform.users.v1.UserR\x02me2n\n\x0cUsersService\x12^\n\x05GetMe\x12).hackarena.platform.users.v1.GetMeRequest\x1a*.hackarena.platform.users.v1.GetMeResponseB\x1e\xaa\x02\x1bHackArena.Platform.Users.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'hackarena/platform/users/v1/users.proto\x12\x1bhackarena.platform.users.v1\x1a(hackarena/platform/common/v1/types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf4\x01\n\x04User\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x14\n\x05\x65mail\x18\x02 \x01(\tR\x05\x65mail\x12!\n\x0c\x64isplay_name\x18\x03 \x01(\tR\x0b\x64isplayName\x12\x14\n\x05roles\x18\x04 \x03(\tR\x05roles\x12\x16\n\x06locale\x18\x05 \x01(\tR\x06locale\x12\x16\n\x06issuer\x18\x14 \x01(\tR\x06issuer\x12-\n\x12preferred_username\x18\x15 \x01(\tR\x11preferredUsernameJ\x04\x08\x06\x10\x14J\x04\x08\x16\x10\x32\"\x0e\n\x0cGetMeRequest\"}\n\rGetMeResponse\x12\x31\n\x02me\x18\x01 \x01(\x0b\x32!.hackarena.platform.users.v1.UserR\x02me\x12\x39\n\nexpires_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\texpiresAt2n\n\x0cUsersService\x12^\n\x05GetMe\x12).hackarena.platform.users.v1.GetMeRequest\x1a*.hackarena.platform.users.v1.GetMeResponseB\x1e\xaa\x02\x1bHackArena.Platform.Users.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,12 +34,12 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'hackarena.platform.users.v1
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\033HackArena.Platform.Users.V1'
-  _globals['_USER']._serialized_start=115
-  _globals['_USER']._serialized_end=359
-  _globals['_GETMEREQUEST']._serialized_start=361
-  _globals['_GETMEREQUEST']._serialized_end=375
-  _globals['_GETMERESPONSE']._serialized_start=377
-  _globals['_GETMERESPONSE']._serialized_end=443
-  _globals['_USERSSERVICE']._serialized_start=445
-  _globals['_USERSSERVICE']._serialized_end=555
+  _globals['_USER']._serialized_start=148
+  _globals['_USER']._serialized_end=392
+  _globals['_GETMEREQUEST']._serialized_start=394
+  _globals['_GETMEREQUEST']._serialized_end=408
+  _globals['_GETMERESPONSE']._serialized_start=410
+  _globals['_GETMERESPONSE']._serialized_end=535
+  _globals['_USERSSERVICE']._serialized_start=537
+  _globals['_USERSSERVICE']._serialized_end=647
 # @@protoc_insertion_point(module_scope)

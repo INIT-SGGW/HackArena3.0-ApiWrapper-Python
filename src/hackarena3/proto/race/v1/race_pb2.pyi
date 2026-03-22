@@ -142,14 +142,16 @@ class _ParticipantCommandTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper
     DESCRIPTOR: _descriptor.EnumDescriptor
     PARTICIPANT_COMMAND_TYPE_UNSPECIFIED: _ParticipantCommandType.ValueType  # 0
     PARTICIPANT_COMMAND_TYPE_BACK_TO_TRACK: _ParticipantCommandType.ValueType  # 1
-    PARTICIPANT_COMMAND_TYPE_TO_PITSTOP: _ParticipantCommandType.ValueType  # 2
+    PARTICIPANT_COMMAND_TYPE_EMERGENCY_PITSTOP: _ParticipantCommandType.ValueType  # 2
+    PARTICIPANT_COMMAND_TYPE_SET_NEXT_PIT_TIRE_TYPE: _ParticipantCommandType.ValueType  # 3
 
 class ParticipantCommandType(_ParticipantCommandType, metaclass=_ParticipantCommandTypeEnumTypeWrapper):
     """Participant command kind used by command acknowledgements."""
 
 PARTICIPANT_COMMAND_TYPE_UNSPECIFIED: ParticipantCommandType.ValueType  # 0
 PARTICIPANT_COMMAND_TYPE_BACK_TO_TRACK: ParticipantCommandType.ValueType  # 1
-PARTICIPANT_COMMAND_TYPE_TO_PITSTOP: ParticipantCommandType.ValueType  # 2
+PARTICIPANT_COMMAND_TYPE_EMERGENCY_PITSTOP: ParticipantCommandType.ValueType  # 2
+PARTICIPANT_COMMAND_TYPE_SET_NEXT_PIT_TIRE_TYPE: ParticipantCommandType.ValueType  # 3
 Global___ParticipantCommandType: _TypeAlias = ParticipantCommandType  # noqa: Y015
 
 class _ParticipantCommandStatus:
@@ -179,6 +181,7 @@ class _ParticipantCommandRejectReasonEnumTypeWrapper(_enum_type_wrapper._EnumTyp
     PARTICIPANT_COMMAND_REJECT_REASON_UNSPECIFIED: _ParticipantCommandRejectReason.ValueType  # 0
     PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: _ParticipantCommandRejectReason.ValueType  # 1
     PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: _ParticipantCommandRejectReason.ValueType  # 2
+    PARTICIPANT_COMMAND_REJECT_REASON_IN_PIT: _ParticipantCommandRejectReason.ValueType  # 3
 
 class ParticipantCommandRejectReason(_ParticipantCommandRejectReason, metaclass=_ParticipantCommandRejectReasonEnumTypeWrapper):
     """Reject reason for participant one-shot commands."""
@@ -186,6 +189,7 @@ class ParticipantCommandRejectReason(_ParticipantCommandRejectReason, metaclass=
 PARTICIPANT_COMMAND_REJECT_REASON_UNSPECIFIED: ParticipantCommandRejectReason.ValueType  # 0
 PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: ParticipantCommandRejectReason.ValueType  # 1
 PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: ParticipantCommandRejectReason.ValueType  # 2
+PARTICIPANT_COMMAND_REJECT_REASON_IN_PIT: ParticipantCommandRejectReason.ValueType  # 3
 Global___ParticipantCommandRejectReason: _TypeAlias = ParticipantCommandRejectReason  # noqa: Y015
 
 @_typing.final
@@ -423,8 +427,8 @@ class ParticipantBackToTrackCommand(_message.Message):
 Global___ParticipantBackToTrackCommand: _TypeAlias = ParticipantBackToTrackCommand  # noqa: Y015
 
 @_typing.final
-class ParticipantToPitstopCommand(_message.Message):
-    """One-shot command requesting teleport to pitstop area."""
+class ParticipantEmergencyPitstopCommand(_message.Message):
+    """One-shot command requesting emergency teleport to pitstop area."""
 
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -439,7 +443,29 @@ class ParticipantToPitstopCommand(_message.Message):
     _ClearFieldArgType: _TypeAlias = _typing.Literal["client_seq", b"client_seq"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
-Global___ParticipantToPitstopCommand: _TypeAlias = ParticipantToPitstopCommand  # noqa: Y015
+Global___ParticipantEmergencyPitstopCommand: _TypeAlias = ParticipantEmergencyPitstopCommand  # noqa: Y015
+
+@_typing.final
+class ParticipantSetNextPitTireTypeCommand(_message.Message):
+    """One-shot command setting tire compound for the next pit stop."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CLIENT_SEQ_FIELD_NUMBER: _builtins.int
+    NEXT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    client_seq: _builtins.int
+    """Client-side command sequence for ack correlation."""
+    next_tire_type: _telemetry_pb2.TireType.ValueType
+    def __init__(
+        self,
+        *,
+        client_seq: _builtins.int = ...,
+        next_tire_type: _telemetry_pb2.TireType.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["client_seq", b"client_seq", "next_tire_type", b"next_tire_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ParticipantSetNextPitTireTypeCommand: _TypeAlias = ParticipantSetNextPitTireTypeCommand  # noqa: Y015
 
 @_typing.final
 class ParticipantClientMessage(_message.Message):
@@ -454,7 +480,8 @@ class ParticipantClientMessage(_message.Message):
     INIT_FIELD_NUMBER: _builtins.int
     CONTROLS_FIELD_NUMBER: _builtins.int
     BACK_TO_TRACK_FIELD_NUMBER: _builtins.int
-    TO_PITSTOP_FIELD_NUMBER: _builtins.int
+    EMERGENCY_PITSTOP_FIELD_NUMBER: _builtins.int
+    SET_NEXT_PIT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def init(self) -> Global___ParticipantStreamInit: ...
     @_builtins.property
@@ -462,20 +489,23 @@ class ParticipantClientMessage(_message.Message):
     @_builtins.property
     def back_to_track(self) -> Global___ParticipantBackToTrackCommand: ...
     @_builtins.property
-    def to_pitstop(self) -> Global___ParticipantToPitstopCommand: ...
+    def emergency_pitstop(self) -> Global___ParticipantEmergencyPitstopCommand: ...
+    @_builtins.property
+    def set_next_pit_tire_type(self) -> Global___ParticipantSetNextPitTireTypeCommand: ...
     def __init__(
         self,
         *,
         init: Global___ParticipantStreamInit | None = ...,
         controls: Global___ParticipantControlsInput | None = ...,
         back_to_track: Global___ParticipantBackToTrackCommand | None = ...,
-        to_pitstop: Global___ParticipantToPitstopCommand | None = ...,
+        emergency_pitstop: Global___ParticipantEmergencyPitstopCommand | None = ...,
+        set_next_pit_tire_type: Global___ParticipantSetNextPitTireTypeCommand | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "init", b"init", "payload", b"payload", "to_pitstop", b"to_pitstop"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "emergency_pitstop", b"emergency_pitstop", "init", b"init", "payload", b"payload", "set_next_pit_tire_type", b"set_next_pit_tire_type"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "init", b"init", "payload", b"payload", "to_pitstop", b"to_pitstop"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["back_to_track", b"back_to_track", "controls", b"controls", "emergency_pitstop", b"emergency_pitstop", "init", b"init", "payload", b"payload", "set_next_pit_tire_type", b"set_next_pit_tire_type"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["init", "controls", "back_to_track", "to_pitstop"]  # noqa: Y015
+    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["init", "controls", "back_to_track", "emergency_pitstop", "set_next_pit_tire_type"]  # noqa: Y015
     _WhichOneofArgType_payload: _TypeAlias = _typing.Literal["payload", b"payload"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
 
@@ -540,7 +570,9 @@ class ParticipantCommandAck(_message.Message):
     applies_from_tick: _builtins.int
     """Tick from which accepted command effects are applied."""
     rejected_reason: Global___ParticipantCommandRejectReason.ValueType
-    """Must be set only when status is REJECTED."""
+    """Must be set only when status is REJECTED.
+    For emergency_pitstop command, IN_PIT may be returned when vehicle is already in pit.
+    """
     def __init__(
         self,
         *,
@@ -730,3 +762,176 @@ class FrontendSpectatorEvent(_message.Message):
     def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
 
 Global___FrontendSpectatorEvent: _TypeAlias = FrontendSpectatorEvent  # noqa: Y015
+
+@_typing.final
+class BackToTrackRequest(_message.Message):
+    """Frontend command request: force controlled bot back to track.
+    Target bot/runtime is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___BackToTrackRequest: _TypeAlias = BackToTrackRequest  # noqa: Y015
+
+@_typing.final
+class BackToTrackResponse(_message.Message):
+    """Frontend response for BackToTrack."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
+    REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    status: Global___ParticipantCommandStatus.ValueType
+    applies_from_tick: _builtins.int
+    """Tick from which accepted command effects are applied."""
+    rejected_reason: Global___ParticipantCommandRejectReason.ValueType
+    """Must be set only when status is REJECTED."""
+    def __init__(
+        self,
+        *,
+        status: Global___ParticipantCommandStatus.ValueType = ...,
+        applies_from_tick: _builtins.int = ...,
+        rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___BackToTrackResponse: _TypeAlias = BackToTrackResponse  # noqa: Y015
+
+@_typing.final
+class RequestPitstopRequest(_message.Message):
+    """Frontend command request: ask controlled bot to (or not to) go to pitstop by itself.
+    Target bot/runtime is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    REQUEST_PITSTOP_FIELD_NUMBER: _builtins.int
+    request_pitstop: _builtins.bool
+    """true: request self-driven pit entry, false: clear previous request."""
+    def __init__(
+        self,
+        *,
+        request_pitstop: _builtins.bool = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["request_pitstop", b"request_pitstop"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___RequestPitstopRequest: _TypeAlias = RequestPitstopRequest  # noqa: Y015
+
+@_typing.final
+class RequestPitstopResponse(_message.Message):
+    """Frontend response for RequestPitstop."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
+    REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    status: Global___ParticipantCommandStatus.ValueType
+    applies_from_tick: _builtins.int
+    """Tick from which accepted command effects are applied."""
+    rejected_reason: Global___ParticipantCommandRejectReason.ValueType
+    """Must be set only when status is REJECTED."""
+    def __init__(
+        self,
+        *,
+        status: Global___ParticipantCommandStatus.ValueType = ...,
+        applies_from_tick: _builtins.int = ...,
+        rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___RequestPitstopResponse: _TypeAlias = RequestPitstopResponse  # noqa: Y015
+
+@_typing.final
+class EmergencyPitstopRequest(_message.Message):
+    """Frontend command request: force controlled bot teleport to pitstop.
+    Target bot/runtime is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___EmergencyPitstopRequest: _TypeAlias = EmergencyPitstopRequest  # noqa: Y015
+
+@_typing.final
+class EmergencyPitstopResponse(_message.Message):
+    """Frontend response for EmergencyPitstop."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
+    REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    status: Global___ParticipantCommandStatus.ValueType
+    applies_from_tick: _builtins.int
+    """Tick from which accepted command effects are applied."""
+    rejected_reason: Global___ParticipantCommandRejectReason.ValueType
+    """Must be set only when status is REJECTED."""
+    def __init__(
+        self,
+        *,
+        status: Global___ParticipantCommandStatus.ValueType = ...,
+        applies_from_tick: _builtins.int = ...,
+        rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___EmergencyPitstopResponse: _TypeAlias = EmergencyPitstopResponse  # noqa: Y015
+
+@_typing.final
+class SetNextPitTireTypeRequest(_message.Message):
+    """Frontend command request: set tire compound for the next pit stop.
+    Target bot/runtime is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    NEXT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    next_tire_type: _telemetry_pb2.TireType.ValueType
+    def __init__(
+        self,
+        *,
+        next_tire_type: _telemetry_pb2.TireType.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["next_tire_type", b"next_tire_type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___SetNextPitTireTypeRequest: _TypeAlias = SetNextPitTireTypeRequest  # noqa: Y015
+
+@_typing.final
+class SetNextPitTireTypeResponse(_message.Message):
+    """Frontend response for SetNextPitTireType."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
+    REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    status: Global___ParticipantCommandStatus.ValueType
+    applies_from_tick: _builtins.int
+    """Tick from which accepted command effects are applied."""
+    rejected_reason: Global___ParticipantCommandRejectReason.ValueType
+    """Must be set only when status is REJECTED."""
+    def __init__(
+        self,
+        *,
+        status: Global___ParticipantCommandStatus.ValueType = ...,
+        applies_from_tick: _builtins.int = ...,
+        rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___SetNextPitTireTypeResponse: _TypeAlias = SetNextPitTireTypeResponse  # noqa: Y015

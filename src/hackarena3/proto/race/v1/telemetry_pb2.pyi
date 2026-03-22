@@ -138,6 +138,26 @@ TIRE_TYPE_SOFT: TireType.ValueType  # 2
 TIRE_TYPE_WET: TireType.ValueType  # 3
 Global___TireType: _TypeAlias = TireType  # noqa: Y015
 
+class _PitEntrySource:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _PitEntrySourceEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_PitEntrySource.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    PIT_ENTRY_SOURCE_UNSPECIFIED: _PitEntrySource.ValueType  # 0
+    PIT_ENTRY_SOURCE_BOT_DECISION: _PitEntrySource.ValueType  # 1
+    PIT_ENTRY_SOURCE_REQUESTED: _PitEntrySource.ValueType  # 2
+    PIT_ENTRY_SOURCE_EMERGENCY: _PitEntrySource.ValueType  # 3
+
+class PitEntrySource(_PitEntrySource, metaclass=_PitEntrySourceEnumTypeWrapper):
+    """Source of pit entry."""
+
+PIT_ENTRY_SOURCE_UNSPECIFIED: PitEntrySource.ValueType  # 0
+PIT_ENTRY_SOURCE_BOT_DECISION: PitEntrySource.ValueType  # 1
+PIT_ENTRY_SOURCE_REQUESTED: PitEntrySource.ValueType  # 2
+PIT_ENTRY_SOURCE_EMERGENCY: PitEntrySource.ValueType  # 3
+Global___PitEntrySource: _TypeAlias = PitEntrySource  # noqa: Y015
+
 @_typing.final
 class TireWearPerWheel(_message.Message):
     """Per-wheel tire wear values normalized to range [0.0, 1.0]."""
@@ -191,6 +211,96 @@ class TireTemperaturePerWheel(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___TireTemperaturePerWheel: _TypeAlias = TireTemperaturePerWheel  # noqa: Y015
+
+@_typing.final
+class PitRuntimeState(_message.Message):
+    """Current pit runtime state for one vehicle."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    PIT_REQUEST_ACTIVE_FIELD_NUMBER: _builtins.int
+    EMERGENCY_LOCK_REMAINING_MS_FIELD_NUMBER: _builtins.int
+    LAST_PIT_TIME_MS_FIELD_NUMBER: _builtins.int
+    LAST_PIT_SOURCE_FIELD_NUMBER: _builtins.int
+    LAST_PIT_LAP_FIELD_NUMBER: _builtins.int
+    pit_request_active: _builtins.bool
+    """True when pit request is currently active."""
+    emergency_lock_remaining_ms: _builtins.int
+    """Emergency lock timeout remaining in milliseconds.
+    When > 0, the vehicle cannot move.
+    """
+    last_pit_time_ms: _builtins.int
+    """Timestamp (ms, Unix epoch UTC) of the last completed pit."""
+    last_pit_source: Global___PitEntrySource.ValueType
+    """Source of the last completed pit."""
+    last_pit_lap: _builtins.int
+    """Lap index at which last completed pit occurred."""
+    def __init__(
+        self,
+        *,
+        pit_request_active: _builtins.bool = ...,
+        emergency_lock_remaining_ms: _builtins.int = ...,
+        last_pit_time_ms: _builtins.int = ...,
+        last_pit_source: Global___PitEntrySource.ValueType = ...,
+        last_pit_lap: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["emergency_lock_remaining_ms", b"emergency_lock_remaining_ms", "last_pit_lap", b"last_pit_lap", "last_pit_source", b"last_pit_source", "last_pit_time_ms", b"last_pit_time_ms", "pit_request_active", b"pit_request_active"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___PitRuntimeState: _TypeAlias = PitRuntimeState  # noqa: Y015
+
+@_typing.final
+class PitHistoryEntry(_message.Message):
+    """One pit history entry."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    PIT_TIME_MS_FIELD_NUMBER: _builtins.int
+    LAP_FIELD_NUMBER: _builtins.int
+    SOURCE_FIELD_NUMBER: _builtins.int
+    NEW_TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    pit_time_ms: _builtins.int
+    """Timestamp (ms, Unix epoch UTC) when pit occurred."""
+    lap: _builtins.int
+    """Lap index at pit event."""
+    source: Global___PitEntrySource.ValueType
+    new_tire_type: Global___TireType.ValueType
+    """Tire compound selected/applied in this pit."""
+    def __init__(
+        self,
+        *,
+        pit_time_ms: _builtins.int = ...,
+        lap: _builtins.int = ...,
+        source: Global___PitEntrySource.ValueType = ...,
+        new_tire_type: Global___TireType.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["lap", b"lap", "new_tire_type", b"new_tire_type", "pit_time_ms", b"pit_time_ms", "source", b"source"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___PitHistoryEntry: _TypeAlias = PitHistoryEntry  # noqa: Y015
+
+@_typing.final
+class PitHistoryState(_message.Message):
+    """Pit history for one vehicle."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ENTRIES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def entries(self) -> _containers.RepeatedCompositeFieldContainer[Global___PitHistoryEntry]:
+        """Ordered from newest to oldest.
+        Number of entries is backend-defined.
+        """
+
+    def __init__(
+        self,
+        *,
+        entries: _abc.Iterable[Global___PitHistoryEntry] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["entries", b"entries"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___PitHistoryState: _TypeAlias = PitHistoryState  # noqa: Y015
 
 @_typing.final
 class GhostModeState(_message.Message):
@@ -278,6 +388,9 @@ class CarParticipantState(_message.Message):
     TIRE_TYPE_FIELD_NUMBER: _builtins.int
     TIRE_WEAR_FIELD_NUMBER: _builtins.int
     TIRE_TEMPERATURE_CELSIUS_FIELD_NUMBER: _builtins.int
+    PIT_RUNTIME_FIELD_NUMBER: _builtins.int
+    PIT_HISTORY_FIELD_NUMBER: _builtins.int
+    NEXT_PIT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
     last_applied_client_seq: _builtins.int
     speed_mps: _builtins.float
     engine_rpm: _builtins.float
@@ -296,6 +409,8 @@ class CarParticipantState(_message.Message):
     """Number of wheels currently inside pitstop zones (range 0..4)."""
     tire_type: Global___TireType.ValueType
     """Installed tire compound."""
+    next_pit_tire_type: Global___TireType.ValueType
+    """Planned tire compound for the next pit stop."""
     @_builtins.property
     def ghost_mode(self) -> Global___GhostModeState:
         """Runtime ghost mode state for this vehicle."""
@@ -307,6 +422,14 @@ class CarParticipantState(_message.Message):
     @_builtins.property
     def tire_temperature_celsius(self) -> Global___TireTemperaturePerWheel:
         """Tire temperature per wheel in degrees Celsius."""
+
+    @_builtins.property
+    def pit_runtime(self) -> Global___PitRuntimeState:
+        """Current pit runtime state (request/emergency lock/last pit summary)."""
+
+    @_builtins.property
+    def pit_history(self) -> Global___PitHistoryState:
+        """Pit history entries for this vehicle."""
 
     def __init__(
         self,
@@ -323,10 +446,13 @@ class CarParticipantState(_message.Message):
         tire_type: Global___TireType.ValueType = ...,
         tire_wear: Global___TireWearPerWheel | None = ...,
         tire_temperature_celsius: Global___TireTemperaturePerWheel | None = ...,
+        pit_runtime: Global___PitRuntimeState | None = ...,
+        pit_history: Global___PitHistoryState | None = ...,
+        next_pit_tire_type: Global___TireType.ValueType = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake_applied", b"brake_applied", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "throttle_applied", b"throttle_applied", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake_applied", b"brake_applied", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "next_pit_tire_type", b"next_pit_tire_type", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "throttle_applied", b"throttle_applied", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___CarParticipantState: _TypeAlias = CarParticipantState  # noqa: Y015

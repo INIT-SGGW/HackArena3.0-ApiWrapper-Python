@@ -146,6 +146,26 @@ class RaceServiceStub(object):
                 request_serializer=race_dot_v1_dot_race__pb2.SetControlsDevRequest.SerializeToString,
                 response_deserializer=race_dot_v1_dot_race__pb2.SetControlsResponse.FromString,
                 _registered_method=True)
+        self.BackToTrack = channel.unary_unary(
+                '/race.v1.RaceService/BackToTrack',
+                request_serializer=race_dot_v1_dot_race__pb2.BackToTrackRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.BackToTrackResponse.FromString,
+                _registered_method=True)
+        self.RequestPitstop = channel.unary_unary(
+                '/race.v1.RaceService/RequestPitstop',
+                request_serializer=race_dot_v1_dot_race__pb2.RequestPitstopRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.RequestPitstopResponse.FromString,
+                _registered_method=True)
+        self.EmergencyPitstop = channel.unary_unary(
+                '/race.v1.RaceService/EmergencyPitstop',
+                request_serializer=race_dot_v1_dot_race__pb2.EmergencyPitstopRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.EmergencyPitstopResponse.FromString,
+                _registered_method=True)
+        self.SetNextPitTireType = channel.unary_unary(
+                '/race.v1.RaceService/SetNextPitTireType',
+                request_serializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.FromString,
+                _registered_method=True)
         self.StreamFrontendSpectator = channel.unary_stream(
                 '/race.v1.RaceService/StreamFrontendSpectator',
                 request_serializer=race_dot_v1_dot_race__pb2.GetFrontendSpectatorRequest.SerializeToString,
@@ -169,6 +189,34 @@ class RaceServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def BackToTrack(self, request, context):
+        """Force controlled bot back to track.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RequestPitstop(self, request, context):
+        """Ask controlled bot to go to pitstop (or clear the request).
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def EmergencyPitstop(self, request, context):
+        """Force controlled bot teleport to pitstop.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetNextPitTireType(self, request, context):
+        """Set tire compound used by controlled bot on the next pit stop.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def StreamFrontendSpectator(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -187,6 +235,26 @@ def add_RaceServiceServicer_to_server(servicer, server):
                     servicer.SetControlsDev,
                     request_deserializer=race_dot_v1_dot_race__pb2.SetControlsDevRequest.FromString,
                     response_serializer=race_dot_v1_dot_race__pb2.SetControlsResponse.SerializeToString,
+            ),
+            'BackToTrack': grpc.unary_unary_rpc_method_handler(
+                    servicer.BackToTrack,
+                    request_deserializer=race_dot_v1_dot_race__pb2.BackToTrackRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.BackToTrackResponse.SerializeToString,
+            ),
+            'RequestPitstop': grpc.unary_unary_rpc_method_handler(
+                    servicer.RequestPitstop,
+                    request_deserializer=race_dot_v1_dot_race__pb2.RequestPitstopRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.RequestPitstopResponse.SerializeToString,
+            ),
+            'EmergencyPitstop': grpc.unary_unary_rpc_method_handler(
+                    servicer.EmergencyPitstop,
+                    request_deserializer=race_dot_v1_dot_race__pb2.EmergencyPitstopRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.EmergencyPitstopResponse.SerializeToString,
+            ),
+            'SetNextPitTireType': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetNextPitTireType,
+                    request_deserializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.SerializeToString,
             ),
             'StreamFrontendSpectator': grpc.unary_stream_rpc_method_handler(
                     servicer.StreamFrontendSpectator,
@@ -248,6 +316,114 @@ class RaceService(object):
             '/race.v1.RaceService/SetControlsDev',
             race_dot_v1_dot_race__pb2.SetControlsDevRequest.SerializeToString,
             race_dot_v1_dot_race__pb2.SetControlsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def BackToTrack(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceService/BackToTrack',
+            race_dot_v1_dot_race__pb2.BackToTrackRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.BackToTrackResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RequestPitstop(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceService/RequestPitstop',
+            race_dot_v1_dot_race__pb2.RequestPitstopRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.RequestPitstopResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def EmergencyPitstop(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceService/EmergencyPitstop',
+            race_dot_v1_dot_race__pb2.EmergencyPitstopRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.EmergencyPitstopResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetNextPitTireType(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceService/SetNextPitTireType',
+            race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.FromString,
             options,
             channel_credentials,
             insecure,

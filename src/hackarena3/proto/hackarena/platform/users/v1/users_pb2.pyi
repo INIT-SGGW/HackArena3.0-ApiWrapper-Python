@@ -6,6 +6,7 @@ isort:skip_file
 from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from hackarena3.proto.hackarena.platform.common.v1 import types_pb2 as _types_pb2
 import builtins as _builtins
@@ -87,18 +88,22 @@ class GetMeResponse(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
     ME_FIELD_NUMBER: _builtins.int
+    EXPIRES_AT_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def me(self) -> Global___User:
         """Current user."""
 
+    @_builtins.property
+    def expires_at(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
         self,
         *,
         me: Global___User | None = ...,
+        expires_at: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["me", b"me"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["expires_at", b"expires_at", "me", b"me"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["me", b"me"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["expires_at", b"expires_at", "me", b"me"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___GetMeResponse: _TypeAlias = GetMeResponse  # noqa: Y015
