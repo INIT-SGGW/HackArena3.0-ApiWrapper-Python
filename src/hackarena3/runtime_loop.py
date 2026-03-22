@@ -26,6 +26,7 @@ from hackarena3.types import (
     Controls,
     GearShift,
     RaceSnapshot,
+    TireType,
 )
 
 if TYPE_CHECKING:
@@ -61,6 +62,12 @@ class _PendingCommandAck:
 
 
 @dataclass(slots=True)
+class _OutboundCommand:
+    kind: str
+    next_tire_type: int | None = None
+
+
+@dataclass(slots=True)
 class _SessionState:
     stop_event: threading.Event = field(default_factory=threading.Event)
     snapshot_event: threading.Event = field(default_factory=threading.Event)
@@ -70,7 +77,7 @@ class _SessionState:
     latest_snapshot_version: int = 0
     desired_controls: Controls | None = None
     controls_dirty: bool = False
-    pending_commands: deque[str] = field(default_factory=deque[str])
+    pending_commands: deque[_OutboundCommand] = field(default_factory=deque)
     next_client_seq: int = 0
     pending_acks: dict[int, _PendingAck] = field(default_factory=dict[int, _PendingAck])
     pending_command_acks: dict[int, _PendingCommandAck] = field(
@@ -167,9 +174,9 @@ def _set_desired_controls(
     state.outbound_event.set()
 
 
-def _enqueue_command(state: _SessionState, command_kind: str) -> None:
+def _enqueue_command(state: _SessionState, command: _OutboundCommand) -> None:
     with state.lock:
-        state.pending_commands.append(command_kind)
+        state.pending_commands.append(command)
     state.outbound_event.set()
 
 
@@ -350,29 +357,43 @@ def _writer_loop(
             message: race_pb2.ParticipantClientMessage | None = None
             with state.lock:
                 if state.pending_commands:
-                    command_kind = state.pending_commands.popleft()
+                    command = state.pending_commands.popleft()
                     state.next_client_seq += 1
                     client_seq = state.next_client_seq
                     state.pending_command_acks[client_seq] = _PendingCommandAck(
                         started_monotonic=time.monotonic(),
-                        command_kind=command_kind,
+                        command_kind=command.kind,
                     )
-                    if command_kind == "to_pitstop":
+                    if command.kind == "emergency_pitstop":
                         message = race_pb2.ParticipantClientMessage(
-                            to_pitstop=race_pb2.ParticipantToPitstopCommand(
+                            emergency_pitstop=race_pb2.ParticipantEmergencyPitstopCommand(
                                 client_seq=client_seq
                             )
                         )
-                    elif command_kind == "back_to_track":
+                    elif command.kind == "back_to_track":
                         message = race_pb2.ParticipantClientMessage(
                             back_to_track=race_pb2.ParticipantBackToTrackCommand(
                                 client_seq=client_seq
                             )
                         )
+                    elif command.kind == "set_next_pit_tire_type":
+                        if command.next_tire_type is None:
+                            if not state.stop_event.is_set():
+                                state.fatal_error = RuntimeErrorWrapper(
+                                    "Missing next_tire_type for set_next_pit_tire_type command."
+                                )
+                                state.stop_event.set()
+                            break
+                        message = race_pb2.ParticipantClientMessage(
+                            set_next_pit_tire_type=race_pb2.ParticipantSetNextPitTireTypeCommand(
+                                client_seq=client_seq,
+                                next_tire_type=command.next_tire_type,
+                            )
+                        )
                     else:
                         if not state.stop_event.is_set():
                             state.fatal_error = RuntimeErrorWrapper(
-                                f"Unsupported participant command kind: {command_kind}"
+                                f"Unsupported participant command kind: {command.kind}"
                             )
                             state.stop_event.set()
                         break
@@ -456,15 +477,28 @@ def run_participant_loop(
             latest_controls = controls
             _set_desired_controls(state, controls)
 
-        def _request_pit_impl(state_ref: _SessionState = state) -> None:
-            _enqueue_command(state_ref, "to_pitstop")
-
         def _request_back_to_track_impl(state_ref: _SessionState = state) -> None:
-            _enqueue_command(state_ref, "back_to_track")
+            _enqueue_command(state_ref, _OutboundCommand(kind="back_to_track"))
+
+        def _request_emergency_pitstop_impl(state_ref: _SessionState = state) -> None:
+            _enqueue_command(state_ref, _OutboundCommand(kind="emergency_pitstop"))
+
+        def _set_next_pit_tire_type_impl(
+            tire_type: TireType,
+            state_ref: _SessionState = state,
+        ) -> None:
+            _enqueue_command(
+                state_ref,
+                _OutboundCommand(
+                    kind="set_next_pit_tire_type",
+                    next_tire_type=int(tire_type),
+                ),
+            )
 
         ctx._set_controls_impl = _set_controls_impl
-        ctx._request_pit_impl = _request_pit_impl
         ctx._request_back_to_track_impl = _request_back_to_track_impl
+        ctx._request_emergency_pitstop_impl = _request_emergency_pitstop_impl
+        ctx._set_next_pit_tire_type_impl = _set_next_pit_tire_type_impl
         if state.controls_dirty:
             state.outbound_event.set()
 

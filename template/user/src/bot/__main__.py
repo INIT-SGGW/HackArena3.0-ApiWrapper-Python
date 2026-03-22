@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from hackarena3 import BotContext, RaceSnapshot, run_bot
-from hackarena3.types import DriveGear, GearShift
+from hackarena3 import BotContext, DriveGear, GearShift, RaceSnapshot, run_bot
 
 
 class ExampleBot:

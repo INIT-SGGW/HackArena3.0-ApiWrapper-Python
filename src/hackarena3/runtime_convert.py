@@ -137,10 +137,13 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
 
     tire_type_raw = int(raw.self.telemetry.tire_type)
     tire_type = _tire_type_from_raw(tire_type_raw)
+    next_pit_tire_type_raw = int(raw.self.telemetry.next_pit_tire_type)
+    next_pit_tire_type = _tire_type_from_raw(next_pit_tire_type_raw)
     tire_wear = _tire_wear_from_proto(raw.self.telemetry.tire_wear)
     tire_temp = _tire_temperature_from_proto(
         raw.self.telemetry.tire_temperature_celsius
     )
+    pit_runtime = raw.self.telemetry.pit_runtime
 
     return RaceSnapshot(
         tick=int(raw.tick),
@@ -161,8 +164,14 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             ghost_mode=self_ghost,
             tire_type_raw=tire_type_raw,
             tire_type=tire_type,
+            next_pit_tire_type_raw=next_pit_tire_type_raw,
+            next_pit_tire_type=next_pit_tire_type,
             tire_wear=tire_wear,
             tire_temperature_celsius=tire_temp,
+            pit_request_active=bool(pit_runtime.pit_request_active),
+            pit_emergency_lock_remaining_ms=int(pit_runtime.emergency_lock_remaining_ms),
+            last_pit_time_ms=int(pit_runtime.last_pit_time_ms),
+            last_pit_source_raw=int(pit_runtime.last_pit_source),
         ),
         opponents=tuple(opponents),
         tire_type_raw=tire_type_raw,

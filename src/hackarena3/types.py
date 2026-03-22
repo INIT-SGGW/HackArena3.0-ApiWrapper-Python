@@ -154,8 +154,14 @@ class CarState:
     ghost_mode: GhostModeState | None
     tire_type_raw: int
     tire_type: TireType
+    next_pit_tire_type_raw: int
+    next_pit_tire_type: TireType
     tire_wear: TireWearPerWheel
     tire_temperature_celsius: TireTemperaturePerWheel
+    pit_request_active: bool
+    pit_emergency_lock_remaining_ms: int
+    last_pit_time_ms: int
+    last_pit_source_raw: int
 
     @property
     def speed_kmh(self) -> float:
@@ -198,6 +204,10 @@ def _unbound_command() -> None:
     raise RuntimeError("BotContext is not attached to active runtime.")
 
 
+def _unbound_set_next_pit_tire_type(_tire_type: TireType) -> None:
+    raise RuntimeError("BotContext is not attached to active runtime.")
+
+
 @dataclass(slots=True)
 class BotContext:
     car_id: int
@@ -212,12 +222,16 @@ class BotContext:
         default=_unbound_set_controls,
         repr=False,
     )
-    _request_pit_impl: Callable[[], None] = field(
+    _request_back_to_track_impl: Callable[[], None] = field(
         default=_unbound_command,
         repr=False,
     )
-    _request_back_to_track_impl: Callable[[], None] = field(
+    _request_emergency_pitstop_impl: Callable[[], None] = field(
         default=_unbound_command,
+        repr=False,
+    )
+    _set_next_pit_tire_type_impl: Callable[[TireType], None] = field(
+        default=_unbound_set_next_pit_tire_type,
         repr=False,
     )
 
@@ -238,11 +252,14 @@ class BotContext:
             )
         )
 
-    def request_pit(self) -> None:
-        self._request_pit_impl()
-
     def request_back_to_track(self) -> None:
         self._request_back_to_track_impl()
+
+    def request_emergency_pitstop(self) -> None:
+        self._request_emergency_pitstop_impl()
+
+    def set_next_pit_tire_type(self, tire_type: TireType) -> None:
+        self._set_next_pit_tire_type_impl(tire_type)
 
 
 class BotProtocol(Protocol):
