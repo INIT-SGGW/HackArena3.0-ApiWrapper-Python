@@ -96,3 +96,71 @@ class GetAchievementsResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___GetAchievementsResponse: _TypeAlias = GetAchievementsResponse  # noqa: Y015
+
+@_typing.final
+class GetAchievementTotalsRequest(_message.Message):
+    """Request computation of team totals."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___GetAchievementTotalsRequest: _TypeAlias = GetAchievementTotalsRequest  # noqa: Y015
+
+@_typing.final
+class GetAchievementTotalsResponse(_message.Message):
+    """Response envelope for team totals collection."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TOTAL_ACHIEVEMENTS_FIELD_NUMBER: _builtins.int
+    TOTALS_FIELD_NUMBER: _builtins.int
+    total_achievements: _builtins.int
+    """Number of all achievements."""
+    @_builtins.property
+    def totals(self) -> _containers.RepeatedCompositeFieldContainer[_achievement_types_pb2.TeamTotal]:
+        """Collection of computed totals for each team."""
+
+    def __init__(
+        self,
+        *,
+        total_achievements: _builtins.int = ...,
+        totals: _abc.Iterable[_achievement_types_pb2.TeamTotal] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["total_achievements", b"total_achievements", "totals", b"totals"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetAchievementTotalsResponse: _TypeAlias = GetAchievementTotalsResponse  # noqa: Y015
+
+@_typing.final
+class StreamAchievementGrantsRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___StreamAchievementGrantsRequest: _TypeAlias = StreamAchievementGrantsRequest  # noqa: Y015
+
+@_typing.final
+class StreamAchievementGrantsResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    ACHIEVEMENT_NAME_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team that got achievement."""
+    achievement_name: _builtins.str
+    """Represents got achievement name."""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+        achievement_name: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_name", b"achievement_name", "team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___StreamAchievementGrantsResponse: _TypeAlias = StreamAchievementGrantsResponse  # noqa: Y015

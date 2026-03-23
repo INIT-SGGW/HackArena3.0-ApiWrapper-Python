@@ -309,3 +309,86 @@ class NumericAchievementRepresentation(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___NumericAchievementRepresentation: _TypeAlias = NumericAchievementRepresentation  # noqa: Y015
+
+@_typing.final
+class TeamTotal(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    TOTAL_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents Team Id."""
+    total: _builtins.int
+    """Represents total number of achieved achievements."""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+        total: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id", "total", b"total"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TeamTotal: _TypeAlias = TeamTotal  # noqa: Y015
+
+@_typing.final
+class AchievementDisplay(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    IMAGE_PATH_FIELD_NUMBER: _builtins.int
+    UNIT_FIELD_NUMBER: _builtins.int
+    AVAILABILITY_FIELD_NUMBER: _builtins.int
+    VISIBILITY_FIELD_NUMBER: _builtins.int
+    achievement_id: _builtins.str
+    name: _builtins.str
+    description: _builtins.str
+    image_path: _builtins.str
+    unit: _builtins.str
+    availability: Global___AchievementAvailability.ValueType
+    visibility: Global___AchievementVisibility.ValueType
+    def __init__(
+        self,
+        *,
+        achievement_id: _builtins.str = ...,
+        name: _builtins.str = ...,
+        description: _builtins.str = ...,
+        image_path: _builtins.str = ...,
+        unit: _builtins.str = ...,
+        availability: Global___AchievementAvailability.ValueType = ...,
+        visibility: Global___AchievementVisibility.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "availability", b"availability", "description", b"description", "image_path", b"image_path", "name", b"name", "unit", b"unit", "visibility", b"visibility"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___AchievementDisplay: _TypeAlias = AchievementDisplay  # noqa: Y015
+
+@_typing.final
+class NewAchievementDisplay(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    NAME_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    IMAGE_PATH_FIELD_NUMBER: _builtins.int
+    UNIT_FIELD_NUMBER: _builtins.int
+    VISIBILITY_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    description: _builtins.str
+    image_path: _builtins.str
+    unit: _builtins.str
+    visibility: Global___AchievementVisibility.ValueType
+    def __init__(
+        self,
+        *,
+        name: _builtins.str = ...,
+        description: _builtins.str = ...,
+        image_path: _builtins.str = ...,
+        unit: _builtins.str = ...,
+        visibility: Global___AchievementVisibility.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["description", b"description", "image_path", b"image_path", "name", b"name", "unit", b"unit", "visibility", b"visibility"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___NewAchievementDisplay: _TypeAlias = NewAchievementDisplay  # noqa: Y015

@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from hackarena3.proto.achievement.v1 import achievement_types_pb2 as achievement_dot_v1_dot_achievement__types__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'achievement/v1/achievement_public.proto\x12\x0e\x61\x63hievement.v1\x1a&achievement/v1/achievement_types.proto\"\xd5\x01\n\x19\x41\x63hievementRepresentation\x12X\n\x0b\x63onditional\x18\x01 \x01(\x0b\x32\x34.achievement.v1.ConditionalAchievementRepresentationH\x00R\x0b\x63onditional\x12L\n\x07numeric\x18\x02 \x01(\x0b\x32\x30.achievement.v1.NumericAchievementRepresentationH\x00R\x07numericB\x10\n\x0erepresentation\"1\n\x16GetAchievementsRequest\x12\x17\n\x07team_id\x18\x01 \x01(\tR\x06teamId\"\xac\x01\n\x17GetAchievementsResponse\x12\x42\n\x1dremaining_secret_achievements\x18\x01 \x01(\x05R\x1bremainingSecretAchievements\x12M\n\x0c\x61\x63hievements\x18\x02 \x03(\x0b\x32).achievement.v1.AchievementRepresentationR\x0c\x61\x63hievements2x\n\x12\x41\x63hievementService\x12\x62\n\x0fGetAchievements\x12&.achievement.v1.GetAchievementsRequest\x1a\'.achievement.v1.GetAchievementsResponseB\x1b\xaa\x02\x18HA3.Proto.Achievement.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'achievement/v1/achievement_public.proto\x12\x0e\x61\x63hievement.v1\x1a&achievement/v1/achievement_types.proto\"\xd5\x01\n\x19\x41\x63hievementRepresentation\x12X\n\x0b\x63onditional\x18\x01 \x01(\x0b\x32\x34.achievement.v1.ConditionalAchievementRepresentationH\x00R\x0b\x63onditional\x12L\n\x07numeric\x18\x02 \x01(\x0b\x32\x30.achievement.v1.NumericAchievementRepresentationH\x00R\x07numericB\x10\n\x0erepresentation\"1\n\x16GetAchievementsRequest\x12\x17\n\x07team_id\x18\x01 \x01(\tR\x06teamId\"\xac\x01\n\x17GetAchievementsResponse\x12\x42\n\x1dremaining_secret_achievements\x18\x01 \x01(\x05R\x1bremainingSecretAchievements\x12M\n\x0c\x61\x63hievements\x18\x02 \x03(\x0b\x32).achievement.v1.AchievementRepresentationR\x0c\x61\x63hievements\"\x1d\n\x1bGetAchievementTotalsRequest\"\x80\x01\n\x1cGetAchievementTotalsResponse\x12-\n\x12total_achievements\x18\x01 \x01(\rR\x11totalAchievements\x12\x31\n\x06totals\x18\x02 \x03(\x0b\x32\x19.achievement.v1.TeamTotalR\x06totals\" \n\x1eStreamAchievementGrantsRequest\"e\n\x1fStreamAchievementGrantsResponse\x12\x17\n\x07team_id\x18\x01 \x01(\tR\x06teamId\x12)\n\x10\x61\x63hievement_name\x18\x02 \x01(\tR\x0f\x61\x63hievementName2\xe9\x02\n\x12\x41\x63hievementService\x12\x62\n\x0fGetAchievements\x12&.achievement.v1.GetAchievementsRequest\x1a\'.achievement.v1.GetAchievementsResponse\x12q\n\x14GetAchievementTotals\x12+.achievement.v1.GetAchievementTotalsRequest\x1a,.achievement.v1.GetAchievementTotalsResponse\x12|\n\x17StreamAchievementGrants\x12..achievement.v1.StreamAchievementGrantsRequest\x1a/.achievement.v1.StreamAchievementGrantsResponse0\x01\x42\x1b\xaa\x02\x18HA3.Proto.Achievement.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -39,6 +39,14 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_GETACHIEVEMENTSREQUEST']._serialized_end=364
   _globals['_GETACHIEVEMENTSRESPONSE']._serialized_start=367
   _globals['_GETACHIEVEMENTSRESPONSE']._serialized_end=539
-  _globals['_ACHIEVEMENTSERVICE']._serialized_start=541
-  _globals['_ACHIEVEMENTSERVICE']._serialized_end=661
+  _globals['_GETACHIEVEMENTTOTALSREQUEST']._serialized_start=541
+  _globals['_GETACHIEVEMENTTOTALSREQUEST']._serialized_end=570
+  _globals['_GETACHIEVEMENTTOTALSRESPONSE']._serialized_start=573
+  _globals['_GETACHIEVEMENTTOTALSRESPONSE']._serialized_end=701
+  _globals['_STREAMACHIEVEMENTGRANTSREQUEST']._serialized_start=703
+  _globals['_STREAMACHIEVEMENTGRANTSREQUEST']._serialized_end=735
+  _globals['_STREAMACHIEVEMENTGRANTSRESPONSE']._serialized_start=737
+  _globals['_STREAMACHIEVEMENTGRANTSRESPONSE']._serialized_end=838
+  _globals['_ACHIEVEMENTSERVICE']._serialized_start=841
+  _globals['_ACHIEVEMENTSERVICE']._serialized_end=1202
 # @@protoc_insertion_point(module_scope)

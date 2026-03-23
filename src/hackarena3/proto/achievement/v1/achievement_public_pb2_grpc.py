@@ -20,6 +20,16 @@ class AchievementServiceStub(object):
                 request_serializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsRequest.SerializeToString,
                 response_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsResponse.FromString,
                 _registered_method=True)
+        self.GetAchievementTotals = channel.unary_unary(
+                '/achievement.v1.AchievementService/GetAchievementTotals',
+                request_serializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsRequest.SerializeToString,
+                response_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsResponse.FromString,
+                _registered_method=True)
+        self.StreamAchievementGrants = channel.unary_stream(
+                '/achievement.v1.AchievementService/StreamAchievementGrants',
+                request_serializer=achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsRequest.SerializeToString,
+                response_deserializer=achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsResponse.FromString,
+                _registered_method=True)
 
 
 class AchievementServiceServicer(object):
@@ -35,6 +45,20 @@ class AchievementServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAchievementTotals(self, request, context):
+        """Get how many achievements each team has.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamAchievementGrants(self, request, context):
+        """Global stream of achievement grant events.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AchievementServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -42,6 +66,16 @@ def add_AchievementServiceServicer_to_server(servicer, server):
                     servicer.GetAchievements,
                     request_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsRequest.FromString,
                     response_serializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsResponse.SerializeToString,
+            ),
+            'GetAchievementTotals': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAchievementTotals,
+                    request_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsRequest.FromString,
+                    response_serializer=achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsResponse.SerializeToString,
+            ),
+            'StreamAchievementGrants': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamAchievementGrants,
+                    request_deserializer=achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsRequest.FromString,
+                    response_serializer=achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -72,6 +106,60 @@ class AchievementService(object):
             '/achievement.v1.AchievementService/GetAchievements',
             achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsRequest.SerializeToString,
             achievement_dot_v1_dot_achievement__public__pb2.GetAchievementsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetAchievementTotals(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/achievement.v1.AchievementService/GetAchievementTotals',
+            achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsRequest.SerializeToString,
+            achievement_dot_v1_dot_achievement__public__pb2.GetAchievementTotalsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StreamAchievementGrants(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/achievement.v1.AchievementService/StreamAchievementGrants',
+            achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsRequest.SerializeToString,
+            achievement_dot_v1_dot_achievement__public__pb2.StreamAchievementGrantsResponse.FromString,
             options,
             channel_credentials,
             insecure,

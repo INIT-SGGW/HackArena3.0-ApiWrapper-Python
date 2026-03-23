@@ -213,6 +213,35 @@ class TireTemperaturePerWheel(_message.Message):
 Global___TireTemperaturePerWheel: _TypeAlias = TireTemperaturePerWheel  # noqa: Y015
 
 @_typing.final
+class TireSlipPerWheel(_message.Message):
+    """Per-wheel tire slip values.
+    Values are >= 0.0. Values > 1.0 indicate lost traction.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    FRONT_LEFT_FIELD_NUMBER: _builtins.int
+    FRONT_RIGHT_FIELD_NUMBER: _builtins.int
+    REAR_LEFT_FIELD_NUMBER: _builtins.int
+    REAR_RIGHT_FIELD_NUMBER: _builtins.int
+    front_left: _builtins.float
+    front_right: _builtins.float
+    rear_left: _builtins.float
+    rear_right: _builtins.float
+    def __init__(
+        self,
+        *,
+        front_left: _builtins.float = ...,
+        front_right: _builtins.float = ...,
+        rear_left: _builtins.float = ...,
+        rear_right: _builtins.float = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["front_left", b"front_left", "front_right", b"front_right", "rear_left", b"rear_left", "rear_right", b"rear_right"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TireSlipPerWheel: _TypeAlias = TireSlipPerWheel  # noqa: Y015
+
+@_typing.final
 class PitRuntimeState(_message.Message):
     """Current pit runtime state for one vehicle."""
 
@@ -380,8 +409,6 @@ class CarParticipantState(_message.Message):
     SPEED_MPS_FIELD_NUMBER: _builtins.int
     ENGINE_RPM_FIELD_NUMBER: _builtins.int
     GEAR_FIELD_NUMBER: _builtins.int
-    THROTTLE_APPLIED_FIELD_NUMBER: _builtins.int
-    BRAKE_APPLIED_FIELD_NUMBER: _builtins.int
     GHOST_MODE_FIELD_NUMBER: _builtins.int
     PITSTOP_ZONE_FLAGS_FIELD_NUMBER: _builtins.int
     WHEELS_IN_PITSTOP_FIELD_NUMBER: _builtins.int
@@ -391,12 +418,11 @@ class CarParticipantState(_message.Message):
     PIT_RUNTIME_FIELD_NUMBER: _builtins.int
     PIT_HISTORY_FIELD_NUMBER: _builtins.int
     NEXT_PIT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    TIRE_SLIP_FIELD_NUMBER: _builtins.int
     last_applied_client_seq: _builtins.int
     speed_mps: _builtins.float
     engine_rpm: _builtins.float
     gear: _builtins.int
-    throttle_applied: _builtins.float
-    brake_applied: _builtins.float
     pitstop_zone_flags: _builtins.int
     """Active pitstop zones encoded as PitstopZoneFlag bitmask.
     Bits:
@@ -431,6 +457,10 @@ class CarParticipantState(_message.Message):
     def pit_history(self) -> Global___PitHistoryState:
         """Pit history entries for this vehicle."""
 
+    @_builtins.property
+    def tire_slip(self) -> Global___TireSlipPerWheel:
+        """Per-wheel tire slip values. > 1.0 indicates lost traction."""
+
     def __init__(
         self,
         *,
@@ -438,8 +468,6 @@ class CarParticipantState(_message.Message):
         speed_mps: _builtins.float = ...,
         engine_rpm: _builtins.float = ...,
         gear: _builtins.int = ...,
-        throttle_applied: _builtins.float = ...,
-        brake_applied: _builtins.float = ...,
         ghost_mode: Global___GhostModeState | None = ...,
         pitstop_zone_flags: _builtins.int = ...,
         wheels_in_pitstop: _builtins.int = ...,
@@ -449,10 +477,11 @@ class CarParticipantState(_message.Message):
         pit_runtime: Global___PitRuntimeState | None = ...,
         pit_history: Global___PitHistoryState | None = ...,
         next_pit_tire_type: Global___TireType.ValueType = ...,
+        tire_slip: Global___TireSlipPerWheel | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake_applied", b"brake_applied", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "next_pit_tire_type", b"next_pit_tire_type", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "throttle_applied", b"throttle_applied", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "next_pit_tire_type", b"next_pit_tire_type", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___CarParticipantState: _TypeAlias = CarParticipantState  # noqa: Y015
@@ -496,7 +525,19 @@ class FrontendCarFullState(_message.Message):
     KINEMATICS_FIELD_NUMBER: _builtins.int
     TELEMETRY_FIELD_NUMBER: _builtins.int
     RENDER_FIELD_NUMBER: _builtins.int
+    INPUT_THROTTLE_FIELD_NUMBER: _builtins.int
+    INPUT_BRAKE_FIELD_NUMBER: _builtins.int
+    CURRENT_BRAKE_BALANCER_FIELD_NUMBER: _builtins.int
+    CURRENT_DIFFERENTIAL_LOCK_FIELD_NUMBER: _builtins.int
     car_id: _builtins.int
+    input_throttle: _builtins.float
+    """Current bot throttle input used for spectator UI."""
+    input_brake: _builtins.float
+    """Current bot brake input used for spectator UI."""
+    current_brake_balancer: _builtins.float
+    """Current brake balancer value used for spectator UI."""
+    current_differential_lock: _builtins.float
+    """Current differential lock value used for spectator UI."""
     @_builtins.property
     def kinematics(self) -> Global___CarKinematics: ...
     @_builtins.property
@@ -510,10 +551,14 @@ class FrontendCarFullState(_message.Message):
         kinematics: Global___CarKinematics | None = ...,
         telemetry: Global___CarParticipantState | None = ...,
         render: Global___CarRenderState | None = ...,
+        input_throttle: _builtins.float = ...,
+        input_brake: _builtins.float = ...,
+        current_brake_balancer: _builtins.float = ...,
+        current_differential_lock: _builtins.float = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["kinematics", b"kinematics", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "kinematics", b"kinematics", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "current_brake_balancer", b"current_brake_balancer", "current_differential_lock", b"current_differential_lock", "input_brake", b"input_brake", "input_throttle", b"input_throttle", "kinematics", b"kinematics", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___FrontendCarFullState: _TypeAlias = FrontendCarFullState  # noqa: Y015

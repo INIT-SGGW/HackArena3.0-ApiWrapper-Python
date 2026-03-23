@@ -381,6 +381,8 @@ class ParticipantControlsInput(_message.Message):
     BRAKE_FIELD_NUMBER: _builtins.int
     STEERING_FIELD_NUMBER: _builtins.int
     GEAR_SHIFT_FIELD_NUMBER: _builtins.int
+    BRAKE_BALANCER_FIELD_NUMBER: _builtins.int
+    DIFFERENTIAL_LOCK_FIELD_NUMBER: _builtins.int
     client_seq: _builtins.int
     """Client-side command sequence for ack correlation."""
     throttle: _builtins.float
@@ -393,6 +395,10 @@ class ParticipantControlsInput(_message.Message):
     """Requested gear shift by one step.
     UNSPECIFIED is treated as NONE.
     """
+    brake_balancer: _builtins.float
+    """Brake balance control in range [0.0, 1.0]."""
+    differential_lock: _builtins.float
+    """Differential lock control in range [0.0, 1.0]."""
     def __init__(
         self,
         *,
@@ -401,8 +407,10 @@ class ParticipantControlsInput(_message.Message):
         brake: _builtins.float = ...,
         steering: _builtins.float = ...,
         gear_shift: Global___GearShift.ValueType = ...,
+        brake_balancer: _builtins.float = ...,
+        differential_lock: _builtins.float = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake", b"brake", "client_seq", b"client_seq", "gear_shift", b"gear_shift", "steering", b"steering", "throttle", b"throttle"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["brake", b"brake", "brake_balancer", b"brake_balancer", "client_seq", b"client_seq", "differential_lock", b"differential_lock", "gear_shift", b"gear_shift", "steering", b"steering", "throttle", b"throttle"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___ParticipantControlsInput: _TypeAlias = ParticipantControlsInput  # noqa: Y015
@@ -520,9 +528,6 @@ class ParticipantControlsAck(_message.Message):
     CLIENT_SEQ_FIELD_NUMBER: _builtins.int
     APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
     ACCEPTED_SHIFT_FIELD_NUMBER: _builtins.int
-    ACCEPTED_THROTTLE_FIELD_NUMBER: _builtins.int
-    ACCEPTED_BRAKE_FIELD_NUMBER: _builtins.int
-    ACCEPTED_STEERING_FIELD_NUMBER: _builtins.int
     client_seq: _builtins.int
     """Echoed client sequence from controls input."""
     applies_from_tick: _builtins.int
@@ -531,23 +536,14 @@ class ParticipantControlsAck(_message.Message):
     """Shift operation that was actually executed by drivetrain logic.
     Returns NONE when no shift was executed.
     """
-    accepted_throttle: _builtins.float
-    """Accepted throttle after server-side clamping/validation."""
-    accepted_brake: _builtins.float
-    """Accepted brake after server-side clamping/validation."""
-    accepted_steering: _builtins.float
-    """Accepted steering after server-side clamping/validation."""
     def __init__(
         self,
         *,
         client_seq: _builtins.int = ...,
         applies_from_tick: _builtins.int = ...,
         accepted_shift: Global___GearShift.ValueType = ...,
-        accepted_throttle: _builtins.float = ...,
-        accepted_brake: _builtins.float = ...,
-        accepted_steering: _builtins.float = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted_brake", b"accepted_brake", "accepted_shift", b"accepted_shift", "accepted_steering", b"accepted_steering", "accepted_throttle", b"accepted_throttle", "applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted_shift", b"accepted_shift", "applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___ParticipantControlsAck: _TypeAlias = ParticipantControlsAck  # noqa: Y015
