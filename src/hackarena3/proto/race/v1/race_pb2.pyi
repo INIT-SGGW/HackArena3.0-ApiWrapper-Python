@@ -281,15 +281,9 @@ class SetControlsResponse(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
     CLIENT_SEQ_FIELD_NUMBER: _builtins.int
-    ACCEPTED_THROTTLE_FIELD_NUMBER: _builtins.int
-    ACCEPTED_BRAKE_FIELD_NUMBER: _builtins.int
-    ACCEPTED_STEERING_FIELD_NUMBER: _builtins.int
     APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
     ACCEPTED_SHIFT_FIELD_NUMBER: _builtins.int
     client_seq: _builtins.int
-    accepted_throttle: _builtins.float
-    accepted_brake: _builtins.float
-    accepted_steering: _builtins.float
     applies_from_tick: _builtins.int
     accepted_shift: Global___GearShift.ValueType
     """Shift operation that was actually executed by drivetrain logic.
@@ -299,13 +293,10 @@ class SetControlsResponse(_message.Message):
         self,
         *,
         client_seq: _builtins.int = ...,
-        accepted_throttle: _builtins.float = ...,
-        accepted_brake: _builtins.float = ...,
-        accepted_steering: _builtins.float = ...,
         applies_from_tick: _builtins.int = ...,
         accepted_shift: Global___GearShift.ValueType = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted_brake", b"accepted_brake", "accepted_shift", b"accepted_shift", "accepted_steering", b"accepted_steering", "accepted_throttle", b"accepted_throttle", "applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted_shift", b"accepted_shift", "applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___SetControlsResponse: _TypeAlias = SetControlsResponse  # noqa: Y015
@@ -584,9 +575,52 @@ class ParticipantCommandAck(_message.Message):
 Global___ParticipantCommandAck: _TypeAlias = ParticipantCommandAck  # noqa: Y015
 
 @_typing.final
+class CarDimensions(_message.Message):
+    """Global car dimensions for the current participant session."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    WIDTH_M_FIELD_NUMBER: _builtins.int
+    DEPTH_M_FIELD_NUMBER: _builtins.int
+    width_m: _builtins.float
+    depth_m: _builtins.float
+    def __init__(
+        self,
+        *,
+        width_m: _builtins.float = ...,
+        depth_m: _builtins.float = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["depth_m", b"depth_m", "width_m", b"width_m"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___CarDimensions: _TypeAlias = CarDimensions  # noqa: Y015
+
+@_typing.final
+class ParticipantBootstrap(_message.Message):
+    """One-time participant stream bootstrap payload."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CAR_DIMENSIONS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def car_dimensions(self) -> Global___CarDimensions: ...
+    def __init__(
+        self,
+        *,
+        car_dimensions: Global___CarDimensions | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["car_dimensions", b"car_dimensions"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_dimensions", b"car_dimensions"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ParticipantBootstrap: _TypeAlias = ParticipantBootstrap  # noqa: Y015
+
+@_typing.final
 class ParticipantServerEvent(_message.Message):
     """Envelope for server->participant stream events.
-    After successful init, server sends settings and then emits ack/snapshot asynchronously.
+    After successful init, server sends settings, then one-time bootstrap,
+    then emits ack/snapshot/command_ack asynchronously.
     """
 
     DESCRIPTOR: _descriptor.Descriptor
@@ -596,6 +630,7 @@ class ParticipantServerEvent(_message.Message):
     ACK_FIELD_NUMBER: _builtins.int
     SNAPSHOT_FIELD_NUMBER: _builtins.int
     COMMAND_ACK_FIELD_NUMBER: _builtins.int
+    BOOTSTRAP_FIELD_NUMBER: _builtins.int
     server_seq: _builtins.int
     """Monotonic per-stream server sequence number."""
     @_builtins.property
@@ -606,6 +641,8 @@ class ParticipantServerEvent(_message.Message):
     def snapshot(self) -> _telemetry_pb2.ParticipantSnapshot: ...
     @_builtins.property
     def command_ack(self) -> Global___ParticipantCommandAck: ...
+    @_builtins.property
+    def bootstrap(self) -> Global___ParticipantBootstrap: ...
     def __init__(
         self,
         *,
@@ -614,12 +651,13 @@ class ParticipantServerEvent(_message.Message):
         ack: Global___ParticipantControlsAck | None = ...,
         snapshot: _telemetry_pb2.ParticipantSnapshot | None = ...,
         command_ack: Global___ParticipantCommandAck | None = ...,
+        bootstrap: Global___ParticipantBootstrap | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "command_ack", b"command_ack", "payload", b"payload", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "bootstrap", b"bootstrap", "command_ack", b"command_ack", "payload", b"payload", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "command_ack", b"command_ack", "payload", b"payload", "server_seq", b"server_seq", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["ack", b"ack", "bootstrap", b"bootstrap", "command_ack", b"command_ack", "payload", b"payload", "server_seq", b"server_seq", "settings", b"settings", "snapshot", b"snapshot"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["settings", "ack", "snapshot", "command_ack"]  # noqa: Y015
+    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["settings", "ack", "snapshot", "command_ack", "bootstrap"]  # noqa: Y015
     _WhichOneofArgType_payload: _TypeAlias = _typing.Literal["payload", b"payload"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
 

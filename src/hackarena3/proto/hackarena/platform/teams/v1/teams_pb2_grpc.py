@@ -35,6 +35,16 @@ class TeamsServiceStub(object):
                 request_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamRequest.SerializeToString,
                 response_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamResponse.FromString,
                 _registered_method=True)
+        self.GetEventTeams = channel.unary_unary(
+                '/hackarena.platform.teams.v1.TeamsService/GetEventTeams',
+                request_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsRequest.SerializeToString,
+                response_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsResponse.FromString,
+                _registered_method=True)
+        self.GetTeamImage = channel.unary_unary(
+                '/hackarena.platform.teams.v1.TeamsService/GetTeamImage',
+                request_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageRequest.SerializeToString,
+                response_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageResponse.FromString,
+                _registered_method=True)
 
 
 class TeamsServiceServicer(object):
@@ -69,6 +79,20 @@ class TeamsServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetEventTeams(self, request, context):
+        """Get event teams
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetTeamImage(self, request, context):
+        """Get teams image
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_TeamsServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -91,6 +115,16 @@ def add_TeamsServiceServicer_to_server(servicer, server):
                     servicer.GetMyTeam,
                     request_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamRequest.FromString,
                     response_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamResponse.SerializeToString,
+            ),
+            'GetEventTeams': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetEventTeams,
+                    request_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsRequest.FromString,
+                    response_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsResponse.SerializeToString,
+            ),
+            'GetTeamImage': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTeamImage,
+                    request_deserializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageRequest.FromString,
+                    response_serializer=hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -202,6 +236,60 @@ class TeamsService(object):
             '/hackarena.platform.teams.v1.TeamsService/GetMyTeam',
             hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamRequest.SerializeToString,
             hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetMyTeamResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetEventTeams(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/hackarena.platform.teams.v1.TeamsService/GetEventTeams',
+            hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsRequest.SerializeToString,
+            hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetEventTeamsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetTeamImage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/hackarena.platform.teams.v1.TeamsService/GetTeamImage',
+            hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageRequest.SerializeToString,
+            hackarena_dot_platform_dot_teams_dot_v1_dot_teams__pb2.GetTeamImageResponse.FromString,
             options,
             channel_credentials,
             insecure,

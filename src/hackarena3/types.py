@@ -1,23 +1,33 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import IntEnum
-from typing import TYPE_CHECKING, Any, Callable, Protocol
+from enum import IntEnum, IntFlag
+from typing import TYPE_CHECKING, Callable, Protocol
 
 from hackarena3.proto.race.v1 import race_pb2, telemetry_pb2, track_pb2
 
 if TYPE_CHECKING:
     from hackarena3.proto.race.v1.telemetry_pb2 import ParticipantSnapshot
-    from hackarena3.proto.race.v1.track_pb2 import TrackData
 
 
-class GearShift(IntEnum):
+class _OpenIntEnum(IntEnum):
+    @classmethod
+    def _missing_(cls, value: object) -> _OpenIntEnum:
+        if not isinstance(value, int):
+            raise ValueError(f"{value!r} is not a valid {cls.__name__}")
+        member = int.__new__(cls, value)
+        member._name_ = f"UNKNOWN_{value}"
+        member._value_ = value
+        return member
+
+
+class GearShift(_OpenIntEnum):
     NONE = int(race_pb2.GEAR_SHIFT_NONE)
     UPSHIFT = int(race_pb2.GEAR_SHIFT_UPSHIFT)
     DOWNSHIFT = int(race_pb2.GEAR_SHIFT_DOWNSHIFT)
 
 
-class DriveGear(IntEnum):
+class DriveGear(_OpenIntEnum):
     REVERSE = -1
     NEUTRAL = 0
     FIRST = 1
@@ -30,19 +40,57 @@ class DriveGear(IntEnum):
     EIGHTH = 8
 
 
-class TireType(IntEnum):
+class TireType(_OpenIntEnum):
     UNSPECIFIED = int(telemetry_pb2.TIRE_TYPE_UNSPECIFIED)
     HARD = int(telemetry_pb2.TIRE_TYPE_HARD)
     SOFT = int(telemetry_pb2.TIRE_TYPE_SOFT)
     WET = int(telemetry_pb2.TIRE_TYPE_WET)
 
 
-class GroundType(IntEnum):
+class GroundType(_OpenIntEnum):
     ASPHALT = int(track_pb2.GROUND_TYPE_ASPHALT)
     GRASS = int(track_pb2.GROUND_TYPE_GRASS)
     GRAVEL = int(track_pb2.GROUND_TYPE_GRAVEL)
     WALL = int(track_pb2.GROUND_TYPE_WALL)
     KERB = int(track_pb2.GROUND_TYPE_KERB)
+
+
+class GhostModePhase(_OpenIntEnum):
+    UNSPECIFIED = int(telemetry_pb2.GHOST_MODE_PHASE_UNSPECIFIED)
+    INACTIVE = int(telemetry_pb2.GHOST_MODE_PHASE_INACTIVE)
+    ACTIVE = int(telemetry_pb2.GHOST_MODE_PHASE_ACTIVE)
+    PENDING_EXIT = int(telemetry_pb2.GHOST_MODE_PHASE_PENDING_EXIT)
+
+
+class GhostModeBlocker(_OpenIntEnum):
+    UNSPECIFIED = int(telemetry_pb2.GHOST_MODE_BLOCKER_UNSPECIFIED)
+    LAPS_REQUIREMENT_NOT_MET = int(
+        telemetry_pb2.GHOST_MODE_BLOCKER_LAPS_REQUIREMENT_NOT_MET
+    )
+    EXIT_SPEED_NOT_MET = int(telemetry_pb2.GHOST_MODE_BLOCKER_EXIT_SPEED_NOT_MET)
+    EXIT_DELAY_RUNNING = int(telemetry_pb2.GHOST_MODE_BLOCKER_EXIT_DELAY_RUNNING)
+    VEHICLE_OVERLAP_ACTIVE = int(
+        telemetry_pb2.GHOST_MODE_BLOCKER_VEHICLE_OVERLAP_ACTIVE
+    )
+    OVERLAP_EXIT_DELAY_RUNNING = int(
+        telemetry_pb2.GHOST_MODE_BLOCKER_OVERLAP_EXIT_DELAY_RUNNING
+    )
+    IN_PIT = int(telemetry_pb2.GHOST_MODE_BLOCKER_IN_PIT)
+
+
+class PitstopZoneFlag(IntFlag):
+    NONE = 0
+    ENTER = int(telemetry_pb2.PITSTOP_ZONE_FLAG_ENTER)
+    FIX = int(telemetry_pb2.PITSTOP_ZONE_FLAG_FIX)
+    EXIT = int(telemetry_pb2.PITSTOP_ZONE_FLAG_EXIT)
+    UNSPECIFIED = NONE
+
+
+class PitEntrySource(_OpenIntEnum):
+    UNSPECIFIED = int(telemetry_pb2.PIT_ENTRY_SOURCE_UNSPECIFIED)
+    BOT_DECISION = int(telemetry_pb2.PIT_ENTRY_SOURCE_BOT_DECISION)
+    REQUESTED = int(telemetry_pb2.PIT_ENTRY_SOURCE_REQUESTED)
+    EMERGENCY = int(telemetry_pb2.PIT_ENTRY_SOURCE_EMERGENCY)
 
 
 @dataclass(frozen=True, slots=True)
@@ -53,10 +101,15 @@ class Vec3:
 
 
 @dataclass(frozen=True, slots=True)
+class CarDimensions:
+    width_m: float
+    depth_m: float
+
+
+@dataclass(frozen=True, slots=True)
 class GroundWidth:
     width_m: float
-    ground_type_raw: int
-    ground_type: GroundType | None
+    ground_type: GroundType
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,8 +167,8 @@ class Quaternion:
 @dataclass(frozen=True, slots=True)
 class GhostModeState:
     can_collide_now: bool
-    phase: int
-    blockers: tuple[int, ...]
+    phase: GhostModePhase
+    blockers: tuple[GhostModeBlocker, ...]
     exit_delay_remaining_ms: int
 
     @property
@@ -153,16 +206,13 @@ class CarState:
     position: Vec3
     orientation: Quaternion
     speed_mps: float
-    gear_raw: int
     gear: DriveGear
     engine_rpm: float
     last_applied_client_seq: int
-    pitstop_zone_flags: int
+    pitstop_zone_flags: PitstopZoneFlag
     wheels_in_pitstop: int
-    ghost_mode: GhostModeState | None
-    tire_type_raw: int
+    ghost_mode: GhostModeState
     tire_type: TireType
-    next_pit_tire_type_raw: int
     next_pit_tire_type: TireType
     tire_wear: TireWearPerWheel
     tire_temperature_celsius: TireTemperaturePerWheel
@@ -170,7 +220,7 @@ class CarState:
     pit_request_active: bool
     pit_emergency_lock_remaining_ms: int
     last_pit_time_ms: int
-    last_pit_source_raw: int
+    last_pit_source: PitEntrySource
 
     @property
     def speed_kmh(self) -> float:
@@ -182,7 +232,7 @@ class OpponentState:
     car_id: int
     position: Vec3
     orientation: Quaternion
-    ghost_mode: GhostModeState | None
+    ghost_mode: GhostModeState
 
 
 @dataclass(frozen=True, slots=True)
@@ -191,10 +241,6 @@ class RaceSnapshot:
     server_time_ms: int
     car: CarState
     opponents: tuple[OpponentState, ...]
-    tire_type_raw: int
-    tire_type: TireType
-    tire_wear: TireWearPerWheel
-    tire_temperature_celsius: TireTemperaturePerWheel
     raw: ParticipantSnapshot
 
 
@@ -205,7 +251,8 @@ class RuntimeConfig:
     sandbox_id: str | None = None
 
 
-def _unbound_set_controls(_controls: Controls) -> None:
+def _unbound_set_controls(controls: Controls) -> None:
+    _ = controls
     raise RuntimeError("BotContext is not attached to active runtime.")
 
 
@@ -213,34 +260,32 @@ def _unbound_command() -> None:
     raise RuntimeError("BotContext is not attached to active runtime.")
 
 
-def _unbound_set_next_pit_tire_type(_tire_type: TireType) -> None:
+def _unbound_set_next_pit_tire_type(tire_type: TireType) -> None:
+    _ = tire_type
     raise RuntimeError("BotContext is not attached to active runtime.")
+
+
+@dataclass(frozen=True, slots=True)
+class _BotContextActions:
+    set_controls: Callable[[Controls], None] = _unbound_set_controls
+    request_back_to_track: Callable[[], None] = _unbound_command
+    request_emergency_pitstop: Callable[[], None] = _unbound_command
+    set_next_pit_tire_type: Callable[[TireType], None] = (
+        _unbound_set_next_pit_tire_type
+    )
 
 
 @dataclass(slots=True)
 class BotContext:
     car_id: int
     map_id: str
+    car_dimensions: CarDimensions
     requested_hz: int
-    track_data: TrackData
     track: TrackLayout
     effective_hz: int | None
     tick: int
-    raw: Any
-    _set_controls_impl: Callable[[Controls], None] = field(
-        default=_unbound_set_controls,
-        repr=False,
-    )
-    _request_back_to_track_impl: Callable[[], None] = field(
-        default=_unbound_command,
-        repr=False,
-    )
-    _request_emergency_pitstop_impl: Callable[[], None] = field(
-        default=_unbound_command,
-        repr=False,
-    )
-    _set_next_pit_tire_type_impl: Callable[[TireType], None] = field(
-        default=_unbound_set_next_pit_tire_type,
+    _actions: _BotContextActions = field(
+        default_factory=_BotContextActions,
         repr=False,
     )
 
@@ -254,7 +299,7 @@ class BotContext:
         brake_balancer: float = 0.5,
         differential_lock: float = 0.0,
     ) -> None:
-        self._set_controls_impl(
+        self._actions.set_controls(
             Controls(
                 throttle=throttle,
                 brake=brake,
@@ -266,13 +311,13 @@ class BotContext:
         )
 
     def request_back_to_track(self) -> None:
-        self._request_back_to_track_impl()
+        self._actions.request_back_to_track()
 
     def request_emergency_pitstop(self) -> None:
-        self._request_emergency_pitstop_impl()
+        self._actions.request_emergency_pitstop()
 
     def set_next_pit_tire_type(self, tire_type: TireType) -> None:
-        self._set_next_pit_tire_type_impl(tire_type)
+        self._actions.set_next_pit_tire_type(tire_type)
 
 
 class BotProtocol(Protocol):

@@ -119,6 +119,41 @@ class TeamMember(_message.Message):
 Global___TeamMember: _TypeAlias = TeamMember  # noqa: Y015
 
 @_typing.final
+class TeamEvent(_message.Message):
+    """Teamk details for an event"""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    ID_FIELD_NUMBER: _builtins.int
+    NAME_FIELD_NUMBER: _builtins.int
+    CODE_FIELD_NUMBER: _builtins.int
+    COLOR_FIELD_NUMBER: _builtins.int
+    name: _builtins.str
+    """Display name"""
+    code: _builtins.str
+    """Short code"""
+    color: _builtins.str
+    """Color (hex / name)"""
+    @_builtins.property
+    def id(self) -> _types_pb2.Uuid:
+        """Team identifier"""
+
+    def __init__(
+        self,
+        *,
+        id: _types_pb2.Uuid | None = ...,
+        name: _builtins.str = ...,
+        code: _builtins.str = ...,
+        color: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["id", b"id"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["code", b"code", "color", b"color", "id", b"id", "name", b"name"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TeamEvent: _TypeAlias = TeamEvent  # noqa: Y015
+
+@_typing.final
 class GetTeamRequest(_message.Message):
     """Get a team by id."""
 
@@ -317,3 +352,87 @@ class GetMyTeamResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___GetMyTeamResponse: _TypeAlias = GetMyTeamResponse  # noqa: Y015
+
+@_typing.final
+class GetEventTeamsRequest(_message.Message):
+    """GetEventTeams request"""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    EDITION_FIELD_NUMBER: _builtins.int
+    edition: _builtins.str
+    """Edition identifier (e.g., "1", "2.5")."""
+    def __init__(
+        self,
+        *,
+        edition: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["edition", b"edition"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetEventTeamsRequest: _TypeAlias = GetEventTeamsRequest  # noqa: Y015
+
+@_typing.final
+class GetEventTeamsResponse(_message.Message):
+    """GetEventTeams response"""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAMS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def teams(self) -> _containers.RepeatedCompositeFieldContainer[Global___TeamEvent]: ...
+    def __init__(
+        self,
+        *,
+        teams: _abc.Iterable[Global___TeamEvent] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["teams", b"teams"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetEventTeamsResponse: _TypeAlias = GetEventTeamsResponse  # noqa: Y015
+
+@_typing.final
+class GetTeamImageRequest(_message.Message):
+    """Get image for team"""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def team_id(self) -> _types_pb2.Uuid: ...
+    def __init__(
+        self,
+        *,
+        team_id: _types_pb2.Uuid | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetTeamImageRequest: _TypeAlias = GetTeamImageRequest  # noqa: Y015
+
+@_typing.final
+class GetTeamImageResponse(_message.Message):
+    """GetTeamImage response."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    DATA_FIELD_NUMBER: _builtins.int
+    CONTENT_TYPE_FIELD_NUMBER: _builtins.int
+    data: _builtins.bytes
+    """Raw image bytes.
+    Note: Entire file is returned in-memory (no streaming).
+    """
+    content_type: _builtins.str
+    """MIME type of the image (e.g., "image/png", "image/jpeg")."""
+    def __init__(
+        self,
+        *,
+        data: _builtins.bytes = ...,
+        content_type: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["content_type", b"content_type", "data", b"data"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetTeamImageResponse: _TypeAlias = GetTeamImageResponse  # noqa: Y015

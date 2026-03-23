@@ -20,9 +20,10 @@ from hackarena3.runtime_common import (
     TRANSIENT_CODES,
     RuntimeErrorWrapper,
 )
-from hackarena3.runtime_convert import build_race_snapshot
+from hackarena3.runtime_convert import build_car_dimensions, build_race_snapshot
 from hackarena3.runtime_race import race_metadata
 from hackarena3.types import (
+    _BotContextActions,
     Controls,
     GearShift,
     RaceSnapshot,
@@ -282,6 +283,16 @@ def _reader_loop(
                 _handle_command_ack(state, event.command_ack)
                 continue
 
+            if payload_name == "bootstrap":
+                ctx.car_dimensions = build_car_dimensions(event.bootstrap.car_dimensions)
+                print(
+                    "[ha3-wrapper] Stream bootstrap: "
+                    f"car_width_m={ctx.car_dimensions.width_m:.3f} "
+                    f"car_depth_m={ctx.car_dimensions.depth_m:.3f}",
+                    file=sys.stderr,
+                )
+                continue
+
             if payload_name != "snapshot":
                 continue
 
@@ -493,10 +504,12 @@ def run_participant_loop(
                 ),
             )
 
-        ctx._set_controls_impl = _set_controls_impl
-        ctx._request_back_to_track_impl = _request_back_to_track_impl
-        ctx._request_emergency_pitstop_impl = _request_emergency_pitstop_impl
-        ctx._set_next_pit_tire_type_impl = _set_next_pit_tire_type_impl
+        ctx._actions = _BotContextActions(
+            set_controls=_set_controls_impl,
+            request_back_to_track=_request_back_to_track_impl,
+            request_emergency_pitstop=_request_emergency_pitstop_impl,
+            set_next_pit_tire_type=_set_next_pit_tire_type_impl,
+        )
         if state.controls_dirty:
             state.outbound_event.set()
 

@@ -21,7 +21,7 @@ from hackarena3.runtime_discovery import (
 )
 from hackarena3.runtime_loop import run_participant_loop
 from hackarena3.runtime_race import create_backend_api, fetch_track_data, race_metadata
-from hackarena3.types import BotContext
+from hackarena3.types import BotContext, CarDimensions
 
 if TYPE_CHECKING:
     from hackarena3.runtime_discovery import BrokerApi
@@ -95,12 +95,11 @@ def run_runtime(bot: BotProtocol, config: RuntimeConfig) -> None:
         ctx = BotContext(
             car_id=join_response.car_id,
             map_id=join_response.map_id,
+            car_dimensions=CarDimensions(width_m=0.0, depth_m=0.0),
             requested_hz=REQUESTED_HZ,
-            track_data=track,
             track=track_layout,
             effective_hz=None,
             tick=0,
-            raw={},
         )
         run_participant_loop(bot, api, token_provider, ctx)
     finally:

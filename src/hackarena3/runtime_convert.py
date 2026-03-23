@@ -3,18 +3,23 @@ from __future__ import annotations
 from hackarena3.proto.race.v1.telemetry_pb2 import ParticipantSnapshot
 from hackarena3.proto.race.v1.track_pb2 import TrackData
 from hackarena3.types import (
+    CarDimensions,
     CarState,
     CenterlinePoint,
     DriveGear,
+    GhostModeBlocker,
+    GhostModePhase,
     GroundType,
     GroundWidth,
     GhostModeState,
     OpponentState,
+    PitEntrySource,
     PitstopLayout,
+    PitstopZoneFlag,
     Quaternion,
     RaceSnapshot,
-    TireTemperaturePerWheel,
     TireSlipPerWheel,
+    TireTemperaturePerWheel,
     TireType,
     TireWearPerWheel,
     TrackLayout,
@@ -27,6 +32,13 @@ def _vec3_from_proto(value: object) -> Vec3:
         x=float(getattr(value, "x", 0.0)),
         y=float(getattr(value, "y", 0.0)),
         z=float(getattr(value, "z", 0.0)),
+    )
+
+
+def build_car_dimensions(raw: object) -> CarDimensions:
+    return CarDimensions(
+        width_m=float(getattr(raw, "width_m", 0.0)),
+        depth_m=float(getattr(raw, "depth_m", 0.0)),
     )
 
 
@@ -67,39 +79,34 @@ def _quaternion_from_proto(value: object) -> Quaternion:
 def _ghost_mode_from_proto(value: object) -> GhostModeState:
     return GhostModeState(
         can_collide_now=bool(getattr(value, "can_collide_now", False)),
-        phase=int(getattr(value, "phase", 0)),
-        blockers=tuple(int(v) for v in getattr(value, "blockers", ())),
+        phase=GhostModePhase(int(getattr(value, "phase", 0))),
+        blockers=tuple(
+            GhostModeBlocker(int(v)) for v in getattr(value, "blockers", ())
+        ),
         exit_delay_remaining_ms=int(getattr(value, "exit_delay_remaining_ms", 0)),
     )
 
 
 def _drive_gear_from_raw(value: int) -> DriveGear:
-    try:
-        return DriveGear(value)
-    except ValueError:
-        raise ValueError(f"Unknown drive gear value from backend: {value}")
+    return DriveGear(value)
 
 
-def _ground_type_from_raw(value: int) -> GroundType | None:
-    try:
-        return GroundType(value)
-    except ValueError:
-        return None
+def _ground_type_from_raw(value: int) -> GroundType:
+    return GroundType(value)
 
 
 def _tire_type_from_raw(value: int) -> TireType:
-    try:
-        return TireType(value)
-    except ValueError:
-        raise ValueError(f"Unknown tire type value from backend: {value}")
+    return TireType(value)
+
+
+def _pit_entry_source_from_raw(value: int) -> PitEntrySource:
+    return PitEntrySource(value)
 
 
 def _ground_width_from_proto(value: object) -> GroundWidth:
-    ground_type_raw = int(getattr(value, "ground_type", 0))
     return GroundWidth(
         width_m=float(getattr(value, "width_m", 0.0)),
-        ground_type_raw=ground_type_raw,
-        ground_type=_ground_type_from_raw(ground_type_raw),
+        ground_type=_ground_type_from_raw(int(getattr(value, "ground_type", 0))),
     )
 
 
@@ -145,10 +152,8 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             )
         )
 
-    tire_type_raw = int(raw.self.telemetry.tire_type)
-    tire_type = _tire_type_from_raw(tire_type_raw)
-    next_pit_tire_type_raw = int(raw.self.telemetry.next_pit_tire_type)
-    next_pit_tire_type = _tire_type_from_raw(next_pit_tire_type_raw)
+    tire_type = _tire_type_from_raw(int(raw.self.telemetry.tire_type))
+    next_pit_tire_type = _tire_type_from_raw(int(raw.self.telemetry.next_pit_tire_type))
     tire_wear = _tire_wear_from_proto(raw.self.telemetry.tire_wear)
     tire_temp = _tire_temperature_from_proto(
         raw.self.telemetry.tire_temperature_celsius
@@ -164,16 +169,13 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             position=_vec3_from_proto(raw.self.kinematics.position),
             orientation=_quaternion_from_proto(raw.self.kinematics.orientation),
             speed_mps=float(raw.self.telemetry.speed_mps),
-            gear_raw=int(raw.self.telemetry.gear),
             gear=_drive_gear_from_raw(int(raw.self.telemetry.gear)),
             engine_rpm=float(raw.self.telemetry.engine_rpm),
             last_applied_client_seq=int(raw.self.telemetry.last_applied_client_seq),
-            pitstop_zone_flags=int(raw.self.telemetry.pitstop_zone_flags),
+            pitstop_zone_flags=PitstopZoneFlag(int(raw.self.telemetry.pitstop_zone_flags)),
             wheels_in_pitstop=int(raw.self.telemetry.wheels_in_pitstop),
             ghost_mode=self_ghost,
-            tire_type_raw=tire_type_raw,
             tire_type=tire_type,
-            next_pit_tire_type_raw=next_pit_tire_type_raw,
             next_pit_tire_type=next_pit_tire_type,
             tire_wear=tire_wear,
             tire_temperature_celsius=tire_temp,
@@ -181,13 +183,9 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             pit_request_active=bool(pit_runtime.pit_request_active),
             pit_emergency_lock_remaining_ms=int(pit_runtime.emergency_lock_remaining_ms),
             last_pit_time_ms=int(pit_runtime.last_pit_time_ms),
-            last_pit_source_raw=int(pit_runtime.last_pit_source),
+            last_pit_source=_pit_entry_source_from_raw(int(pit_runtime.last_pit_source)),
         ),
         opponents=tuple(opponents),
-        tire_type_raw=tire_type_raw,
-        tire_type=tire_type,
-        tire_wear=tire_wear,
-        tire_temperature_celsius=tire_temp,
         raw=raw,
     )
 
