@@ -127,9 +127,11 @@ def _normalize_controls(controls: Controls) -> Controls:
         throttle = float(controls.throttle)
         brake = float(controls.brake)
         steering = float(controls.steering)
+        brake_balancer = float(controls.brake_balancer)
+        differential_lock = float(controls.differential_lock)
     except (TypeError, ValueError) as exc:
         raise RuntimeErrorWrapper(
-            "set_controls received non-numeric value; throttle/brake/steer must be floats."
+            "set_controls received non-numeric value; throttle/brake/steer/brake_balancer/differential_lock must be floats."
         ) from exc
 
     clamped = Controls(
@@ -137,23 +139,25 @@ def _normalize_controls(controls: Controls) -> Controls:
         brake=_clamp(brake, 0.0, 1.0),
         steering=_clamp(steering, -1.0, 1.0),
         gear_shift=controls.gear_shift,
+        brake_balancer=_clamp(brake_balancer, 0.0, 1.0),
+        differential_lock=_clamp(differential_lock, 0.0, 1.0),
     )
     if (
         clamped.throttle != throttle
         or clamped.brake != brake
         or clamped.steering != steering
+        or clamped.brake_balancer != brake_balancer
+        or clamped.differential_lock != differential_lock
     ):
         print(
             "[ha3-wrapper] Bot set_controls out-of-range values were clamped "
-            f"(thr={throttle}, brk={brake}, str={steering}).",
+            f"(thr={throttle}, brk={brake}, str={steering}, bb={brake_balancer}, dl={differential_lock}).",
             file=sys.stderr,
         )
     return clamped
 
 
-def _normalize_gear_shift(gear_shift: GearShift | None) -> int:
-    if gear_shift is None:
-        return int(race_pb2.GEAR_SHIFT_NONE)
+def _normalize_gear_shift(gear_shift: GearShift) -> int:
     try:
         return int(GearShift(gear_shift))
     except Exception:
@@ -401,20 +405,12 @@ def _writer_loop(
                     controls = state.desired_controls
                     if controls is None:
                         break
-                    send_controls = controls
-                    if send_controls.gear_shift is not None:
-                        controls = Controls(
-                            throttle=controls.throttle,
-                            brake=controls.brake,
-                            steering=controls.steering,
-                            gear_shift=None,
-                        )
-                        state.desired_controls = controls
-                    if not state.controls_dirty and send_controls.gear_shift is None:
+                    if not state.controls_dirty:
                         break
                     state.controls_dirty = False
                     state.next_client_seq += 1
                     client_seq = state.next_client_seq
+                    send_controls = controls
 
                     try:
                         normalized = _normalize_controls(send_controls)
@@ -431,6 +427,8 @@ def _writer_loop(
                             brake=normalized.brake,
                             steering=normalized.steering,
                             gear_shift=_normalize_gear_shift(normalized.gear_shift),
+                            brake_balancer=normalized.brake_balancer,
+                            differential_lock=normalized.differential_lock,
                         )
                     )
                     state.pending_acks[client_seq] = _PendingAck(

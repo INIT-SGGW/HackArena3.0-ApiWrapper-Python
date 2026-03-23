@@ -98,7 +98,9 @@ class Controls:
     throttle: float
     brake: float
     steering: float
-    gear_shift: GearShift | None = None
+    gear_shift: GearShift = GearShift.NONE
+    brake_balancer: float = 0.5
+    differential_lock: float = 0.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -138,6 +140,14 @@ class TireTemperaturePerWheel:
 
 
 @dataclass(frozen=True, slots=True)
+class TireSlipPerWheel:
+    front_left: float
+    front_right: float
+    rear_left: float
+    rear_right: float
+
+
+@dataclass(frozen=True, slots=True)
 class CarState:
     car_id: int
     position: Vec3
@@ -146,8 +156,6 @@ class CarState:
     gear_raw: int
     gear: DriveGear
     engine_rpm: float
-    throttle_applied: float
-    brake_applied: float
     last_applied_client_seq: int
     pitstop_zone_flags: int
     wheels_in_pitstop: int
@@ -158,6 +166,7 @@ class CarState:
     next_pit_tire_type: TireType
     tire_wear: TireWearPerWheel
     tire_temperature_celsius: TireTemperaturePerWheel
+    tire_slip: TireSlipPerWheel
     pit_request_active: bool
     pit_emergency_lock_remaining_ms: int
     last_pit_time_ms: int
@@ -241,7 +250,9 @@ class BotContext:
         throttle: float,
         brake: float,
         steer: float,
-        gear_shift: GearShift | None = None,
+        gear_shift: GearShift = GearShift.NONE,
+        brake_balancer: float = 0.5,
+        differential_lock: float = 0.0,
     ) -> None:
         self._set_controls_impl(
             Controls(
@@ -249,6 +260,8 @@ class BotContext:
                 brake=brake,
                 steering=steer,
                 gear_shift=gear_shift,
+                brake_balancer=brake_balancer,
+                differential_lock=differential_lock,
             )
         )
 

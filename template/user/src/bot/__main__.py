@@ -32,6 +32,22 @@ class ExampleBot:
                 )
                 return
 
+        if (
+            max(
+                snapshot.car.tire_slip.front_left,
+                snapshot.car.tire_slip.front_right,
+                snapshot.car.tire_slip.rear_left,
+                snapshot.car.tire_slip.rear_right,
+            )
+            > 1.0
+        ):
+            ctx.set_controls(
+                throttle=0.0,
+                brake=0.1,
+                steer=0.0,
+            )
+            return
+
         ctx.set_controls(
             throttle=0.55,
             brake=0,

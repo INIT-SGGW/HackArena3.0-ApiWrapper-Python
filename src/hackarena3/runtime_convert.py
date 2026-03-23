@@ -14,6 +14,7 @@ from hackarena3.types import (
     Quaternion,
     RaceSnapshot,
     TireTemperaturePerWheel,
+    TireSlipPerWheel,
     TireType,
     TireWearPerWheel,
     TrackLayout,
@@ -120,6 +121,15 @@ def _tire_temperature_from_proto(value: object) -> TireTemperaturePerWheel:
     )
 
 
+def _tire_slip_from_proto(value: object) -> TireSlipPerWheel:
+    return TireSlipPerWheel(
+        front_left=float(getattr(value, "front_left", 0.0)),
+        front_right=float(getattr(value, "front_right", 0.0)),
+        rear_left=float(getattr(value, "rear_left", 0.0)),
+        rear_right=float(getattr(value, "rear_right", 0.0)),
+    )
+
+
 def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
     self_ghost = _ghost_mode_from_proto(raw.self.telemetry.ghost_mode)
 
@@ -143,6 +153,7 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
     tire_temp = _tire_temperature_from_proto(
         raw.self.telemetry.tire_temperature_celsius
     )
+    tire_slip = _tire_slip_from_proto(raw.self.telemetry.tire_slip)
     pit_runtime = raw.self.telemetry.pit_runtime
 
     return RaceSnapshot(
@@ -156,8 +167,6 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             gear_raw=int(raw.self.telemetry.gear),
             gear=_drive_gear_from_raw(int(raw.self.telemetry.gear)),
             engine_rpm=float(raw.self.telemetry.engine_rpm),
-            throttle_applied=float(raw.self.telemetry.throttle_applied),
-            brake_applied=float(raw.self.telemetry.brake_applied),
             last_applied_client_seq=int(raw.self.telemetry.last_applied_client_seq),
             pitstop_zone_flags=int(raw.self.telemetry.pitstop_zone_flags),
             wheels_in_pitstop=int(raw.self.telemetry.wheels_in_pitstop),
@@ -168,6 +177,7 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             next_pit_tire_type=next_pit_tire_type,
             tire_wear=tire_wear,
             tire_temperature_celsius=tire_temp,
+            tire_slip=tire_slip,
             pit_request_active=bool(pit_runtime.pit_request_active),
             pit_emergency_lock_remaining_ms=int(pit_runtime.emergency_lock_remaining_ms),
             last_pit_time_ms=int(pit_runtime.last_pit_time_ms),
