@@ -2,6 +2,7 @@ schema = 1
 
 [wrapper]
 language = "python"
+template_version = "0.1.0b4"
 
 [runtime]
 engine = "python"
@@ -12,7 +13,10 @@ entrypoint = ["python", "-m", "bot"]
 source_dir = "user/src"
 
 [submit]
-include = ["user/src"]
+include = [
+  "user/src",
+  "user/requirements.txt"
+]
 exclude = [
   "**/__pycache__/**",
   "**/*.pyc"
