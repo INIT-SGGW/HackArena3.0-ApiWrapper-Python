@@ -21,6 +21,11 @@ class RaceParticipantServiceStub(object):
                 request_serializer=race_dot_v1_dot_race__pb2.ParticipantClientMessage.SerializeToString,
                 response_deserializer=race_dot_v1_dot_race__pb2.ParticipantServerEvent.FromString,
                 _registered_method=True)
+        self.PrepareOfficialJoin = channel.unary_unary(
+                '/race.v1.RaceParticipantService/PrepareOfficialJoin',
+                request_serializer=race_dot_v1_dot_race__pb2.PrepareOfficialJoinRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.PrepareOfficialJoinResponse.FromString,
+                _registered_method=True)
         self.LocalSandboxJoin = channel.unary_unary(
                 '/race.v1.RaceParticipantService/LocalSandboxJoin',
                 request_serializer=race_dot_v1_dot_race__pb2.LocalSandboxJoinRequest.SerializeToString,
@@ -39,6 +44,13 @@ class RaceParticipantServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PrepareOfficialJoin(self, request, context):
+        """Prepares participant for active official race and returns assigned car/map.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def LocalSandboxJoin(self, request, context):
         """Joins an active local sandbox.
         """
@@ -53,6 +65,11 @@ def add_RaceParticipantServiceServicer_to_server(servicer, server):
                     servicer.Stream,
                     request_deserializer=race_dot_v1_dot_race__pb2.ParticipantClientMessage.FromString,
                     response_serializer=race_dot_v1_dot_race__pb2.ParticipantServerEvent.SerializeToString,
+            ),
+            'PrepareOfficialJoin': grpc.unary_unary_rpc_method_handler(
+                    servicer.PrepareOfficialJoin,
+                    request_deserializer=race_dot_v1_dot_race__pb2.PrepareOfficialJoinRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.PrepareOfficialJoinResponse.SerializeToString,
             ),
             'LocalSandboxJoin': grpc.unary_unary_rpc_method_handler(
                     servicer.LocalSandboxJoin,
@@ -89,6 +106,33 @@ class RaceParticipantService(object):
             '/race.v1.RaceParticipantService/Stream',
             race_dot_v1_dot_race__pb2.ParticipantClientMessage.SerializeToString,
             race_dot_v1_dot_race__pb2.ParticipantServerEvent.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PrepareOfficialJoin(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceParticipantService/PrepareOfficialJoin',
+            race_dot_v1_dot_race__pb2.PrepareOfficialJoinRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.PrepareOfficialJoinResponse.FromString,
             options,
             channel_credentials,
             insecure,

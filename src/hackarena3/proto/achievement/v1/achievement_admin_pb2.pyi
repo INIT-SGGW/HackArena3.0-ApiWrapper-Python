@@ -32,7 +32,10 @@ class _GrantAchievementReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper
     GRANT_ACHIEVEMENT_REASON_NO_ACHIEVEMENT: _GrantAchievementReason.ValueType  # 3
     GRANT_ACHIEVEMENT_REASON_ALREADY_GRANTED: _GrantAchievementReason.ValueType  # 4
 
-class GrantAchievementReason(_GrantAchievementReason, metaclass=_GrantAchievementReasonEnumTypeWrapper): ...
+class GrantAchievementReason(_GrantAchievementReason, metaclass=_GrantAchievementReasonEnumTypeWrapper):
+    """Enum defining the reasons for the outcome of a GrantAchievement operation.
+    This is typically used to provide more context when an operation fails.
+    """
 
 GRANT_ACHIEVEMENT_REASON_UNSPECIFIED: GrantAchievementReason.ValueType  # 0
 GRANT_ACHIEVEMENT_REASON_NONE: GrantAchievementReason.ValueType  # 1
@@ -53,7 +56,10 @@ class _RefuseAchievementReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrappe
     REFUSE_ACHIEVEMENT_REASON_NO_ACHIEVEMENT: _RefuseAchievementReason.ValueType  # 3
     REFUSE_ACHIEVEMENT_REASON_ALREADY_REFUSED: _RefuseAchievementReason.ValueType  # 4
 
-class RefuseAchievementReason(_RefuseAchievementReason, metaclass=_RefuseAchievementReasonEnumTypeWrapper): ...
+class RefuseAchievementReason(_RefuseAchievementReason, metaclass=_RefuseAchievementReasonEnumTypeWrapper):
+    """Enum defining the reasons for the outcome of a RefuseAchievement operation.
+    This is typically used to provide more context when an operation fails.
+    """
 
 REFUSE_ACHIEVEMENT_REASON_UNSPECIFIED: RefuseAchievementReason.ValueType  # 0
 REFUSE_ACHIEVEMENT_REASON_NONE: RefuseAchievementReason.ValueType  # 1
@@ -72,7 +78,10 @@ class _UpdateAchievementDisplayReasonEnumTypeWrapper(_enum_type_wrapper._EnumTyp
     UPDATE_ACHIEVEMENT_DISPLAY_REASON_NONE: _UpdateAchievementDisplayReason.ValueType  # 1
     UPDATE_ACHIEVEMENT_DISPLAY_REASON_NO_ACHIEVEMENT: _UpdateAchievementDisplayReason.ValueType  # 2
 
-class UpdateAchievementDisplayReason(_UpdateAchievementDisplayReason, metaclass=_UpdateAchievementDisplayReasonEnumTypeWrapper): ...
+class UpdateAchievementDisplayReason(_UpdateAchievementDisplayReason, metaclass=_UpdateAchievementDisplayReasonEnumTypeWrapper):
+    """Enum defining the reasons for the outcome of an UpdateAchievementDisplay operation.
+    This is typically used to provide more context when an operation fails.
+    """
 
 UPDATE_ACHIEVEMENT_DISPLAY_REASON_UNSPECIFIED: UpdateAchievementDisplayReason.ValueType  # 0
 UPDATE_ACHIEVEMENT_DISPLAY_REASON_NONE: UpdateAchievementDisplayReason.ValueType  # 1
@@ -81,12 +90,16 @@ Global___UpdateAchievementDisplayReason: _TypeAlias = UpdateAchievementDisplayRe
 
 @_typing.final
 class GrantAchievementRequest(_message.Message):
+    """Request message for granting a specific achievement to a team."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     TEAM_ID_FIELD_NUMBER: _builtins.int
     ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
+    """The unique identifier of the team to grant the achievement to."""
     achievement_id: _builtins.str
+    """The unique identifier of the achievement to be granted."""
     def __init__(
         self,
         *,
@@ -100,12 +113,18 @@ Global___GrantAchievementRequest: _TypeAlias = GrantAchievementRequest  # noqa: 
 
 @_typing.final
 class GrantAchievementResponse(_message.Message):
+    """Response message for the GrantAchievement operation."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     IS_GRANTED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
     REASON_FIELD_NUMBER: _builtins.int
     is_granted_successfully: _builtins.bool
+    """A boolean flag indicating whether the achievement was granted successfully.
+    `true` for success, `false` for failure.
+    """
     reason: Global___GrantAchievementReason.ValueType
+    """Provides additional context on the operation's outcome, especially in case of failure."""
     def __init__(
         self,
         *,
@@ -119,12 +138,16 @@ Global___GrantAchievementResponse: _TypeAlias = GrantAchievementResponse  # noqa
 
 @_typing.final
 class RefuseAchievementRequest(_message.Message):
+    """Request message for refusing (or revoking) a specific achievement for a team."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     TEAM_ID_FIELD_NUMBER: _builtins.int
     ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
+    """The unique identifier of the team for which the achievement should be refused."""
     achievement_id: _builtins.str
+    """The unique identifier of the achievement to be refused."""
     def __init__(
         self,
         *,
@@ -138,12 +161,18 @@ Global___RefuseAchievementRequest: _TypeAlias = RefuseAchievementRequest  # noqa
 
 @_typing.final
 class RefuseAchievementResponse(_message.Message):
+    """Response message for the RefuseAchievement operation."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     IS_REFUSED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
     REASON_FIELD_NUMBER: _builtins.int
     is_refused_successfully: _builtins.bool
+    """A boolean flag indicating whether the achievement was refused successfully.
+    `true` for success, `false` for failure.
+    """
     reason: Global___RefuseAchievementReason.ValueType
+    """Provides additional context on the operation's outcome, especially in case of failure."""
     def __init__(
         self,
         *,
@@ -157,6 +186,8 @@ Global___RefuseAchievementResponse: _TypeAlias = RefuseAchievementResponse  # no
 
 @_typing.final
 class GetAchievementDisplaysRequest(_message.Message):
+    """Request message to retrieve a list of all achievement displays."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     def __init__(
@@ -167,11 +198,17 @@ Global___GetAchievementDisplaysRequest: _TypeAlias = GetAchievementDisplaysReque
 
 @_typing.final
 class GetAchievementDisplaysResponse(_message.Message):
+    """Response message containing the list of all achievement displays."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     DISPLAYS_FIELD_NUMBER: _builtins.int
     @_builtins.property
-    def displays(self) -> _containers.RepeatedCompositeFieldContainer[_achievement_types_pb2.AchievementDisplay]: ...
+    def displays(self) -> _containers.RepeatedCompositeFieldContainer[_achievement_types_pb2.AchievementDisplay]:
+        """A list of achievement display data.
+        The `AchievementDisplay` message is defined in `achievement/v1/achievement_types.proto`.
+        """
+
     def __init__(
         self,
         *,
@@ -189,8 +226,13 @@ class UpdateAchievementDisplayRequest(_message.Message):
     ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
     NEW_ACHIEVEMENT_DISPLAY_FIELD_NUMBER: _builtins.int
     achievement_id: _builtins.str
+    """The unique identifier of the achievement whose display properties are to be updated."""
     @_builtins.property
-    def new_achievement_display(self) -> _achievement_types_pb2.NewAchievementDisplay: ...
+    def new_achievement_display(self) -> _achievement_types_pb2.NewAchievementDisplay:
+        """The new display data for the achievement.
+        The `NewAchievementDisplay` message is defined in `achievement/v1/achievement_types.proto`.
+        """
+
     def __init__(
         self,
         *,
@@ -206,12 +248,18 @@ Global___UpdateAchievementDisplayRequest: _TypeAlias = UpdateAchievementDisplayR
 
 @_typing.final
 class UpdateAchievementDisplayResponse(_message.Message):
+    """Response message for the UpdateAchievementDisplay operation."""
+
     DESCRIPTOR: _descriptor.Descriptor
 
     IS_UPDATED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
     REASON_FIELD_NUMBER: _builtins.int
     is_updated_successfully: _builtins.bool
+    """A boolean flag indicating whether the update was successful.
+    `true` for success, `false` for failure.
+    """
     reason: Global___UpdateAchievementDisplayReason.ValueType
+    """Provides additional context on the operation's outcome, especially in case of failure."""
     def __init__(
         self,
         *,

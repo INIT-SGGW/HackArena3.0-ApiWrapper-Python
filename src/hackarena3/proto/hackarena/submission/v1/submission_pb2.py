@@ -22,34 +22,62 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-from hackarena3.proto.hackarena.submission.v1 import common_pb2 as hackarena_dot_submission_dot_v1_dot_common__pb2
-from hackarena3.proto.hackarena.submission.v1 import upload_pb2 as hackarena_dot_submission_dot_v1_dot_upload__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(hackarena/submission/v1/submission.proto\x12\x17hackarena.submission.v1\x1a$hackarena/submission/v1/common.proto\x1a$hackarena/submission/v1/upload.proto\"0\n\x11StartBuildRequest\x12\x1b\n\tupload_id\x18\x01 \x01(\tR\x08uploadId\"Q\n\x12StartBuildResponse\x12;\n\x05\x62uild\x18\x01 \x01(\x0b\x32%.hackarena.submission.v1.BuildSummaryR\x05\x62uild\",\n\x0fGetBuildRequest\x12\x19\n\x08\x62uild_id\x18\x01 \x01(\tR\x07\x62uildId\"O\n\x10GetBuildResponse\x12;\n\x05\x62uild\x18\x01 \x01(\x0b\x32%.hackarena.submission.v1.BuildSummaryR\x05\x62uild\")\n\x11ListBuildsRequest\x12\x14\n\x05limit\x18\x01 \x01(\rR\x05limit\"S\n\x12ListBuildsResponse\x12=\n\x06\x62uilds\x18\x01 \x03(\x0b\x32%.hackarena.submission.v1.BuildSummaryR\x06\x62uilds\"/\n\x12\x43\x61ncelBuildRequest\x12\x19\n\x08\x62uild_id\x18\x01 \x01(\tR\x07\x62uildId\"R\n\x13\x43\x61ncelBuildResponse\x12;\n\x05\x62uild\x18\x01 \x01(\x0b\x32%.hackarena.submission.v1.BuildSummaryR\x05\x62uild2\x9b\x04\n\x11SubmissionService\x12m\n\x0cUploadSource\x12,.hackarena.submission.v1.UploadSourceRequest\x1a-.hackarena.submission.v1.UploadSourceResponse(\x01\x12\x65\n\nStartBuild\x12*.hackarena.submission.v1.StartBuildRequest\x1a+.hackarena.submission.v1.StartBuildResponse\x12_\n\x08GetBuild\x12(.hackarena.submission.v1.GetBuildRequest\x1a).hackarena.submission.v1.GetBuildResponse\x12\x65\n\nListBuilds\x12*.hackarena.submission.v1.ListBuildsRequest\x1a+.hackarena.submission.v1.ListBuildsResponse\x12h\n\x0b\x43\x61ncelBuild\x12+.hackarena.submission.v1.CancelBuildRequest\x1a,.hackarena.submission.v1.CancelBuildResponseB\x1a\xaa\x02\x17HackArena.Submission.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(hackarena/submission/v1/submission.proto\x12\rsubmission.v1\"\xef\x01\n\x12SubmitBuildRequest\x12=\n\x0cwrapper_kind\x18\x01 \x01(\x0e\x32\x1a.submission.v1.WrapperKindR\x0bwrapperKind\x12\'\n\x0fwrapper_version\x18\x02 \x01(\tR\x0ewrapperVersion\x12-\n\x13user_archive_tar_gz\x18\x03 \x01(\x0cR\x10userArchiveTarGz\x12\x17\n\x04slot\x18\x04 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12 \n\x0b\x64\x65scription\x18\x05 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot\"3\n\x0c\x42uildStarted\x12#\n\rsubmission_id\x18\x01 \x01(\tR\x0csubmissionId\"\x1e\n\x08\x42uildLog\x12\x12\n\x04line\x18\x01 \x01(\tR\x04line\")\n\rBuildFinished\x12\x18\n\x07success\x18\x01 \x01(\x08R\x07success\"\xc6\x01\n\x19SubmitBuildStreamResponse\x12\x37\n\x07started\x18\x01 \x01(\x0b\x32\x1b.submission.v1.BuildStartedH\x00R\x07started\x12+\n\x03log\x18\x02 \x01(\x0b\x32\x17.submission.v1.BuildLogH\x00R\x03log\x12:\n\x08\x66inished\x18\x03 \x01(\x0b\x32\x1c.submission.v1.BuildFinishedH\x00R\x08\x66inishedB\x07\n\x05\x65vent\"\x14\n\x12StreamSlotsRequest\"C\n\x13StreamSlotsResponse\x12,\n\x05slots\x18\x01 \x03(\x0b\x32\x16.submission.v1.SlotDtoR\x05slots\"\x11\n\x0fGetSlotsRequest\"G\n\x10GetSlotsResponse\x12\x33\n\x05slots\x18\x01 \x03(\x0b\x32\x1d.submission.v1.SlotSummaryDtoR\x05slots\"\'\n\x11SelectSlotRequest\x12\x12\n\x04slot\x18\x01 \x01(\x05R\x04slot\"\x14\n\x12SelectSlotResponse\"O\n\x1aJoinOfficialSandboxRequest\x12\x1d\n\nsandbox_id\x18\x01 \x01(\tR\tsandboxId\x12\x12\n\x04slot\x18\x02 \x01(\x05R\x04slot\"|\n\x1bJoinOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\x1d\n\x1bLeaveOfficialSandboxRequest\"}\n\x1cLeaveOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\xb9\x01\n\x07SlotDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08selected\x18\x04 \x01(\x08R\x08selected\x12)\n\x10\x63urrently_loaded\x18\x05 \x01(\x08R\x0f\x63urrentlyLoadedB\x07\n\x05_slot\"y\n\x0eSlotSummaryDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot*\x8b\x01\n\x0bWrapperKind\x12\x1c\n\x18WRAPPER_KIND_UNSPECIFIED\x10\x00\x12\x17\n\x13WRAPPER_KIND_PYTHON\x10\x01\x12\x17\n\x13WRAPPER_KIND_CSHARP\x10\x02\x12\x14\n\x10WRAPPER_KIND_CPP\x10\x03\x12\x16\n\x12WRAPPER_KIND_JS_TS\x10\x04*\xb2\x01\n\x10SubmissionStatus\x12!\n\x1dSUBMISSION_STATUS_UNSPECIFIED\x10\x00\x12\x1c\n\x18SUBMISSION_STATUS_QUEUED\x10\x01\x12\x1e\n\x1aSUBMISSION_STATUS_BUILDING\x10\x02\x12\x1f\n\x1bSUBMISSION_STATUS_SUCCEEDED\x10\x03\x12\x1c\n\x18SUBMISSION_STATUS_FAILED\x10\x04*\xa3\x01\n\x1cOfficialSandboxCommandStatus\x12/\n+OFFICIAL_SANDBOX_COMMAND_STATUS_UNSPECIFIED\x10\x00\x12&\n\"OFFICIAL_SANDBOX_COMMAND_STATUS_OK\x10\x01\x12*\n&OFFICIAL_SANDBOX_COMMAND_STATUS_FAILED\x10\x02\x32w\n\x11SubmissionService\x12\x62\n\x11SubmitBuildStream\x12!.submission.v1.SubmitBuildRequest\x1a(.submission.v1.SubmitBuildStreamResponse0\x01\x32\xb7\x01\n\x10SlotQueryService\x12K\n\x08GetSlots\x12\x1e.submission.v1.GetSlotsRequest\x1a\x1f.submission.v1.GetSlotsResponse\x12V\n\x0bStreamSlots\x12!.submission.v1.StreamSlotsRequest\x1a\".submission.v1.StreamSlotsResponse0\x01\x32g\n\x12SlotCommandService\x12Q\n\nSelectSlot\x12 .submission.v1.SelectSlotRequest\x1a!.submission.v1.SelectSlotResponse2\xfe\x01\n\x1dOfficialSandboxCommandService\x12l\n\x13JoinOfficialSandbox\x12).submission.v1.JoinOfficialSandboxRequest\x1a*.submission.v1.JoinOfficialSandboxResponse\x12o\n\x14LeaveOfficialSandbox\x12*.submission.v1.LeaveOfficialSandboxRequest\x1a+.submission.v1.LeaveOfficialSandboxResponseB\x1a\xaa\x02\x17HA3.Proto.Submission.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'hackarena.submission.v1.submission_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\252\002\027HackArena.Submission.V1'
-  _globals['_STARTBUILDREQUEST']._serialized_start=145
-  _globals['_STARTBUILDREQUEST']._serialized_end=193
-  _globals['_STARTBUILDRESPONSE']._serialized_start=195
-  _globals['_STARTBUILDRESPONSE']._serialized_end=276
-  _globals['_GETBUILDREQUEST']._serialized_start=278
-  _globals['_GETBUILDREQUEST']._serialized_end=322
-  _globals['_GETBUILDRESPONSE']._serialized_start=324
-  _globals['_GETBUILDRESPONSE']._serialized_end=403
-  _globals['_LISTBUILDSREQUEST']._serialized_start=405
-  _globals['_LISTBUILDSREQUEST']._serialized_end=446
-  _globals['_LISTBUILDSRESPONSE']._serialized_start=448
-  _globals['_LISTBUILDSRESPONSE']._serialized_end=531
-  _globals['_CANCELBUILDREQUEST']._serialized_start=533
-  _globals['_CANCELBUILDREQUEST']._serialized_end=580
-  _globals['_CANCELBUILDRESPONSE']._serialized_start=582
-  _globals['_CANCELBUILDRESPONSE']._serialized_end=664
-  _globals['_SUBMISSIONSERVICE']._serialized_start=667
-  _globals['_SUBMISSIONSERVICE']._serialized_end=1206
+  _globals['DESCRIPTOR']._serialized_options = b'\252\002\027HA3.Proto.Submission.V1'
+  _globals['_WRAPPERKIND']._serialized_start=1553
+  _globals['_WRAPPERKIND']._serialized_end=1692
+  _globals['_SUBMISSIONSTATUS']._serialized_start=1695
+  _globals['_SUBMISSIONSTATUS']._serialized_end=1873
+  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_start=1876
+  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_end=2039
+  _globals['_SUBMITBUILDREQUEST']._serialized_start=60
+  _globals['_SUBMITBUILDREQUEST']._serialized_end=299
+  _globals['_BUILDSTARTED']._serialized_start=301
+  _globals['_BUILDSTARTED']._serialized_end=352
+  _globals['_BUILDLOG']._serialized_start=354
+  _globals['_BUILDLOG']._serialized_end=384
+  _globals['_BUILDFINISHED']._serialized_start=386
+  _globals['_BUILDFINISHED']._serialized_end=427
+  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_start=430
+  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_end=628
+  _globals['_STREAMSLOTSREQUEST']._serialized_start=630
+  _globals['_STREAMSLOTSREQUEST']._serialized_end=650
+  _globals['_STREAMSLOTSRESPONSE']._serialized_start=652
+  _globals['_STREAMSLOTSRESPONSE']._serialized_end=719
+  _globals['_GETSLOTSREQUEST']._serialized_start=721
+  _globals['_GETSLOTSREQUEST']._serialized_end=738
+  _globals['_GETSLOTSRESPONSE']._serialized_start=740
+  _globals['_GETSLOTSRESPONSE']._serialized_end=811
+  _globals['_SELECTSLOTREQUEST']._serialized_start=813
+  _globals['_SELECTSLOTREQUEST']._serialized_end=852
+  _globals['_SELECTSLOTRESPONSE']._serialized_start=854
+  _globals['_SELECTSLOTRESPONSE']._serialized_end=874
+  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_start=876
+  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_end=955
+  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_start=957
+  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_end=1081
+  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_start=1083
+  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_end=1112
+  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_start=1114
+  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_end=1239
+  _globals['_SLOTDTO']._serialized_start=1242
+  _globals['_SLOTDTO']._serialized_end=1427
+  _globals['_SLOTSUMMARYDTO']._serialized_start=1429
+  _globals['_SLOTSUMMARYDTO']._serialized_end=1550
+  _globals['_SUBMISSIONSERVICE']._serialized_start=2041
+  _globals['_SUBMISSIONSERVICE']._serialized_end=2160
+  _globals['_SLOTQUERYSERVICE']._serialized_start=2163
+  _globals['_SLOTQUERYSERVICE']._serialized_end=2346
+  _globals['_SLOTCOMMANDSERVICE']._serialized_start=2348
+  _globals['_SLOTCOMMANDSERVICE']._serialized_end=2451
+  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_start=2454
+  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_end=2708
 # @@protoc_insertion_point(module_scope)

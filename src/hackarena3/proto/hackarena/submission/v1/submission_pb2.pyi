@@ -7,7 +7,7 @@ from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf.internal import containers as _containers
-from hackarena3.proto.hackarena.submission.v1 import common_pb2 as _common_pb2
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 import builtins as _builtins
 import sys
 import typing as _typing
@@ -19,168 +19,379 @@ else:
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
-@_typing.final
-class StartBuildRequest(_message.Message):
-    """Start build from previously uploaded source."""
+class _WrapperKind:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
+class _WrapperKindEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_WrapperKind.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    WRAPPER_KIND_UNSPECIFIED: _WrapperKind.ValueType  # 0
+    WRAPPER_KIND_PYTHON: _WrapperKind.ValueType  # 1
+    WRAPPER_KIND_CSHARP: _WrapperKind.ValueType  # 2
+    WRAPPER_KIND_CPP: _WrapperKind.ValueType  # 3
+    WRAPPER_KIND_JS_TS: _WrapperKind.ValueType  # 4
+
+class WrapperKind(_WrapperKind, metaclass=_WrapperKindEnumTypeWrapper): ...
+
+WRAPPER_KIND_UNSPECIFIED: WrapperKind.ValueType  # 0
+WRAPPER_KIND_PYTHON: WrapperKind.ValueType  # 1
+WRAPPER_KIND_CSHARP: WrapperKind.ValueType  # 2
+WRAPPER_KIND_CPP: WrapperKind.ValueType  # 3
+WRAPPER_KIND_JS_TS: WrapperKind.ValueType  # 4
+Global___WrapperKind: _TypeAlias = WrapperKind  # noqa: Y015
+
+class _SubmissionStatus:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _SubmissionStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_SubmissionStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    SUBMISSION_STATUS_UNSPECIFIED: _SubmissionStatus.ValueType  # 0
+    SUBMISSION_STATUS_QUEUED: _SubmissionStatus.ValueType  # 1
+    SUBMISSION_STATUS_BUILDING: _SubmissionStatus.ValueType  # 2
+    SUBMISSION_STATUS_SUCCEEDED: _SubmissionStatus.ValueType  # 3
+    SUBMISSION_STATUS_FAILED: _SubmissionStatus.ValueType  # 4
+
+class SubmissionStatus(_SubmissionStatus, metaclass=_SubmissionStatusEnumTypeWrapper): ...
+
+SUBMISSION_STATUS_UNSPECIFIED: SubmissionStatus.ValueType  # 0
+SUBMISSION_STATUS_QUEUED: SubmissionStatus.ValueType  # 1
+SUBMISSION_STATUS_BUILDING: SubmissionStatus.ValueType  # 2
+SUBMISSION_STATUS_SUCCEEDED: SubmissionStatus.ValueType  # 3
+SUBMISSION_STATUS_FAILED: SubmissionStatus.ValueType  # 4
+Global___SubmissionStatus: _TypeAlias = SubmissionStatus  # noqa: Y015
+
+class _OfficialSandboxCommandStatus:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _OfficialSandboxCommandStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_OfficialSandboxCommandStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    OFFICIAL_SANDBOX_COMMAND_STATUS_UNSPECIFIED: _OfficialSandboxCommandStatus.ValueType  # 0
+    OFFICIAL_SANDBOX_COMMAND_STATUS_OK: _OfficialSandboxCommandStatus.ValueType  # 1
+    OFFICIAL_SANDBOX_COMMAND_STATUS_FAILED: _OfficialSandboxCommandStatus.ValueType  # 2
+
+class OfficialSandboxCommandStatus(_OfficialSandboxCommandStatus, metaclass=_OfficialSandboxCommandStatusEnumTypeWrapper): ...
+
+OFFICIAL_SANDBOX_COMMAND_STATUS_UNSPECIFIED: OfficialSandboxCommandStatus.ValueType  # 0
+OFFICIAL_SANDBOX_COMMAND_STATUS_OK: OfficialSandboxCommandStatus.ValueType  # 1
+OFFICIAL_SANDBOX_COMMAND_STATUS_FAILED: OfficialSandboxCommandStatus.ValueType  # 2
+Global___OfficialSandboxCommandStatus: _TypeAlias = OfficialSandboxCommandStatus  # noqa: Y015
+
+@_typing.final
+class SubmitBuildRequest(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    UPLOAD_ID_FIELD_NUMBER: _builtins.int
-    upload_id: _builtins.str
-    """Uploaded source identifier from UploadSource."""
+    WRAPPER_KIND_FIELD_NUMBER: _builtins.int
+    WRAPPER_VERSION_FIELD_NUMBER: _builtins.int
+    USER_ARCHIVE_TAR_GZ_FIELD_NUMBER: _builtins.int
+    SLOT_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    wrapper_kind: Global___WrapperKind.ValueType
+    wrapper_version: _builtins.str
+    user_archive_tar_gz: _builtins.bytes
+    slot: _builtins.int
+    description: _builtins.str
     def __init__(
         self,
         *,
-        upload_id: _builtins.str = ...,
+        wrapper_kind: Global___WrapperKind.ValueType = ...,
+        wrapper_version: _builtins.str = ...,
+        user_archive_tar_gz: _builtins.bytes = ...,
+        slot: _builtins.int | None = ...,
+        description: _builtins.str = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["upload_id", b"upload_id"]  # noqa: Y015
-    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-
-Global___StartBuildRequest: _TypeAlias = StartBuildRequest  # noqa: Y015
-
-@_typing.final
-class StartBuildResponse(_message.Message):
-    """StartBuild result."""
-
-    DESCRIPTOR: _descriptor.Descriptor
-
-    BUILD_FIELD_NUMBER: _builtins.int
-    @_builtins.property
-    def build(self) -> _common_pb2.BuildSummary:
-        """Newly created build."""
-
-    def __init__(
-        self,
-        *,
-        build: _common_pb2.BuildSummary | None = ...,
-    ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "slot", b"slot"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "description", b"description", "slot", b"slot", "user_archive_tar_gz", b"user_archive_tar_gz", "wrapper_kind", b"wrapper_kind", "wrapper_version", b"wrapper_version"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__slot: _TypeAlias = _typing.Literal["slot"]  # noqa: Y015
+    _WhichOneofArgType__slot: _TypeAlias = _typing.Literal["_slot", b"_slot"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__slot) -> _WhichOneofReturnType__slot | None: ...
 
-Global___StartBuildResponse: _TypeAlias = StartBuildResponse  # noqa: Y015
+Global___SubmitBuildRequest: _TypeAlias = SubmitBuildRequest  # noqa: Y015
 
 @_typing.final
-class GetBuildRequest(_message.Message):
-    """Get build by id."""
-
+class BuildStarted(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    BUILD_ID_FIELD_NUMBER: _builtins.int
-    build_id: _builtins.str
-    """Build identifier."""
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    submission_id: _builtins.str
     def __init__(
         self,
         *,
-        build_id: _builtins.str = ...,
+        submission_id: _builtins.str = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["build_id", b"build_id"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["submission_id", b"submission_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
-Global___GetBuildRequest: _TypeAlias = GetBuildRequest  # noqa: Y015
+Global___BuildStarted: _TypeAlias = BuildStarted  # noqa: Y015
 
 @_typing.final
-class GetBuildResponse(_message.Message):
-    """GetBuild result."""
-
+class BuildLog(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    BUILD_FIELD_NUMBER: _builtins.int
+    LINE_FIELD_NUMBER: _builtins.int
+    line: _builtins.str
+    def __init__(
+        self,
+        *,
+        line: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["line", b"line"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___BuildLog: _TypeAlias = BuildLog  # noqa: Y015
+
+@_typing.final
+class BuildFinished(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SUCCESS_FIELD_NUMBER: _builtins.int
+    success: _builtins.bool
+    def __init__(
+        self,
+        *,
+        success: _builtins.bool = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["success", b"success"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___BuildFinished: _TypeAlias = BuildFinished  # noqa: Y015
+
+@_typing.final
+class SubmitBuildStreamResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STARTED_FIELD_NUMBER: _builtins.int
+    LOG_FIELD_NUMBER: _builtins.int
+    FINISHED_FIELD_NUMBER: _builtins.int
     @_builtins.property
-    def build(self) -> _common_pb2.BuildSummary:
-        """Requested build."""
-
+    def started(self) -> Global___BuildStarted: ...
+    @_builtins.property
+    def log(self) -> Global___BuildLog: ...
+    @_builtins.property
+    def finished(self) -> Global___BuildFinished: ...
     def __init__(
         self,
         *,
-        build: _common_pb2.BuildSummary | None = ...,
+        started: Global___BuildStarted | None = ...,
+        log: Global___BuildLog | None = ...,
+        finished: Global___BuildFinished | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["event", b"event", "finished", b"finished", "log", b"log", "started", b"started"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["event", b"event", "finished", b"finished", "log", b"log", "started", b"started"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_event: _TypeAlias = _typing.Literal["started", "log", "finished"]  # noqa: Y015
+    _WhichOneofArgType_event: _TypeAlias = _typing.Literal["event", b"event"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_event) -> _WhichOneofReturnType_event | None: ...
 
-Global___GetBuildResponse: _TypeAlias = GetBuildResponse  # noqa: Y015
+Global___SubmitBuildStreamResponse: _TypeAlias = SubmitBuildStreamResponse  # noqa: Y015
 
 @_typing.final
-class ListBuildsRequest(_message.Message):
-    """List latest builds."""
-
+class StreamSlotsRequest(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    LIMIT_FIELD_NUMBER: _builtins.int
-    limit: _builtins.int
-    """Maximum number of returned builds."""
     def __init__(
         self,
-        *,
-        limit: _builtins.int = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["limit", b"limit"]  # noqa: Y015
-    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
-Global___ListBuildsRequest: _TypeAlias = ListBuildsRequest  # noqa: Y015
+Global___StreamSlotsRequest: _TypeAlias = StreamSlotsRequest  # noqa: Y015
 
 @_typing.final
-class ListBuildsResponse(_message.Message):
-    """ListBuilds result."""
-
+class StreamSlotsResponse(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    BUILDS_FIELD_NUMBER: _builtins.int
+    SLOTS_FIELD_NUMBER: _builtins.int
     @_builtins.property
-    def builds(self) -> _containers.RepeatedCompositeFieldContainer[_common_pb2.BuildSummary]:
-        """Returned builds."""
-
+    def slots(self) -> _containers.RepeatedCompositeFieldContainer[Global___SlotDto]: ...
     def __init__(
         self,
         *,
-        builds: _abc.Iterable[_common_pb2.BuildSummary] | None = ...,
+        slots: _abc.Iterable[Global___SlotDto] | None = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["builds", b"builds"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["slots", b"slots"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
-Global___ListBuildsResponse: _TypeAlias = ListBuildsResponse  # noqa: Y015
+Global___StreamSlotsResponse: _TypeAlias = StreamSlotsResponse  # noqa: Y015
 
 @_typing.final
-class CancelBuildRequest(_message.Message):
-    """Cancel build by id."""
-
+class GetSlotsRequest(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    BUILD_ID_FIELD_NUMBER: _builtins.int
-    build_id: _builtins.str
-    """Build identifier."""
     def __init__(
         self,
-        *,
-        build_id: _builtins.str = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["build_id", b"build_id"]  # noqa: Y015
-    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
-Global___CancelBuildRequest: _TypeAlias = CancelBuildRequest  # noqa: Y015
+Global___GetSlotsRequest: _TypeAlias = GetSlotsRequest  # noqa: Y015
 
 @_typing.final
-class CancelBuildResponse(_message.Message):
-    """CancelBuild result."""
-
+class GetSlotsResponse(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 
-    BUILD_FIELD_NUMBER: _builtins.int
+    SLOTS_FIELD_NUMBER: _builtins.int
     @_builtins.property
-    def build(self) -> _common_pb2.BuildSummary:
-        """Updated build state."""
-
+    def slots(self) -> _containers.RepeatedCompositeFieldContainer[Global___SlotSummaryDto]: ...
     def __init__(
         self,
         *,
-        build: _common_pb2.BuildSummary | None = ...,
+        slots: _abc.Iterable[Global___SlotSummaryDto] | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["slots", b"slots"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetSlotsResponse: _TypeAlias = GetSlotsResponse  # noqa: Y015
+
+@_typing.final
+class SelectSlotRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SLOT_FIELD_NUMBER: _builtins.int
+    slot: _builtins.int
+    def __init__(
+        self,
+        *,
+        slot: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["slot", b"slot"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___SelectSlotRequest: _TypeAlias = SelectSlotRequest  # noqa: Y015
+
+@_typing.final
+class SelectSlotResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___SelectSlotResponse: _TypeAlias = SelectSlotResponse  # noqa: Y015
+
+@_typing.final
+class JoinOfficialSandboxRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SANDBOX_ID_FIELD_NUMBER: _builtins.int
+    SLOT_FIELD_NUMBER: _builtins.int
+    sandbox_id: _builtins.str
+    slot: _builtins.int
+    def __init__(
+        self,
+        *,
+        sandbox_id: _builtins.str = ...,
+        slot: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["sandbox_id", b"sandbox_id", "slot", b"slot"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___JoinOfficialSandboxRequest: _TypeAlias = JoinOfficialSandboxRequest  # noqa: Y015
+
+@_typing.final
+class JoinOfficialSandboxResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    status: Global___OfficialSandboxCommandStatus.ValueType
+    message: _builtins.str
+    def __init__(
+        self,
+        *,
+        status: Global___OfficialSandboxCommandStatus.ValueType = ...,
+        message: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___JoinOfficialSandboxResponse: _TypeAlias = JoinOfficialSandboxResponse  # noqa: Y015
+
+@_typing.final
+class LeaveOfficialSandboxRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___LeaveOfficialSandboxRequest: _TypeAlias = LeaveOfficialSandboxRequest  # noqa: Y015
+
+@_typing.final
+class LeaveOfficialSandboxResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: _builtins.int
+    MESSAGE_FIELD_NUMBER: _builtins.int
+    status: Global___OfficialSandboxCommandStatus.ValueType
+    message: _builtins.str
+    def __init__(
+        self,
+        *,
+        status: Global___OfficialSandboxCommandStatus.ValueType = ...,
+        message: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["message", b"message", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LeaveOfficialSandboxResponse: _TypeAlias = LeaveOfficialSandboxResponse  # noqa: Y015
+
+@_typing.final
+class SlotDto(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SLOT_FIELD_NUMBER: _builtins.int
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    SELECTED_FIELD_NUMBER: _builtins.int
+    CURRENTLY_LOADED_FIELD_NUMBER: _builtins.int
+    slot: _builtins.int
+    submission_id: _builtins.str
+    description: _builtins.str
+    selected: _builtins.bool
+    currently_loaded: _builtins.bool
+    def __init__(
+        self,
+        *,
+        slot: _builtins.int | None = ...,
+        submission_id: _builtins.str = ...,
+        description: _builtins.str = ...,
+        selected: _builtins.bool = ...,
+        currently_loaded: _builtins.bool = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "slot", b"slot"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["build", b"build"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "currently_loaded", b"currently_loaded", "description", b"description", "selected", b"selected", "slot", b"slot", "submission_id", b"submission_id"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__slot: _TypeAlias = _typing.Literal["slot"]  # noqa: Y015
+    _WhichOneofArgType__slot: _TypeAlias = _typing.Literal["_slot", b"_slot"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__slot) -> _WhichOneofReturnType__slot | None: ...
 
-Global___CancelBuildResponse: _TypeAlias = CancelBuildResponse  # noqa: Y015
+Global___SlotDto: _TypeAlias = SlotDto  # noqa: Y015
+
+@_typing.final
+class SlotSummaryDto(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SLOT_FIELD_NUMBER: _builtins.int
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    slot: _builtins.int
+    submission_id: _builtins.str
+    description: _builtins.str
+    def __init__(
+        self,
+        *,
+        slot: _builtins.int | None = ...,
+        submission_id: _builtins.str = ...,
+        description: _builtins.str = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "slot", b"slot"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_slot", b"_slot", "description", b"description", "slot", b"slot", "submission_id", b"submission_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__slot: _TypeAlias = _typing.Literal["slot"]  # noqa: Y015
+    _WhichOneofArgType__slot: _TypeAlias = _typing.Literal["_slot", b"_slot"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__slot) -> _WhichOneofReturnType__slot | None: ...
+
+Global___SlotSummaryDto: _TypeAlias = SlotSummaryDto  # noqa: Y015

@@ -6,7 +6,10 @@ from hackarena3.proto.achievement.v1 import achievement_admin_pb2 as achievement
 
 
 class AchievementServiceAdminStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """Service definition for administrative actions related to achievements.
+    This service provides methods for managing achievements, such as granting,
+    refusing, and updating their display information.
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -37,28 +40,35 @@ class AchievementServiceAdminStub(object):
 
 
 class AchievementServiceAdminServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """Service definition for administrative actions related to achievements.
+    This service provides methods for managing achievements, such as granting,
+    refusing, and updating their display information.
+    """
 
     def GrantAchievement(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Grants a specific achievement to a team.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def RefuseAchievement(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Refuses (or revokes) a specific achievement for a team.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetAchievementDisplays(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Retrieves display information (e.g., name, description, icon) for all available achievements.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def UpdateAchievementDisplay(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Updates the display information for a specific achievement.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -95,7 +105,10 @@ def add_AchievementServiceAdminServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class AchievementServiceAdmin(object):
-    """Missing associated documentation comment in .proto file."""
+    """Service definition for administrative actions related to achievements.
+    This service provides methods for managing achievements, such as granting,
+    refusing, and updating their display information.
+    """
 
     @staticmethod
     def GrantAchievement(request,

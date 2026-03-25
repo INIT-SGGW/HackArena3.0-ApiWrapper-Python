@@ -302,6 +302,41 @@ class SetControlsResponse(_message.Message):
 Global___SetControlsResponse: _TypeAlias = SetControlsResponse  # noqa: Y015
 
 @_typing.final
+class PrepareOfficialJoinRequest(_message.Message):
+    """Request for preparing/joining active official race session."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___PrepareOfficialJoinRequest: _TypeAlias = PrepareOfficialJoinRequest  # noqa: Y015
+
+@_typing.final
+class PrepareOfficialJoinResponse(_message.Message):
+    """Response with assigned participant vehicle data for official race."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CAR_ID_FIELD_NUMBER: _builtins.int
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    car_id: _builtins.int
+    """Assigned participant vehicle identifier."""
+    map_id: _builtins.str
+    """Map identifier of the joined official race session."""
+    def __init__(
+        self,
+        *,
+        car_id: _builtins.int = ...,
+        map_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "map_id", b"map_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___PrepareOfficialJoinResponse: _TypeAlias = PrepareOfficialJoinResponse  # noqa: Y015
+
+@_typing.final
 class SetControlsDevRequest(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 

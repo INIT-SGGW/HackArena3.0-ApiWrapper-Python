@@ -1,16 +1,27 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlparse
 
 from hackarena3.types import RuntimeConfig
 
 ENV_API_URL = "HA3_WRAPPER_API_URL"
 ENV_HA_AUTH_BIN = "HA3_WRAPPER_HA_AUTH_BIN"
+ENV_BACKEND_ENDPOINT = "HA3_WRAPPER_BACKEND_ENDPOINT"
+ENV_TEAM_TOKEN = "HA3_WRAPPER_TEAM_TOKEN"
 
 
 class ConfigError(RuntimeError):
     pass
+
+
+@dataclass(frozen=True, slots=True)
+class OfficialRuntimeConfig:
+    grpc_target: str
+    rpc_prefix: str
+    team_token: str
 
 
 def _strip_quotes(value: str) -> str:
@@ -42,10 +53,68 @@ def _required_api_addr() -> str:
     raise ConfigError(f"Missing required runtime env: {ENV_API_URL}")
 
 
-def load_runtime_config() -> RuntimeConfig:
+def _optional_api_addr() -> str:
+    return str(os.environ.get(ENV_API_URL, "")).strip()
+
+
+def load_runtime_config(*, require_api_addr: bool = True) -> RuntimeConfig:
     _load_dotenv_if_present()
 
-    api_addr = _required_api_addr()
+    api_addr = _required_api_addr() if require_api_addr else _optional_api_addr()
     ha_auth_bin = str(os.environ.get(ENV_HA_AUTH_BIN, "")).strip() or None
 
     return RuntimeConfig(api_addr=api_addr, ha_auth_bin=ha_auth_bin)
+
+
+def load_official_runtime_config() -> OfficialRuntimeConfig:
+    _load_dotenv_if_present()
+
+    endpoint = str(os.environ.get(ENV_BACKEND_ENDPOINT, "")).strip()
+    if not endpoint:
+        raise ConfigError(f"Missing required runtime env: {ENV_BACKEND_ENDPOINT}")
+
+    team_token = str(os.environ.get(ENV_TEAM_TOKEN, "")).strip()
+    if not team_token:
+        raise ConfigError(f"Missing required runtime env: {ENV_TEAM_TOKEN}")
+
+    parsed = urlparse(endpoint)
+    if parsed.scheme != "https":
+        raise ConfigError(
+            f"Invalid {ENV_BACKEND_ENDPOINT}: expected https:// URL."
+        )
+    if not parsed.hostname:
+        raise ConfigError(
+            f"Invalid {ENV_BACKEND_ENDPOINT}: missing host in URL {endpoint!r}."
+        )
+    if parsed.query or parsed.fragment or parsed.params:
+        raise ConfigError(
+            f"Invalid {ENV_BACKEND_ENDPOINT}: query/fragment/params are not supported."
+        )
+
+    path = parsed.path.strip()
+    if not path or path == "/":
+        raise ConfigError(
+            f"Invalid {ENV_BACKEND_ENDPOINT}: non-root path prefix is required (for example /backend)."
+        )
+    rpc_prefix = path.rstrip("/")
+    if not rpc_prefix.startswith("/"):
+        rpc_prefix = f"/{rpc_prefix}"
+
+    try:
+        port = parsed.port
+    except ValueError as exc:
+        raise ConfigError(
+            f"Invalid {ENV_BACKEND_ENDPOINT}: invalid port in URL {endpoint!r}."
+        ) from exc
+    if port is None:
+        port = 443
+
+    host = parsed.hostname
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+    grpc_target = f"{host}:{port}"
+    return OfficialRuntimeConfig(
+        grpc_target=grpc_target,
+        rpc_prefix=rpc_prefix,
+        team_token=team_token,
+    )

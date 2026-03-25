@@ -5,6 +5,7 @@ isort:skip_file
 
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from hackarena3.proto.race.v1 import common_pb2 as _common_pb2
 import builtins as _builtins
@@ -225,6 +226,7 @@ class ConditionalAchievementRepresentation(_message.Message):
     AVAILABILITY_FIELD_NUMBER: _builtins.int
     VISIBILITY_FIELD_NUMBER: _builtins.int
     IS_ACHIEVED_FIELD_NUMBER: _builtins.int
+    GRANTED_AT_FIELD_NUMBER: _builtins.int
     achievement_id: _builtins.str
     name: _builtins.str
     """Achievement name."""
@@ -238,6 +240,12 @@ class ConditionalAchievementRepresentation(_message.Message):
     """Achevement visibility."""
     is_achieved: _builtins.bool
     """Is Achevement achieved by team. (default: false)"""
+    @_builtins.property
+    def granted_at(self) -> _timestamp_pb2.Timestamp:
+        """If achievement is granted, this field contains
+        real time of its grant. It is zeroed otherwise
+        """
+
     def __init__(
         self,
         *,
@@ -248,8 +256,11 @@ class ConditionalAchievementRepresentation(_message.Message):
         availability: Global___AchievementAvailability.ValueType = ...,
         visibility: Global___AchievementVisibility.ValueType = ...,
         is_achieved: _builtins.bool = ...,
+        granted_at: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "availability", b"availability", "description", b"description", "image_path", b"image_path", "is_achieved", b"is_achieved", "name", b"name", "visibility", b"visibility"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["granted_at", b"granted_at"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "availability", b"availability", "description", b"description", "granted_at", b"granted_at", "image_path", b"image_path", "is_achieved", b"is_achieved", "name", b"name", "visibility", b"visibility"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___ConditionalAchievementRepresentation: _TypeAlias = ConditionalAchievementRepresentation  # noqa: Y015
@@ -269,6 +280,7 @@ class NumericAchievementRepresentation(_message.Message):
     TARGET_VALUE_FIELD_NUMBER: _builtins.int
     UNIT_FIELD_NUMBER: _builtins.int
     PROGRESS_FIELD_NUMBER: _builtins.int
+    GRANTED_AT_FIELD_NUMBER: _builtins.int
     achievement_id: _builtins.str
     name: _builtins.str
     """Achievement name."""
@@ -290,6 +302,12 @@ class NumericAchievementRepresentation(_message.Message):
     """Unit of current_value and target_value."""
     progress: _builtins.int
     """Progress percentage (0 - 100 inclusive)."""
+    @_builtins.property
+    def granted_at(self) -> _timestamp_pb2.Timestamp:
+        """If achievement is granted, this field contains
+        real time of its grant. It is zeroed otherwise
+        """
+
     def __init__(
         self,
         *,
@@ -304,8 +322,11 @@ class NumericAchievementRepresentation(_message.Message):
         target_value: _builtins.int = ...,
         unit: _builtins.str = ...,
         progress: _builtins.int = ...,
+        granted_at: _timestamp_pb2.Timestamp | None = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "availability", b"availability", "current_value", b"current_value", "description", b"description", "image_path", b"image_path", "is_achieved", b"is_achieved", "name", b"name", "progress", b"progress", "target_value", b"target_value", "unit", b"unit", "visibility", b"visibility"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["granted_at", b"granted_at"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "availability", b"availability", "current_value", b"current_value", "description", b"description", "granted_at", b"granted_at", "image_path", b"image_path", "is_achieved", b"is_achieved", "name", b"name", "progress", b"progress", "target_value", b"target_value", "unit", b"unit", "visibility", b"visibility"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___NumericAchievementRepresentation: _TypeAlias = NumericAchievementRepresentation  # noqa: Y015
@@ -333,6 +354,10 @@ Global___TeamTotal: _TypeAlias = TeamTotal  # noqa: Y015
 
 @_typing.final
 class AchievementDisplay(_message.Message):
+    """Represents the displayable data of a single achievement.
+    This message is typically used to show achievement details in a user interface.
+    """
+
     DESCRIPTOR: _descriptor.Descriptor
 
     ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
@@ -343,12 +368,21 @@ class AchievementDisplay(_message.Message):
     AVAILABILITY_FIELD_NUMBER: _builtins.int
     VISIBILITY_FIELD_NUMBER: _builtins.int
     achievement_id: _builtins.str
+    """The unique identifier of the achievement."""
     name: _builtins.str
+    """The human-readable name of the achievement, e.g., "Master Explorer"."""
     description: _builtins.str
+    """A detailed description of what the achievement represents or how to earn it."""
     image_path: _builtins.str
+    """The path or URL to the visual icon or badge for this achievement."""
     unit: _builtins.str
+    """An optional unit of measurement for progress towards the achievement,"""
     availability: Global___AchievementAvailability.ValueType
+    """The current availability status of the achievement (e.g. race, sandbox, both)."""
     visibility: Global___AchievementVisibility.ValueType
+    """The visibility status of the achievement, determining if it should be shown
+    to users before it has been earned (e.g., public, secret).
+    """
     def __init__(
         self,
         *,
@@ -367,6 +401,10 @@ Global___AchievementDisplay: _TypeAlias = AchievementDisplay  # noqa: Y015
 
 @_typing.final
 class NewAchievementDisplay(_message.Message):
+    """Contains the data required to create or update the display properties of an achievement.
+    This message is used as input for administrative operations.
+    """
+
     DESCRIPTOR: _descriptor.Descriptor
 
     NAME_FIELD_NUMBER: _builtins.int
@@ -375,10 +413,15 @@ class NewAchievementDisplay(_message.Message):
     UNIT_FIELD_NUMBER: _builtins.int
     VISIBILITY_FIELD_NUMBER: _builtins.int
     name: _builtins.str
+    """The new or updated human-readable name for the achievement."""
     description: _builtins.str
+    """The new or updated detailed description for the achievement."""
     image_path: _builtins.str
+    """The new or updated path or URL to the visual icon."""
     unit: _builtins.str
+    """The new or updated unit of measurement for progress, if applicable."""
     visibility: Global___AchievementVisibility.ValueType
+    """The new or updated visibility status for the achievement."""
     def __init__(
         self,
         *,

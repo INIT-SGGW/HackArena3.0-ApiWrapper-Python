@@ -32,6 +32,7 @@ class PublicSandboxRuntimeInfo(_message.Message):
     ACTIVE_TIME_OF_DAY_PRESET_FIELD_NUMBER: _builtins.int
     GHOST_MODE_FIELD_NUMBER: _builtins.int
     ACTIVE_PLAYER_COUNT_FIELD_NUMBER: _builtins.int
+    TEAM_BOT_JOINED_FIELD_NUMBER: _builtins.int
     sandbox_id: _builtins.str
     """Active sandbox identifier."""
     sandbox_name: _builtins.str
@@ -42,6 +43,8 @@ class PublicSandboxRuntimeInfo(_message.Message):
     """Active in-session time-of-day preset."""
     active_player_count: _builtins.int
     """Number of currently connected players in this sandbox."""
+    team_bot_joined: _builtins.bool
+    """True when caller's team bot is currently joined to this sandbox runtime."""
     @_builtins.property
     def ghost_mode(self) -> _runtime_settings_pb2.GhostModeSettings:
         """Active ghost mode behavior."""
@@ -55,10 +58,11 @@ class PublicSandboxRuntimeInfo(_message.Message):
         active_time_of_day_preset: _runtime_settings_pb2.RuntimeTimeOfDayPreset.ValueType = ...,
         ghost_mode: _runtime_settings_pb2.GhostModeSettings | None = ...,
         active_player_count: _builtins.int = ...,
+        team_bot_joined: _builtins.bool = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_player_count", b"active_player_count", "active_time_of_day_preset", b"active_time_of_day_preset", "ghost_mode", b"ghost_mode", "map_id", b"map_id", "sandbox_id", b"sandbox_id", "sandbox_name", b"sandbox_name"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_player_count", b"active_player_count", "active_time_of_day_preset", b"active_time_of_day_preset", "ghost_mode", b"ghost_mode", "map_id", b"map_id", "sandbox_id", b"sandbox_id", "sandbox_name", b"sandbox_name", "team_bot_joined", b"team_bot_joined"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___PublicSandboxRuntimeInfo: _TypeAlias = PublicSandboxRuntimeInfo  # noqa: Y015

@@ -26,7 +26,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from hackarena3.proto.race.v1 import runtime_settings_pb2 as race_dot_v1_dot_runtime__settings__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1crace/v1/runtime_public.proto\x12\x07race.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1erace/v1/runtime_settings.proto\"\xb9\x02\n\x18PublicSandboxRuntimeInfo\x12\x1d\n\nsandbox_id\x18\x01 \x01(\tR\tsandboxId\x12!\n\x0csandbox_name\x18\x02 \x01(\tR\x0bsandboxName\x12\x15\n\x06map_id\x18\x03 \x01(\tR\x05mapId\x12Y\n\x19\x61\x63tive_time_of_day_preset\x18\x04 \x01(\x0e\x32\x1f.race.v1.RuntimeTimeOfDayPresetR\x15\x61\x63tiveTimeOfDayPreset\x12\x39\n\nghost_mode\x18\x05 \x01(\x0b\x32\x1a.race.v1.GhostModeSettingsR\tghostMode\x12.\n\x13\x61\x63tive_player_count\x18\x06 \x01(\rR\x11\x61\x63tivePlayerCount\"\x82\x01\n\x1ePublicOfficialRaceStagingState\x12,\n\x12ready_player_count\x18\x01 \x01(\rR\x10readyPlayerCount\x12\x32\n\x15\x65xpected_player_count\x18\x02 \x01(\rR\x13\x65xpectedPlayerCount\"o\n PublicOfficialRaceCountdownState\x12K\n\x14\x63ountdown_end_at_utc\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x11\x63ountdownEndAtUtc\"i\n\x1ePublicOfficialRaceRunningState\x12G\n\x12planned_end_at_utc\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0fplannedEndAtUtc\"!\n\x1fPublicOfficialRaceFinishedState\" \n\x1ePublicOfficialRaceAbortedState\"\xb2\x04\n\x1dPublicOfficialRaceRuntimeInfo\x12\x1b\n\trace_name\x18\x01 \x01(\tR\x08raceName\x12\x15\n\x06map_id\x18\x02 \x01(\tR\x05mapId\x12@\n\x0estart_time_utc\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0cstartTimeUtc\x12*\n\x11race_duration_sec\x18\x04 \x01(\rR\x0fraceDurationSec\x12\x43\n\x07staging\x18\x05 \x01(\x0b\x32\'.race.v1.PublicOfficialRaceStagingStateH\x00R\x07staging\x12I\n\tcountdown\x18\x06 \x01(\x0b\x32).race.v1.PublicOfficialRaceCountdownStateH\x00R\tcountdown\x12\x43\n\x07running\x18\x07 \x01(\x0b\x32\'.race.v1.PublicOfficialRaceRunningStateH\x00R\x07running\x12\x46\n\x08\x66inished\x18\x08 \x01(\x0b\x32(.race.v1.PublicOfficialRaceFinishedStateH\x00R\x08\x66inished\x12\x43\n\x07\x61\x62orted\x18\t \x01(\x0b\x32\'.race.v1.PublicOfficialRaceAbortedStateH\x00R\x07\x61\x62ortedB\r\n\x0bphase_state\"\xa6\x01\n\x19PublicUpcomingRaceSummary\x12\x1b\n\trace_name\x18\x01 \x01(\tR\x08raceName\x12@\n\x0estart_time_utc\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0cstartTimeUtc\x12*\n\x11race_duration_sec\x18\x03 \x01(\rR\x0fraceDurationSec\"[\n\x18PublicSandboxRuntimeMode\x12?\n\tsandboxes\x18\x01 \x03(\x0b\x32!.race.v1.PublicSandboxRuntimeInfoR\tsandboxes\"\xfe\x01\n\x12PublicRuntimeState\x12\x42\n\x0fserver_time_utc\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\rserverTimeUtc\x12M\n\rofficial_race\x18\x04 \x01(\x0b\x32&.race.v1.PublicOfficialRaceRuntimeInfoH\x00R\x0cofficialRace\x12\x46\n\x0csandbox_mode\x18\x05 \x01(\x0b\x32!.race.v1.PublicSandboxRuntimeModeH\x00R\x0bsandboxModeB\r\n\x0b\x61\x63tive_mode\"\x93\x01\n\x0fPublicMenuState\x12\x35\n\x07runtime\x18\x01 \x01(\x0b\x32\x1b.race.v1.PublicRuntimeStateR\x07runtime\x12I\n\x0eupcoming_races\x18\x02 \x03(\x0b\x32\".race.v1.PublicUpcomingRaceSummaryR\rupcomingRaces\"\x1b\n\x19GetPublicMenuStateRequest\"L\n\x1aGetPublicMenuStateResponse\x12.\n\x05state\x18\x01 \x01(\x0b\x32\x18.race.v1.PublicMenuStateR\x05state\"\x1e\n\x1cStreamPublicMenuStateRequest2\xce\x01\n\x11PublicMenuService\x12]\n\x12GetPublicMenuState\x12\".race.v1.GetPublicMenuStateRequest\x1a#.race.v1.GetPublicMenuStateResponse\x12Z\n\x15StreamPublicMenuState\x12%.race.v1.StreamPublicMenuStateRequest\x1a\x18.race.v1.PublicMenuState0\x01\x42\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1crace/v1/runtime_public.proto\x12\x07race.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1erace/v1/runtime_settings.proto\"\xe1\x02\n\x18PublicSandboxRuntimeInfo\x12\x1d\n\nsandbox_id\x18\x01 \x01(\tR\tsandboxId\x12!\n\x0csandbox_name\x18\x02 \x01(\tR\x0bsandboxName\x12\x15\n\x06map_id\x18\x03 \x01(\tR\x05mapId\x12Y\n\x19\x61\x63tive_time_of_day_preset\x18\x04 \x01(\x0e\x32\x1f.race.v1.RuntimeTimeOfDayPresetR\x15\x61\x63tiveTimeOfDayPreset\x12\x39\n\nghost_mode\x18\x05 \x01(\x0b\x32\x1a.race.v1.GhostModeSettingsR\tghostMode\x12.\n\x13\x61\x63tive_player_count\x18\x06 \x01(\rR\x11\x61\x63tivePlayerCount\x12&\n\x0fteam_bot_joined\x18\x07 \x01(\x08R\rteamBotJoined\"\x82\x01\n\x1ePublicOfficialRaceStagingState\x12,\n\x12ready_player_count\x18\x01 \x01(\rR\x10readyPlayerCount\x12\x32\n\x15\x65xpected_player_count\x18\x02 \x01(\rR\x13\x65xpectedPlayerCount\"o\n PublicOfficialRaceCountdownState\x12K\n\x14\x63ountdown_end_at_utc\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x11\x63ountdownEndAtUtc\"i\n\x1ePublicOfficialRaceRunningState\x12G\n\x12planned_end_at_utc\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0fplannedEndAtUtc\"!\n\x1fPublicOfficialRaceFinishedState\" \n\x1ePublicOfficialRaceAbortedState\"\xb2\x04\n\x1dPublicOfficialRaceRuntimeInfo\x12\x1b\n\trace_name\x18\x01 \x01(\tR\x08raceName\x12\x15\n\x06map_id\x18\x02 \x01(\tR\x05mapId\x12@\n\x0estart_time_utc\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0cstartTimeUtc\x12*\n\x11race_duration_sec\x18\x04 \x01(\rR\x0fraceDurationSec\x12\x43\n\x07staging\x18\x05 \x01(\x0b\x32\'.race.v1.PublicOfficialRaceStagingStateH\x00R\x07staging\x12I\n\tcountdown\x18\x06 \x01(\x0b\x32).race.v1.PublicOfficialRaceCountdownStateH\x00R\tcountdown\x12\x43\n\x07running\x18\x07 \x01(\x0b\x32\'.race.v1.PublicOfficialRaceRunningStateH\x00R\x07running\x12\x46\n\x08\x66inished\x18\x08 \x01(\x0b\x32(.race.v1.PublicOfficialRaceFinishedStateH\x00R\x08\x66inished\x12\x43\n\x07\x61\x62orted\x18\t \x01(\x0b\x32\'.race.v1.PublicOfficialRaceAbortedStateH\x00R\x07\x61\x62ortedB\r\n\x0bphase_state\"\xa6\x01\n\x19PublicUpcomingRaceSummary\x12\x1b\n\trace_name\x18\x01 \x01(\tR\x08raceName\x12@\n\x0estart_time_utc\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0cstartTimeUtc\x12*\n\x11race_duration_sec\x18\x03 \x01(\rR\x0fraceDurationSec\"[\n\x18PublicSandboxRuntimeMode\x12?\n\tsandboxes\x18\x01 \x03(\x0b\x32!.race.v1.PublicSandboxRuntimeInfoR\tsandboxes\"\xfe\x01\n\x12PublicRuntimeState\x12\x42\n\x0fserver_time_utc\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\rserverTimeUtc\x12M\n\rofficial_race\x18\x04 \x01(\x0b\x32&.race.v1.PublicOfficialRaceRuntimeInfoH\x00R\x0cofficialRace\x12\x46\n\x0csandbox_mode\x18\x05 \x01(\x0b\x32!.race.v1.PublicSandboxRuntimeModeH\x00R\x0bsandboxModeB\r\n\x0b\x61\x63tive_mode\"\x93\x01\n\x0fPublicMenuState\x12\x35\n\x07runtime\x18\x01 \x01(\x0b\x32\x1b.race.v1.PublicRuntimeStateR\x07runtime\x12I\n\x0eupcoming_races\x18\x02 \x03(\x0b\x32\".race.v1.PublicUpcomingRaceSummaryR\rupcomingRaces\"\x1b\n\x19GetPublicMenuStateRequest\"L\n\x1aGetPublicMenuStateResponse\x12.\n\x05state\x18\x01 \x01(\x0b\x32\x18.race.v1.PublicMenuStateR\x05state\"\x1e\n\x1cStreamPublicMenuStateRequest2\xce\x01\n\x11PublicMenuService\x12]\n\x12GetPublicMenuState\x12\".race.v1.GetPublicMenuStateRequest\x1a#.race.v1.GetPublicMenuStateResponse\x12Z\n\x15StreamPublicMenuState\x12%.race.v1.StreamPublicMenuStateRequest\x1a\x18.race.v1.PublicMenuState0\x01\x42\x14\xaa\x02\x11HA3.Proto.Race.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,33 +35,33 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\021HA3.Proto.Race.V1'
   _globals['_PUBLICSANDBOXRUNTIMEINFO']._serialized_start=107
-  _globals['_PUBLICSANDBOXRUNTIMEINFO']._serialized_end=420
-  _globals['_PUBLICOFFICIALRACESTAGINGSTATE']._serialized_start=423
-  _globals['_PUBLICOFFICIALRACESTAGINGSTATE']._serialized_end=553
-  _globals['_PUBLICOFFICIALRACECOUNTDOWNSTATE']._serialized_start=555
-  _globals['_PUBLICOFFICIALRACECOUNTDOWNSTATE']._serialized_end=666
-  _globals['_PUBLICOFFICIALRACERUNNINGSTATE']._serialized_start=668
-  _globals['_PUBLICOFFICIALRACERUNNINGSTATE']._serialized_end=773
-  _globals['_PUBLICOFFICIALRACEFINISHEDSTATE']._serialized_start=775
-  _globals['_PUBLICOFFICIALRACEFINISHEDSTATE']._serialized_end=808
-  _globals['_PUBLICOFFICIALRACEABORTEDSTATE']._serialized_start=810
-  _globals['_PUBLICOFFICIALRACEABORTEDSTATE']._serialized_end=842
-  _globals['_PUBLICOFFICIALRACERUNTIMEINFO']._serialized_start=845
-  _globals['_PUBLICOFFICIALRACERUNTIMEINFO']._serialized_end=1407
-  _globals['_PUBLICUPCOMINGRACESUMMARY']._serialized_start=1410
-  _globals['_PUBLICUPCOMINGRACESUMMARY']._serialized_end=1576
-  _globals['_PUBLICSANDBOXRUNTIMEMODE']._serialized_start=1578
-  _globals['_PUBLICSANDBOXRUNTIMEMODE']._serialized_end=1669
-  _globals['_PUBLICRUNTIMESTATE']._serialized_start=1672
-  _globals['_PUBLICRUNTIMESTATE']._serialized_end=1926
-  _globals['_PUBLICMENUSTATE']._serialized_start=1929
-  _globals['_PUBLICMENUSTATE']._serialized_end=2076
-  _globals['_GETPUBLICMENUSTATEREQUEST']._serialized_start=2078
-  _globals['_GETPUBLICMENUSTATEREQUEST']._serialized_end=2105
-  _globals['_GETPUBLICMENUSTATERESPONSE']._serialized_start=2107
-  _globals['_GETPUBLICMENUSTATERESPONSE']._serialized_end=2183
-  _globals['_STREAMPUBLICMENUSTATEREQUEST']._serialized_start=2185
-  _globals['_STREAMPUBLICMENUSTATEREQUEST']._serialized_end=2215
-  _globals['_PUBLICMENUSERVICE']._serialized_start=2218
-  _globals['_PUBLICMENUSERVICE']._serialized_end=2424
+  _globals['_PUBLICSANDBOXRUNTIMEINFO']._serialized_end=460
+  _globals['_PUBLICOFFICIALRACESTAGINGSTATE']._serialized_start=463
+  _globals['_PUBLICOFFICIALRACESTAGINGSTATE']._serialized_end=593
+  _globals['_PUBLICOFFICIALRACECOUNTDOWNSTATE']._serialized_start=595
+  _globals['_PUBLICOFFICIALRACECOUNTDOWNSTATE']._serialized_end=706
+  _globals['_PUBLICOFFICIALRACERUNNINGSTATE']._serialized_start=708
+  _globals['_PUBLICOFFICIALRACERUNNINGSTATE']._serialized_end=813
+  _globals['_PUBLICOFFICIALRACEFINISHEDSTATE']._serialized_start=815
+  _globals['_PUBLICOFFICIALRACEFINISHEDSTATE']._serialized_end=848
+  _globals['_PUBLICOFFICIALRACEABORTEDSTATE']._serialized_start=850
+  _globals['_PUBLICOFFICIALRACEABORTEDSTATE']._serialized_end=882
+  _globals['_PUBLICOFFICIALRACERUNTIMEINFO']._serialized_start=885
+  _globals['_PUBLICOFFICIALRACERUNTIMEINFO']._serialized_end=1447
+  _globals['_PUBLICUPCOMINGRACESUMMARY']._serialized_start=1450
+  _globals['_PUBLICUPCOMINGRACESUMMARY']._serialized_end=1616
+  _globals['_PUBLICSANDBOXRUNTIMEMODE']._serialized_start=1618
+  _globals['_PUBLICSANDBOXRUNTIMEMODE']._serialized_end=1709
+  _globals['_PUBLICRUNTIMESTATE']._serialized_start=1712
+  _globals['_PUBLICRUNTIMESTATE']._serialized_end=1966
+  _globals['_PUBLICMENUSTATE']._serialized_start=1969
+  _globals['_PUBLICMENUSTATE']._serialized_end=2116
+  _globals['_GETPUBLICMENUSTATEREQUEST']._serialized_start=2118
+  _globals['_GETPUBLICMENUSTATEREQUEST']._serialized_end=2145
+  _globals['_GETPUBLICMENUSTATERESPONSE']._serialized_start=2147
+  _globals['_GETPUBLICMENUSTATERESPONSE']._serialized_end=2223
+  _globals['_STREAMPUBLICMENUSTATEREQUEST']._serialized_start=2225
+  _globals['_STREAMPUBLICMENUSTATEREQUEST']._serialized_end=2255
+  _globals['_PUBLICMENUSERVICE']._serialized_start=2258
+  _globals['_PUBLICMENUSERVICE']._serialized_end=2464
 # @@protoc_insertion_point(module_scope)

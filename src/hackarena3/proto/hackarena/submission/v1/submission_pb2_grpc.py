@@ -3,12 +3,10 @@
 import grpc
 
 from hackarena3.proto.hackarena.submission.v1 import submission_pb2 as hackarena_dot_submission_dot_v1_dot_submission__pb2
-from hackarena3.proto.hackarena.submission.v1 import upload_pb2 as hackarena_dot_submission_dot_v1_dot_upload__pb2
 
 
 class SubmissionServiceStub(object):
-    """CLI/backend submission API.
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -16,68 +14,18 @@ class SubmissionServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.UploadSource = channel.stream_unary(
-                '/hackarena.submission.v1.SubmissionService/UploadSource',
-                request_serializer=hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceRequest.SerializeToString,
-                response_deserializer=hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceResponse.FromString,
-                _registered_method=True)
-        self.StartBuild = channel.unary_unary(
-                '/hackarena.submission.v1.SubmissionService/StartBuild',
-                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildRequest.SerializeToString,
-                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildResponse.FromString,
-                _registered_method=True)
-        self.GetBuild = channel.unary_unary(
-                '/hackarena.submission.v1.SubmissionService/GetBuild',
-                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildRequest.SerializeToString,
-                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildResponse.FromString,
-                _registered_method=True)
-        self.ListBuilds = channel.unary_unary(
-                '/hackarena.submission.v1.SubmissionService/ListBuilds',
-                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsRequest.SerializeToString,
-                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsResponse.FromString,
-                _registered_method=True)
-        self.CancelBuild = channel.unary_unary(
-                '/hackarena.submission.v1.SubmissionService/CancelBuild',
-                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildRequest.SerializeToString,
-                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildResponse.FromString,
+        self.SubmitBuildStream = channel.unary_stream(
+                '/submission.v1.SubmissionService/SubmitBuildStream',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.FromString,
                 _registered_method=True)
 
 
 class SubmissionServiceServicer(object):
-    """CLI/backend submission API.
-    """
+    """Missing associated documentation comment in .proto file."""
 
-    def UploadSource(self, request_iterator, context):
-        """Upload participant source archive.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def StartBuild(self, request, context):
-        """Start build using previously uploaded source.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetBuild(self, request, context):
-        """Get build by id.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def ListBuilds(self, request, context):
-        """List latest builds.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def CancelBuild(self, request, context):
-        """Cancel active or queued build.
-        """
+    def SubmitBuildStream(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -85,45 +33,24 @@ class SubmissionServiceServicer(object):
 
 def add_SubmissionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'UploadSource': grpc.stream_unary_rpc_method_handler(
-                    servicer.UploadSource,
-                    request_deserializer=hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceRequest.FromString,
-                    response_serializer=hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceResponse.SerializeToString,
-            ),
-            'StartBuild': grpc.unary_unary_rpc_method_handler(
-                    servicer.StartBuild,
-                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildRequest.FromString,
-                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildResponse.SerializeToString,
-            ),
-            'GetBuild': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetBuild,
-                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildRequest.FromString,
-                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildResponse.SerializeToString,
-            ),
-            'ListBuilds': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListBuilds,
-                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsRequest.FromString,
-                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsResponse.SerializeToString,
-            ),
-            'CancelBuild': grpc.unary_unary_rpc_method_handler(
-                    servicer.CancelBuild,
-                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildRequest.FromString,
-                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildResponse.SerializeToString,
+            'SubmitBuildStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.SubmitBuildStream,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'hackarena.submission.v1.SubmissionService', rpc_method_handlers)
+            'submission.v1.SubmissionService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('hackarena.submission.v1.SubmissionService', rpc_method_handlers)
+    server.add_registered_method_handlers('submission.v1.SubmissionService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
 class SubmissionService(object):
-    """CLI/backend submission API.
-    """
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def UploadSource(request_iterator,
+    def SubmitBuildStream(request,
             target,
             options=(),
             channel_credentials=None,
@@ -133,12 +60,12 @@ class SubmissionService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(
-            request_iterator,
+        return grpc.experimental.unary_stream(
+            request,
             target,
-            '/hackarena.submission.v1.SubmissionService/UploadSource',
-            hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceRequest.SerializeToString,
-            hackarena_dot_submission_dot_v1_dot_upload__pb2.UploadSourceResponse.FromString,
+            '/submission.v1.SubmissionService/SubmitBuildStream',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -149,8 +76,69 @@ class SubmissionService(object):
             metadata,
             _registered_method=True)
 
+
+class SlotQueryServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.GetSlots = channel.unary_unary(
+                '/submission.v1.SlotQueryService/GetSlots',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsResponse.FromString,
+                _registered_method=True)
+        self.StreamSlots = channel.unary_stream(
+                '/submission.v1.SlotQueryService/StreamSlots',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsResponse.FromString,
+                _registered_method=True)
+
+
+class SlotQueryServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def GetSlots(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamSlots(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_SlotQueryServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'GetSlots': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSlots,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsResponse.SerializeToString,
+            ),
+            'StreamSlots': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamSlots,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'submission.v1.SlotQueryService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('submission.v1.SlotQueryService', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class SlotQueryService(object):
+    """Missing associated documentation comment in .proto file."""
+
     @staticmethod
-    def StartBuild(request,
+    def GetSlots(request,
             target,
             options=(),
             channel_credentials=None,
@@ -163,9 +151,9 @@ class SubmissionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hackarena.submission.v1.SubmissionService/StartBuild',
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildRequest.SerializeToString,
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.StartBuildResponse.FromString,
+            '/submission.v1.SlotQueryService/GetSlots',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSlotsResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -177,7 +165,79 @@ class SubmissionService(object):
             _registered_method=True)
 
     @staticmethod
-    def GetBuild(request,
+    def StreamSlots(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/submission.v1.SlotQueryService/StreamSlots',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.StreamSlotsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class SlotCommandServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.SelectSlot = channel.unary_unary(
+                '/submission.v1.SlotCommandService/SelectSlot',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotResponse.FromString,
+                _registered_method=True)
+
+
+class SlotCommandServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def SelectSlot(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_SlotCommandServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'SelectSlot': grpc.unary_unary_rpc_method_handler(
+                    servicer.SelectSlot,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'submission.v1.SlotCommandService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('submission.v1.SlotCommandService', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class SlotCommandService(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def SelectSlot(request,
             target,
             options=(),
             channel_credentials=None,
@@ -190,9 +250,9 @@ class SubmissionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hackarena.submission.v1.SubmissionService/GetBuild',
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildRequest.SerializeToString,
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetBuildResponse.FromString,
+            '/submission.v1.SlotCommandService/SelectSlot',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.SelectSlotResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -203,8 +263,69 @@ class SubmissionService(object):
             metadata,
             _registered_method=True)
 
+
+class OfficialSandboxCommandServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.JoinOfficialSandbox = channel.unary_unary(
+                '/submission.v1.OfficialSandboxCommandService/JoinOfficialSandbox',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxResponse.FromString,
+                _registered_method=True)
+        self.LeaveOfficialSandbox = channel.unary_unary(
+                '/submission.v1.OfficialSandboxCommandService/LeaveOfficialSandbox',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxResponse.FromString,
+                _registered_method=True)
+
+
+class OfficialSandboxCommandServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def JoinOfficialSandbox(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def LeaveOfficialSandbox(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_OfficialSandboxCommandServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'JoinOfficialSandbox': grpc.unary_unary_rpc_method_handler(
+                    servicer.JoinOfficialSandbox,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxResponse.SerializeToString,
+            ),
+            'LeaveOfficialSandbox': grpc.unary_unary_rpc_method_handler(
+                    servicer.LeaveOfficialSandbox,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'submission.v1.OfficialSandboxCommandService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('submission.v1.OfficialSandboxCommandService', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class OfficialSandboxCommandService(object):
+    """Missing associated documentation comment in .proto file."""
+
     @staticmethod
-    def ListBuilds(request,
+    def JoinOfficialSandbox(request,
             target,
             options=(),
             channel_credentials=None,
@@ -217,9 +338,9 @@ class SubmissionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hackarena.submission.v1.SubmissionService/ListBuilds',
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsRequest.SerializeToString,
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.ListBuildsResponse.FromString,
+            '/submission.v1.OfficialSandboxCommandService/JoinOfficialSandbox',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.JoinOfficialSandboxResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -231,7 +352,7 @@ class SubmissionService(object):
             _registered_method=True)
 
     @staticmethod
-    def CancelBuild(request,
+    def LeaveOfficialSandbox(request,
             target,
             options=(),
             channel_credentials=None,
@@ -244,9 +365,9 @@ class SubmissionService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/hackarena.submission.v1.SubmissionService/CancelBuild',
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildRequest.SerializeToString,
-            hackarena_dot_submission_dot_v1_dot_submission__pb2.CancelBuildResponse.FromString,
+            '/submission.v1.OfficialSandboxCommandService/LeaveOfficialSandbox',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.LeaveOfficialSandboxResponse.FromString,
             options,
             channel_credentials,
             insecure,

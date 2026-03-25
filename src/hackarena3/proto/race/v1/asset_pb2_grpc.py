@@ -30,6 +30,16 @@ class AssetServiceStub(object):
                 request_serializer=race_dot_v1_dot_asset__pb2.GetMapAssetRequest.SerializeToString,
                 response_deserializer=race_dot_v1_dot_asset__pb2.GetMapAssetResponse.FromString,
                 _registered_method=True)
+        self.GetMapAssetSyncMeta = channel.unary_unary(
+                '/race.v1.AssetService/GetMapAssetSyncMeta',
+                request_serializer=race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaResponse.FromString,
+                _registered_method=True)
+        self.StreamMapAssetGlb = channel.unary_stream(
+                '/race.v1.AssetService/StreamMapAssetGlb',
+                request_serializer=race_dot_v1_dot_asset__pb2.StreamMapAssetGlbRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_asset__pb2.StreamMapAssetGlbResponse.FromString,
+                _registered_method=True)
 
 
 class AssetServiceServicer(object):
@@ -57,6 +67,22 @@ class AssetServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetMapAssetSyncMeta(self, request, context):
+        """Internal-only: returns light/raw files used for backend-to-backend map sync.
+        Not intended for frontend/public clients.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamMapAssetGlb(self, request, context):
+        """Internal-only: streams selected GLB bytes in chunks for backend-to-backend map sync.
+        Not intended for frontend/public clients.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AssetServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -74,6 +100,16 @@ def add_AssetServiceServicer_to_server(servicer, server):
                     servicer.GetMapAsset,
                     request_deserializer=race_dot_v1_dot_asset__pb2.GetMapAssetRequest.FromString,
                     response_serializer=race_dot_v1_dot_asset__pb2.GetMapAssetResponse.SerializeToString,
+            ),
+            'GetMapAssetSyncMeta': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetMapAssetSyncMeta,
+                    request_deserializer=race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaRequest.FromString,
+                    response_serializer=race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaResponse.SerializeToString,
+            ),
+            'StreamMapAssetGlb': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamMapAssetGlb,
+                    request_deserializer=race_dot_v1_dot_asset__pb2.StreamMapAssetGlbRequest.FromString,
+                    response_serializer=race_dot_v1_dot_asset__pb2.StreamMapAssetGlbResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -158,6 +194,60 @@ class AssetService(object):
             '/race.v1.AssetService/GetMapAsset',
             race_dot_v1_dot_asset__pb2.GetMapAssetRequest.SerializeToString,
             race_dot_v1_dot_asset__pb2.GetMapAssetResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetMapAssetSyncMeta(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.AssetService/GetMapAssetSyncMeta',
+            race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaRequest.SerializeToString,
+            race_dot_v1_dot_asset__pb2.GetMapAssetSyncMetaResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StreamMapAssetGlb(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/race.v1.AssetService/StreamMapAssetGlb',
+            race_dot_v1_dot_asset__pb2.StreamMapAssetGlbRequest.SerializeToString,
+            race_dot_v1_dot_asset__pb2.StreamMapAssetGlbResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -4,6 +4,7 @@ import queue
 import sys
 import threading
 import time
+from collections.abc import Callable
 from collections import deque
 from dataclasses import dataclass, field
 from importlib import metadata as importlib_metadata
@@ -21,7 +22,6 @@ from hackarena3.runtime_common import (
     RuntimeErrorWrapper,
 )
 from hackarena3.runtime_convert import build_car_dimensions, build_race_snapshot
-from hackarena3.runtime_race import race_metadata
 from hackarena3.types import (
     _BotContextActions,
     Controls,
@@ -34,6 +34,9 @@ if TYPE_CHECKING:
     from hackarena3.game_token import GameTokenProvider
     from hackarena3.runtime_race import RaceApi
     from hackarena3.types import BotContext, BotProtocol
+
+
+StreamMetadataProvider = Callable[[], tuple[tuple[str, str], ...]]
 
 
 _RUNTIME_POLL_SECONDS = 0.2
@@ -252,6 +255,7 @@ def _reader_loop(
     stream_call: grpc.Call,
     state: _SessionState,
     ctx: BotContext,
+    expected_map_id: str | None = None,
 ) -> None:
     last_effective_hz: int | None = None
     last_map_id: str | None = None
@@ -263,8 +267,20 @@ def _reader_loop(
             if payload_name == "settings":
                 effective_hz = int(event.settings.effective_hz)
                 ctx.effective_hz = effective_hz if effective_hz > 0 else None
-                if event.settings.map_id:
-                    ctx.map_id = event.settings.map_id
+                stream_map_id = event.settings.map_id.strip()
+                if stream_map_id:
+                    if (
+                        expected_map_id is not None
+                        and expected_map_id.strip()
+                        and stream_map_id != expected_map_id
+                    ):
+                        state.fatal_error = RuntimeErrorWrapper(
+                            "Stream map_id mismatch: "
+                            f"prepared={expected_map_id!r}, stream={stream_map_id!r}."
+                        )
+                        state.stop_event.set()
+                        break
+                    ctx.map_id = stream_map_id
                 if last_effective_hz != ctx.effective_hz or last_map_id != ctx.map_id:
                     map_suffix = f" map_id={ctx.map_id}" if ctx.map_id else ""
                     print(
@@ -340,6 +356,7 @@ def _callback_loop(
             continue
         processed_version = snapshot_version
         ctx.tick = snapshot.tick
+        ctx.car_id = snapshot.car.car_id
 
         try:
             result = bot.on_tick(snapshot, ctx)
@@ -466,12 +483,46 @@ def _stream_init_message() -> race_pb2.ParticipantClientMessage:
     )
 
 
+def _open_participant_stream(
+    api: RaceApi,
+    outbound: _OutboundMessageIterator,
+    *,
+    metadata: tuple[tuple[str, str], ...],
+    stream_method: str | None,
+) -> grpc.Call:
+    if stream_method is None:
+        return api.participant.Stream(  # type: ignore
+            outbound,
+            metadata=metadata,
+        )
+
+    stream_rpc = api.channel.stream_stream(
+        stream_method,
+        request_serializer=race_pb2.ParticipantClientMessage.SerializeToString,
+        response_deserializer=race_pb2.ParticipantServerEvent.FromString,
+    )
+    return stream_rpc(
+        outbound,
+        metadata=metadata,
+    )
+
+
 def run_participant_loop(
     bot: BotProtocol,
     api: RaceApi,
-    token_provider: GameTokenProvider,
     ctx: BotContext,
+    *,
+    metadata_provider: StreamMetadataProvider,
+    token_provider: GameTokenProvider | None = None,
+    allow_auth_refresh: bool = True,
+    stream_method: str | None = None,
+    expected_map_id: str | None = None,
 ) -> None:
+    if allow_auth_refresh and token_provider is None:
+        raise RuntimeErrorWrapper(
+            "Internal error: token_provider is required when allow_auth_refresh=True."
+        )
+
     retry_attempt = 0
     latest_controls: Controls | None = None
 
@@ -517,18 +568,29 @@ def run_participant_loop(
         outbound.put(_stream_init_message())
 
         try:
-            stream_call = api.participant.Stream(  # type: ignore
+            stream_metadata = metadata_provider()
+        except RuntimeError as exc:
+            raise RuntimeErrorWrapper(
+                f"Failed to prepare stream metadata: {exc}"
+            ) from exc
+
+        try:
+            stream_call = _open_participant_stream(
+                api,
                 outbound,
-                metadata=race_metadata(token_provider),
+                metadata=stream_metadata,
+                stream_method=stream_method,
             )
         except grpc.RpcError as exc:
+            method_label = stream_method or "/race.v1.RaceParticipantService/Stream"
             raise RuntimeErrorWrapper(
-                f"Race participant stream open failed: {exc.code().name} {exc.details()}"
+                f"Race participant stream open failed ({method_label}): "
+                f"{exc.code().name} {exc.details()}"
             ) from exc
 
         reader = threading.Thread(
             target=_reader_loop,
-            args=(stream_call, state, ctx),
+            args=(stream_call, state, ctx, expected_map_id),
             name="ha3-reader-loop",
             daemon=True,
         )
@@ -551,6 +613,8 @@ def run_participant_loop(
         token_rotated = False
         try:
             while not state.stop_event.wait(_RUNTIME_POLL_SECONDS):
+                if not allow_auth_refresh or token_provider is None:
+                    continue
                 if token_provider.ensure_fresh(_TOKEN_REFRESH_SKEW_SECONDS):
                     token_rotated = True
                     state.stop_event.set()
@@ -588,6 +652,10 @@ def run_participant_loop(
             ) from stream_error
 
         if code in AUTH_CODES:
+            if not allow_auth_refresh or token_provider is None:
+                raise RuntimeErrorWrapper(
+                    f"Authentication failed ({code.name}): {details or 'no details'}"
+                ) from stream_error
             try:
                 token_provider.refresh()
             except GameTokenError as refresh_exc:

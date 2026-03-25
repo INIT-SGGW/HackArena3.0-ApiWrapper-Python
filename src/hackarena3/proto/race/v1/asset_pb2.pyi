@@ -58,6 +58,24 @@ MAP_ASSET_KIND_ANIMATION_GLB: MapAssetKind.ValueType  # 2
 MAP_ASSET_KIND_MINIMAP_SVG: MapAssetKind.ValueType  # 3
 Global___MapAssetKind: _TypeAlias = MapAssetKind  # noqa: Y015
 
+class _MapGlbKind:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _MapGlbKindEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_MapGlbKind.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    MAP_GLB_KIND_UNSPECIFIED: _MapGlbKind.ValueType  # 0
+    MAP_GLB_KIND_MAIN: _MapGlbKind.ValueType  # 1
+    MAP_GLB_KIND_ANIMATION: _MapGlbKind.ValueType  # 2
+
+class MapGlbKind(_MapGlbKind, metaclass=_MapGlbKindEnumTypeWrapper):
+    """GLB slots used by backend-to-backend asset sync."""
+
+MAP_GLB_KIND_UNSPECIFIED: MapGlbKind.ValueType  # 0
+MAP_GLB_KIND_MAIN: MapGlbKind.ValueType  # 1
+MAP_GLB_KIND_ANIMATION: MapGlbKind.ValueType  # 2
+Global___MapGlbKind: _TypeAlias = MapGlbKind  # noqa: Y015
+
 @_typing.final
 class MapAssetMeta(_message.Message):
     """Metadata descriptor for a single map asset file."""
@@ -412,3 +430,103 @@ class GetMapAssetResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___GetMapAssetResponse: _TypeAlias = GetMapAssetResponse  # noqa: Y015
+
+@_typing.final
+class GetMapAssetSyncMetaRequest(_message.Message):
+    """Internal-only request for backend-to-backend map sync metadata."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    map_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        map_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["map_id", b"map_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetMapAssetSyncMetaRequest: _TypeAlias = GetMapAssetSyncMetaRequest  # noqa: Y015
+
+@_typing.final
+class GetMapAssetSyncMetaResponse(_message.Message):
+    """Internal-only response for backend-to-backend map sync metadata."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    MINIMAP_SVG_FIELD_NUMBER: _builtins.int
+    MAIN_METADATA_JSON_FIELD_NUMBER: _builtins.int
+    MINIMAP_METADATA_JSON_FIELD_NUMBER: _builtins.int
+    map_id: _builtins.str
+    minimap_svg: _builtins.bytes
+    main_metadata_json: _builtins.bytes
+    minimap_metadata_json: _builtins.bytes
+    def __init__(
+        self,
+        *,
+        map_id: _builtins.str = ...,
+        minimap_svg: _builtins.bytes = ...,
+        main_metadata_json: _builtins.bytes = ...,
+        minimap_metadata_json: _builtins.bytes = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["main_metadata_json", b"main_metadata_json", "map_id", b"map_id", "minimap_metadata_json", b"minimap_metadata_json", "minimap_svg", b"minimap_svg"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetMapAssetSyncMetaResponse: _TypeAlias = GetMapAssetSyncMetaResponse  # noqa: Y015
+
+@_typing.final
+class StreamMapAssetGlbRequest(_message.Message):
+    """Internal-only request for backend-to-backend GLB chunk download."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    KIND_FIELD_NUMBER: _builtins.int
+    OFFSET_FIELD_NUMBER: _builtins.int
+    LIMIT_FIELD_NUMBER: _builtins.int
+    map_id: _builtins.str
+    """Target map identifier."""
+    kind: Global___MapGlbKind.ValueType
+    """Requested GLB slot."""
+    offset: _builtins.int
+    """Byte offset from start of file."""
+    limit: _builtins.int
+    """Maximum number of bytes to stream in this request."""
+    def __init__(
+        self,
+        *,
+        map_id: _builtins.str = ...,
+        kind: Global___MapGlbKind.ValueType = ...,
+        offset: _builtins.int = ...,
+        limit: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["kind", b"kind", "limit", b"limit", "map_id", b"map_id", "offset", b"offset"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___StreamMapAssetGlbRequest: _TypeAlias = StreamMapAssetGlbRequest  # noqa: Y015
+
+@_typing.final
+class StreamMapAssetGlbResponse(_message.Message):
+    """Internal-only chunked GLB response for backend-to-backend map sync."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    OFFSET_FIELD_NUMBER: _builtins.int
+    DATA_FIELD_NUMBER: _builtins.int
+    EOF_FIELD_NUMBER: _builtins.int
+    offset: _builtins.int
+    data: _builtins.bytes
+    eof: _builtins.bool
+    def __init__(
+        self,
+        *,
+        offset: _builtins.int = ...,
+        data: _builtins.bytes = ...,
+        eof: _builtins.bool = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["data", b"data", "eof", b"eof", "offset", b"offset"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___StreamMapAssetGlbResponse: _TypeAlias = StreamMapAssetGlbResponse  # noqa: Y015

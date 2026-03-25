@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from hackarena3.proto.hackarena.platform.common.v1 import types_pb2 as hackarena_dot_platform_dot_common_dot_v1_dot_types__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'hackarena/platform/teams/v1/teams.proto\x12\x1bhackarena.platform.teams.v1\x1a(hackarena/platform/common/v1/types.proto\"\xb3\x01\n\x04Team\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n\x08\x65\x64itions\x18\x03 \x03(\tR\x08\x65\x64itions\x12\x41\n\x07members\x18\x04 \x03(\x0b\x32\'.hackarena.platform.teams.v1.TeamMemberR\x07membersJ\x04\x08\x05\x10\x32\"\xaa\x01\n\nTeamMember\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x1b\n\tis_leader\x18\x02 \x01(\x08R\x08isLeader\x12\x45\n\x06status\x18\x03 \x01(\x0e\x32-.hackarena.platform.teams.v1.TeamMemberStatusR\x06statusJ\x04\x08\x04\x10\x32\"\x83\x01\n\tTeamEvent\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n\x04\x63ode\x18\x03 \x01(\tR\x04\x63ode\x12\x14\n\x05\x63olor\x18\x04 \x01(\tR\x05\x63olorJ\x04\x08\x05\x10\x32\"M\n\x0eGetTeamRequest\x12;\n\x07team_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06teamId\"H\n\x0fGetTeamResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04team\"s\n\x14GetTeamByUserRequest\x12;\n\x07user_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06userId\x12\x18\n\x07\x65\x64ition\x18\x02 \x01(\tR\x07\x65\x64itionJ\x04\x08\x03\x10\x32\"T\n\x15GetTeamByUserResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04teamJ\x04\x08\x02\x10\x32\"\x92\x01\n\x10ListTeamsRequest\x12\x1a\n\x08\x65\x64itions\x18\x01 \x03(\tR\x08\x65\x64itions\x12\x1d\n\nname_query\x18\x02 \x01(\tR\tnameQuery\x12=\n\x04page\x18\x03 \x01(\x0b\x32).hackarena.platform.common.v1.PageRequestR\x04pageJ\x04\x08\x04\x10\x32\"\x92\x01\n\x11ListTeamsResponse\x12\x37\n\x05teams\x18\x01 \x03(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x05teams\x12>\n\x04page\x18\x02 \x01(\x0b\x32*.hackarena.platform.common.v1.PageResponseR\x04pageJ\x04\x08\x03\x10\x32\"2\n\x10GetMyTeamRequest\x12\x18\n\x07\x65\x64ition\x18\x01 \x01(\tR\x07\x65\x64itionJ\x04\x08\x02\x10\x32\"P\n\x11GetMyTeamResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04teamJ\x04\x08\x02\x10\x32\"0\n\x14GetEventTeamsRequest\x12\x18\n\x07\x65\x64ition\x18\x01 \x01(\tR\x07\x65\x64ition\"[\n\x15GetEventTeamsResponse\x12<\n\x05teams\x18\x01 \x03(\x0b\x32&.hackarena.platform.teams.v1.TeamEventR\x05teamsJ\x04\x08\x02\x10\x32\"R\n\x13GetTeamImageRequest\x12;\n\x07team_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06teamId\"S\n\x14GetTeamImageResponse\x12\x12\n\x04\x64\x61ta\x18\x01 \x01(\x0cR\x04\x64\x61ta\x12!\n\x0c\x63ontent_type\x18\x02 \x01(\tR\x0b\x63ontentTypeJ\x04\x08\x03\x10\x32*\x97\x01\n\x10TeamMemberStatus\x12\"\n\x1eTEAM_MEMBER_STATUS_UNSPECIFIED\x10\x00\x12\x1e\n\x1aTEAM_MEMBER_STATUS_INVITED\x10\x01\x12\x1f\n\x1bTEAM_MEMBER_STATUS_ACCEPTED\x10\x02\x12\x1e\n\x1aTEAM_MEMBER_STATUS_REMOVED\x10\x03\x32\xb1\x05\n\x0cTeamsService\x12\x64\n\x07GetTeam\x12+.hackarena.platform.teams.v1.GetTeamRequest\x1a,.hackarena.platform.teams.v1.GetTeamResponse\x12v\n\rGetTeamByUser\x12\x31.hackarena.platform.teams.v1.GetTeamByUserRequest\x1a\x32.hackarena.platform.teams.v1.GetTeamByUserResponse\x12j\n\tListTeams\x12-.hackarena.platform.teams.v1.ListTeamsRequest\x1a..hackarena.platform.teams.v1.ListTeamsResponse\x12j\n\tGetMyTeam\x12-.hackarena.platform.teams.v1.GetMyTeamRequest\x1a..hackarena.platform.teams.v1.GetMyTeamResponse\x12v\n\rGetEventTeams\x12\x31.hackarena.platform.teams.v1.GetEventTeamsRequest\x1a\x32.hackarena.platform.teams.v1.GetEventTeamsResponse\x12s\n\x0cGetTeamImage\x12\x30.hackarena.platform.teams.v1.GetTeamImageRequest\x1a\x31.hackarena.platform.teams.v1.GetTeamImageResponseB\x1e\xaa\x02\x1bHackArena.Platform.Teams.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'hackarena/platform/teams/v1/teams.proto\x12\x1bhackarena.platform.teams.v1\x1a(hackarena/platform/common/v1/types.proto\"\xb3\x01\n\x04Team\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n\x08\x65\x64itions\x18\x03 \x03(\tR\x08\x65\x64itions\x12\x41\n\x07members\x18\x04 \x03(\x0b\x32\'.hackarena.platform.teams.v1.TeamMemberR\x07membersJ\x04\x08\x05\x10\x32\"\xaa\x01\n\nTeamMember\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x1b\n\tis_leader\x18\x02 \x01(\x08R\x08isLeader\x12\x45\n\x06status\x18\x03 \x01(\x0e\x32-.hackarena.platform.teams.v1.TeamMemberStatusR\x06statusJ\x04\x08\x04\x10\x32\"\xa0\x01\n\tTeamEvent\x12\x32\n\x02id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x02id\x12\x12\n\x04name\x18\x02 \x01(\tR\x04name\x12\x17\n\x04\x63ode\x18\x03 \x01(\tH\x00R\x04\x63ode\x88\x01\x01\x12\x19\n\x05\x63olor\x18\x04 \x01(\tH\x01R\x05\x63olor\x88\x01\x01\x42\x07\n\x05_codeB\x08\n\x06_colorJ\x04\x08\x05\x10\x32\"M\n\x0eGetTeamRequest\x12;\n\x07team_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06teamId\"H\n\x0fGetTeamResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04team\"s\n\x14GetTeamByUserRequest\x12;\n\x07user_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06userId\x12\x18\n\x07\x65\x64ition\x18\x02 \x01(\tR\x07\x65\x64itionJ\x04\x08\x03\x10\x32\"T\n\x15GetTeamByUserResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04teamJ\x04\x08\x02\x10\x32\"\x92\x01\n\x10ListTeamsRequest\x12\x1a\n\x08\x65\x64itions\x18\x01 \x03(\tR\x08\x65\x64itions\x12\x1d\n\nname_query\x18\x02 \x01(\tR\tnameQuery\x12=\n\x04page\x18\x03 \x01(\x0b\x32).hackarena.platform.common.v1.PageRequestR\x04pageJ\x04\x08\x04\x10\x32\"\x92\x01\n\x11ListTeamsResponse\x12\x37\n\x05teams\x18\x01 \x03(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x05teams\x12>\n\x04page\x18\x02 \x01(\x0b\x32*.hackarena.platform.common.v1.PageResponseR\x04pageJ\x04\x08\x03\x10\x32\"2\n\x10GetMyTeamRequest\x12\x18\n\x07\x65\x64ition\x18\x01 \x01(\tR\x07\x65\x64itionJ\x04\x08\x02\x10\x32\"P\n\x11GetMyTeamResponse\x12\x35\n\x04team\x18\x01 \x01(\x0b\x32!.hackarena.platform.teams.v1.TeamR\x04teamJ\x04\x08\x02\x10\x32\"0\n\x14GetEventTeamsRequest\x12\x18\n\x07\x65\x64ition\x18\x01 \x01(\tR\x07\x65\x64ition\"[\n\x15GetEventTeamsResponse\x12<\n\x05teams\x18\x01 \x03(\x0b\x32&.hackarena.platform.teams.v1.TeamEventR\x05teamsJ\x04\x08\x02\x10\x32\"R\n\x13GetTeamImageRequest\x12;\n\x07team_id\x18\x01 \x01(\x0b\x32\".hackarena.platform.common.v1.UuidR\x06teamId\"S\n\x14GetTeamImageResponse\x12\x12\n\x04\x64\x61ta\x18\x01 \x01(\x0cR\x04\x64\x61ta\x12!\n\x0c\x63ontent_type\x18\x02 \x01(\tR\x0b\x63ontentTypeJ\x04\x08\x03\x10\x32*\x97\x01\n\x10TeamMemberStatus\x12\"\n\x1eTEAM_MEMBER_STATUS_UNSPECIFIED\x10\x00\x12\x1e\n\x1aTEAM_MEMBER_STATUS_INVITED\x10\x01\x12\x1f\n\x1bTEAM_MEMBER_STATUS_ACCEPTED\x10\x02\x12\x1e\n\x1aTEAM_MEMBER_STATUS_REMOVED\x10\x03\x32\xb1\x05\n\x0cTeamsService\x12\x64\n\x07GetTeam\x12+.hackarena.platform.teams.v1.GetTeamRequest\x1a,.hackarena.platform.teams.v1.GetTeamResponse\x12v\n\rGetTeamByUser\x12\x31.hackarena.platform.teams.v1.GetTeamByUserRequest\x1a\x32.hackarena.platform.teams.v1.GetTeamByUserResponse\x12j\n\tListTeams\x12-.hackarena.platform.teams.v1.ListTeamsRequest\x1a..hackarena.platform.teams.v1.ListTeamsResponse\x12j\n\tGetMyTeam\x12-.hackarena.platform.teams.v1.GetMyTeamRequest\x1a..hackarena.platform.teams.v1.GetMyTeamResponse\x12v\n\rGetEventTeams\x12\x31.hackarena.platform.teams.v1.GetEventTeamsRequest\x1a\x32.hackarena.platform.teams.v1.GetEventTeamsResponse\x12s\n\x0cGetTeamImage\x12\x30.hackarena.platform.teams.v1.GetTeamImageRequest\x1a\x31.hackarena.platform.teams.v1.GetTeamImageResponseB\x1e\xaa\x02\x1bHackArena.Platform.Teams.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,38 +33,38 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'hackarena.platform.teams.v1
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\033HackArena.Platform.Teams.V1'
-  _globals['_TEAMMEMBERSTATUS']._serialized_start=1704
-  _globals['_TEAMMEMBERSTATUS']._serialized_end=1855
+  _globals['_TEAMMEMBERSTATUS']._serialized_start=1733
+  _globals['_TEAMMEMBERSTATUS']._serialized_end=1884
   _globals['_TEAM']._serialized_start=115
   _globals['_TEAM']._serialized_end=294
   _globals['_TEAMMEMBER']._serialized_start=297
   _globals['_TEAMMEMBER']._serialized_end=467
   _globals['_TEAMEVENT']._serialized_start=470
-  _globals['_TEAMEVENT']._serialized_end=601
-  _globals['_GETTEAMREQUEST']._serialized_start=603
-  _globals['_GETTEAMREQUEST']._serialized_end=680
-  _globals['_GETTEAMRESPONSE']._serialized_start=682
-  _globals['_GETTEAMRESPONSE']._serialized_end=754
-  _globals['_GETTEAMBYUSERREQUEST']._serialized_start=756
-  _globals['_GETTEAMBYUSERREQUEST']._serialized_end=871
-  _globals['_GETTEAMBYUSERRESPONSE']._serialized_start=873
-  _globals['_GETTEAMBYUSERRESPONSE']._serialized_end=957
-  _globals['_LISTTEAMSREQUEST']._serialized_start=960
-  _globals['_LISTTEAMSREQUEST']._serialized_end=1106
-  _globals['_LISTTEAMSRESPONSE']._serialized_start=1109
-  _globals['_LISTTEAMSRESPONSE']._serialized_end=1255
-  _globals['_GETMYTEAMREQUEST']._serialized_start=1257
-  _globals['_GETMYTEAMREQUEST']._serialized_end=1307
-  _globals['_GETMYTEAMRESPONSE']._serialized_start=1309
-  _globals['_GETMYTEAMRESPONSE']._serialized_end=1389
-  _globals['_GETEVENTTEAMSREQUEST']._serialized_start=1391
-  _globals['_GETEVENTTEAMSREQUEST']._serialized_end=1439
-  _globals['_GETEVENTTEAMSRESPONSE']._serialized_start=1441
-  _globals['_GETEVENTTEAMSRESPONSE']._serialized_end=1532
-  _globals['_GETTEAMIMAGEREQUEST']._serialized_start=1534
-  _globals['_GETTEAMIMAGEREQUEST']._serialized_end=1616
-  _globals['_GETTEAMIMAGERESPONSE']._serialized_start=1618
-  _globals['_GETTEAMIMAGERESPONSE']._serialized_end=1701
-  _globals['_TEAMSSERVICE']._serialized_start=1858
-  _globals['_TEAMSSERVICE']._serialized_end=2547
+  _globals['_TEAMEVENT']._serialized_end=630
+  _globals['_GETTEAMREQUEST']._serialized_start=632
+  _globals['_GETTEAMREQUEST']._serialized_end=709
+  _globals['_GETTEAMRESPONSE']._serialized_start=711
+  _globals['_GETTEAMRESPONSE']._serialized_end=783
+  _globals['_GETTEAMBYUSERREQUEST']._serialized_start=785
+  _globals['_GETTEAMBYUSERREQUEST']._serialized_end=900
+  _globals['_GETTEAMBYUSERRESPONSE']._serialized_start=902
+  _globals['_GETTEAMBYUSERRESPONSE']._serialized_end=986
+  _globals['_LISTTEAMSREQUEST']._serialized_start=989
+  _globals['_LISTTEAMSREQUEST']._serialized_end=1135
+  _globals['_LISTTEAMSRESPONSE']._serialized_start=1138
+  _globals['_LISTTEAMSRESPONSE']._serialized_end=1284
+  _globals['_GETMYTEAMREQUEST']._serialized_start=1286
+  _globals['_GETMYTEAMREQUEST']._serialized_end=1336
+  _globals['_GETMYTEAMRESPONSE']._serialized_start=1338
+  _globals['_GETMYTEAMRESPONSE']._serialized_end=1418
+  _globals['_GETEVENTTEAMSREQUEST']._serialized_start=1420
+  _globals['_GETEVENTTEAMSREQUEST']._serialized_end=1468
+  _globals['_GETEVENTTEAMSRESPONSE']._serialized_start=1470
+  _globals['_GETEVENTTEAMSRESPONSE']._serialized_end=1561
+  _globals['_GETTEAMIMAGEREQUEST']._serialized_start=1563
+  _globals['_GETTEAMIMAGEREQUEST']._serialized_end=1645
+  _globals['_GETTEAMIMAGERESPONSE']._serialized_start=1647
+  _globals['_GETTEAMIMAGERESPONSE']._serialized_end=1730
+  _globals['_TEAMSSERVICE']._serialized_start=1887
+  _globals['_TEAMSSERVICE']._serialized_end=2576
 # @@protoc_insertion_point(module_scope)

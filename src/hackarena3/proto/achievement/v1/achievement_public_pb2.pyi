@@ -8,6 +8,7 @@ from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 import builtins as _builtins
 import sys
 import typing as _typing
@@ -18,6 +19,42 @@ else:
     from typing_extensions import TypeAlias as _TypeAlias
 
 DESCRIPTOR: _descriptor.FileDescriptor
+
+class _GrantDevToolsFailReason:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _GrantDevToolsFailReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_GrantDevToolsFailReason.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    GRANT_DEV_TOOLS_FAIL_UNSPECIFIED: _GrantDevToolsFailReason.ValueType  # 0
+    GRANT_DEV_TOOLS_FAIL_NONE: _GrantDevToolsFailReason.ValueType  # 1
+    GRANT_DEV_TOOLS_FAIL_ALREADY_GRANTED: _GrantDevToolsFailReason.ValueType  # 2
+
+class GrantDevToolsFailReason(_GrantDevToolsFailReason, metaclass=_GrantDevToolsFailReasonEnumTypeWrapper): ...
+
+GRANT_DEV_TOOLS_FAIL_UNSPECIFIED: GrantDevToolsFailReason.ValueType  # 0
+GRANT_DEV_TOOLS_FAIL_NONE: GrantDevToolsFailReason.ValueType  # 1
+GRANT_DEV_TOOLS_FAIL_ALREADY_GRANTED: GrantDevToolsFailReason.ValueType  # 2
+Global___GrantDevToolsFailReason: _TypeAlias = GrantDevToolsFailReason  # noqa: Y015
+
+class _GrantEasterEggFailReason:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _GrantEasterEggFailReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_GrantEasterEggFailReason.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    GRANT_EASTER_EGG_FAIL_UNSPECIFIED: _GrantEasterEggFailReason.ValueType  # 0
+    GRANT_EASTER_EGG_FAIL_NONE: _GrantEasterEggFailReason.ValueType  # 1
+    GRANT_EASTER_EGG_FAIL_ALREADY_GRANTED: _GrantEasterEggFailReason.ValueType  # 2
+    GRANT_EASTER_EGG_FAIL_WRONG_CODE: _GrantEasterEggFailReason.ValueType  # 3
+
+class GrantEasterEggFailReason(_GrantEasterEggFailReason, metaclass=_GrantEasterEggFailReasonEnumTypeWrapper): ...
+
+GRANT_EASTER_EGG_FAIL_UNSPECIFIED: GrantEasterEggFailReason.ValueType  # 0
+GRANT_EASTER_EGG_FAIL_NONE: GrantEasterEggFailReason.ValueType  # 1
+GRANT_EASTER_EGG_FAIL_ALREADY_GRANTED: GrantEasterEggFailReason.ValueType  # 2
+GRANT_EASTER_EGG_FAIL_WRONG_CODE: GrantEasterEggFailReason.ValueType  # 3
+Global___GrantEasterEggFailReason: _TypeAlias = GrantEasterEggFailReason  # noqa: Y015
 
 @_typing.final
 class AchievementRepresentation(_message.Message):
@@ -164,3 +201,87 @@ class StreamAchievementGrantsResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___StreamAchievementGrantsResponse: _TypeAlias = StreamAchievementGrantsResponse  # noqa: Y015
+
+@_typing.final
+class GrantDevToolsAchievementRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team id."""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantDevToolsAchievementRequest: _TypeAlias = GrantDevToolsAchievementRequest  # noqa: Y015
+
+@_typing.final
+class GrantDevToolsAchievementResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    IS_GRANTED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    is_granted_successfully: _builtins.bool
+    """Represents grant status."""
+    reason: Global___GrantDevToolsFailReason.ValueType
+    """Fail reason. If is_granted_successfully is true
+    it is set to NONE.
+    """
+    def __init__(
+        self,
+        *,
+        is_granted_successfully: _builtins.bool = ...,
+        reason: Global___GrantDevToolsFailReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["is_granted_successfully", b"is_granted_successfully", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantDevToolsAchievementResponse: _TypeAlias = GrantDevToolsAchievementResponse  # noqa: Y015
+
+@_typing.final
+class GrantEasterEggAchievementRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    SECRET_CODE_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team id."""
+    secret_code: _builtins.str
+    """Represents secret code."""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+        secret_code: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["secret_code", b"secret_code", "team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantEasterEggAchievementRequest: _TypeAlias = GrantEasterEggAchievementRequest  # noqa: Y015
+
+@_typing.final
+class GrantEasterEggAchievementResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    IS_GRANTED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    is_granted_successfully: _builtins.bool
+    """Represents grant status."""
+    reason: Global___GrantEasterEggFailReason.ValueType
+    """Fail reason. If is_granted_successfully is true
+    it is set to NONE.
+    """
+    def __init__(
+        self,
+        *,
+        is_granted_successfully: _builtins.bool = ...,
+        reason: Global___GrantEasterEggFailReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["is_granted_successfully", b"is_granted_successfully", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantEasterEggAchievementResponse: _TypeAlias = GrantEasterEggAchievementResponse  # noqa: Y015

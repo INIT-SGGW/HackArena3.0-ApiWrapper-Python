@@ -143,13 +143,21 @@ class TeamEvent(_message.Message):
         *,
         id: _types_pb2.Uuid | None = ...,
         name: _builtins.str = ...,
-        code: _builtins.str = ...,
-        color: _builtins.str = ...,
+        code: _builtins.str | None = ...,
+        color: _builtins.str | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["id", b"id"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_code", b"_code", "_color", b"_color", "code", b"code", "color", b"color", "id", b"id"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["code", b"code", "color", b"color", "id", b"id", "name", b"name"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_code", b"_code", "_color", b"_color", "code", b"code", "color", b"color", "id", b"id", "name", b"name"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__code: _TypeAlias = _typing.Literal["code"]  # noqa: Y015
+    _WhichOneofArgType__code: _TypeAlias = _typing.Literal["_code", b"_code"]  # noqa: Y015
+    _WhichOneofReturnType__color: _TypeAlias = _typing.Literal["color"]  # noqa: Y015
+    _WhichOneofArgType__color: _TypeAlias = _typing.Literal["_color", b"_color"]  # noqa: Y015
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__code) -> _WhichOneofReturnType__code | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__color) -> _WhichOneofReturnType__color | None: ...
 
 Global___TeamEvent: _TypeAlias = TeamEvent  # noqa: Y015
 
