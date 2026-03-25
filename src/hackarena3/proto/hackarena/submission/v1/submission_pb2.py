@@ -22,9 +22,10 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(hackarena/submission/v1/submission.proto\x12\rsubmission.v1\"\xef\x01\n\x12SubmitBuildRequest\x12=\n\x0cwrapper_kind\x18\x01 \x01(\x0e\x32\x1a.submission.v1.WrapperKindR\x0bwrapperKind\x12\'\n\x0fwrapper_version\x18\x02 \x01(\tR\x0ewrapperVersion\x12-\n\x13user_archive_tar_gz\x18\x03 \x01(\x0cR\x10userArchiveTarGz\x12\x17\n\x04slot\x18\x04 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12 \n\x0b\x64\x65scription\x18\x05 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot\"3\n\x0c\x42uildStarted\x12#\n\rsubmission_id\x18\x01 \x01(\tR\x0csubmissionId\"\x1e\n\x08\x42uildLog\x12\x12\n\x04line\x18\x01 \x01(\tR\x04line\")\n\rBuildFinished\x12\x18\n\x07success\x18\x01 \x01(\x08R\x07success\"\xc6\x01\n\x19SubmitBuildStreamResponse\x12\x37\n\x07started\x18\x01 \x01(\x0b\x32\x1b.submission.v1.BuildStartedH\x00R\x07started\x12+\n\x03log\x18\x02 \x01(\x0b\x32\x17.submission.v1.BuildLogH\x00R\x03log\x12:\n\x08\x66inished\x18\x03 \x01(\x0b\x32\x1c.submission.v1.BuildFinishedH\x00R\x08\x66inishedB\x07\n\x05\x65vent\"\x14\n\x12StreamSlotsRequest\"C\n\x13StreamSlotsResponse\x12,\n\x05slots\x18\x01 \x03(\x0b\x32\x16.submission.v1.SlotDtoR\x05slots\"\x11\n\x0fGetSlotsRequest\"G\n\x10GetSlotsResponse\x12\x33\n\x05slots\x18\x01 \x03(\x0b\x32\x1d.submission.v1.SlotSummaryDtoR\x05slots\"\'\n\x11SelectSlotRequest\x12\x12\n\x04slot\x18\x01 \x01(\x05R\x04slot\"\x14\n\x12SelectSlotResponse\"O\n\x1aJoinOfficialSandboxRequest\x12\x1d\n\nsandbox_id\x18\x01 \x01(\tR\tsandboxId\x12\x12\n\x04slot\x18\x02 \x01(\x05R\x04slot\"|\n\x1bJoinOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\x1d\n\x1bLeaveOfficialSandboxRequest\"}\n\x1cLeaveOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\xb9\x01\n\x07SlotDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08selected\x18\x04 \x01(\x08R\x08selected\x12)\n\x10\x63urrently_loaded\x18\x05 \x01(\x08R\x0f\x63urrentlyLoadedB\x07\n\x05_slot\"y\n\x0eSlotSummaryDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot*\x8b\x01\n\x0bWrapperKind\x12\x1c\n\x18WRAPPER_KIND_UNSPECIFIED\x10\x00\x12\x17\n\x13WRAPPER_KIND_PYTHON\x10\x01\x12\x17\n\x13WRAPPER_KIND_CSHARP\x10\x02\x12\x14\n\x10WRAPPER_KIND_CPP\x10\x03\x12\x16\n\x12WRAPPER_KIND_JS_TS\x10\x04*\xb2\x01\n\x10SubmissionStatus\x12!\n\x1dSUBMISSION_STATUS_UNSPECIFIED\x10\x00\x12\x1c\n\x18SUBMISSION_STATUS_QUEUED\x10\x01\x12\x1e\n\x1aSUBMISSION_STATUS_BUILDING\x10\x02\x12\x1f\n\x1bSUBMISSION_STATUS_SUCCEEDED\x10\x03\x12\x1c\n\x18SUBMISSION_STATUS_FAILED\x10\x04*\xa3\x01\n\x1cOfficialSandboxCommandStatus\x12/\n+OFFICIAL_SANDBOX_COMMAND_STATUS_UNSPECIFIED\x10\x00\x12&\n\"OFFICIAL_SANDBOX_COMMAND_STATUS_OK\x10\x01\x12*\n&OFFICIAL_SANDBOX_COMMAND_STATUS_FAILED\x10\x02\x32w\n\x11SubmissionService\x12\x62\n\x11SubmitBuildStream\x12!.submission.v1.SubmitBuildRequest\x1a(.submission.v1.SubmitBuildStreamResponse0\x01\x32\xb7\x01\n\x10SlotQueryService\x12K\n\x08GetSlots\x12\x1e.submission.v1.GetSlotsRequest\x1a\x1f.submission.v1.GetSlotsResponse\x12V\n\x0bStreamSlots\x12!.submission.v1.StreamSlotsRequest\x1a\".submission.v1.StreamSlotsResponse0\x01\x32g\n\x12SlotCommandService\x12Q\n\nSelectSlot\x12 .submission.v1.SelectSlotRequest\x1a!.submission.v1.SelectSlotResponse2\xfe\x01\n\x1dOfficialSandboxCommandService\x12l\n\x13JoinOfficialSandbox\x12).submission.v1.JoinOfficialSandboxRequest\x1a*.submission.v1.JoinOfficialSandboxResponse\x12o\n\x14LeaveOfficialSandbox\x12*.submission.v1.LeaveOfficialSandboxRequest\x1a+.submission.v1.LeaveOfficialSandboxResponseB\x1a\xaa\x02\x17HA3.Proto.Submission.V1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(hackarena/submission/v1/submission.proto\x12\rsubmission.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xef\x01\n\x12SubmitBuildRequest\x12=\n\x0cwrapper_kind\x18\x01 \x01(\x0e\x32\x1a.submission.v1.WrapperKindR\x0bwrapperKind\x12\'\n\x0fwrapper_version\x18\x02 \x01(\tR\x0ewrapperVersion\x12-\n\x13user_archive_tar_gz\x18\x03 \x01(\x0cR\x10userArchiveTarGz\x12\x17\n\x04slot\x18\x04 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12 \n\x0b\x64\x65scription\x18\x05 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot\"3\n\x0c\x42uildStarted\x12#\n\rsubmission_id\x18\x01 \x01(\tR\x0csubmissionId\"\x1e\n\x08\x42uildLog\x12\x12\n\x04line\x18\x01 \x01(\tR\x04line\")\n\rBuildFinished\x12\x18\n\x07success\x18\x01 \x01(\x08R\x07success\"\xc6\x01\n\x19SubmitBuildStreamResponse\x12\x37\n\x07started\x18\x01 \x01(\x0b\x32\x1b.submission.v1.BuildStartedH\x00R\x07started\x12+\n\x03log\x18\x02 \x01(\x0b\x32\x17.submission.v1.BuildLogH\x00R\x03log\x12:\n\x08\x66inished\x18\x03 \x01(\x0b\x32\x1c.submission.v1.BuildFinishedH\x00R\x08\x66inishedB\x07\n\x05\x65vent\"\x14\n\x12StreamSlotsRequest\"C\n\x13StreamSlotsResponse\x12,\n\x05slots\x18\x01 \x03(\x0b\x32\x16.submission.v1.SlotDtoR\x05slots\"\x11\n\x0fGetSlotsRequest\"G\n\x10GetSlotsResponse\x12\x33\n\x05slots\x18\x01 \x03(\x0b\x32\x1d.submission.v1.SlotSummaryDtoR\x05slots\"\'\n\x11SelectSlotRequest\x12\x12\n\x04slot\x18\x01 \x01(\x05R\x04slot\"\x14\n\x12SelectSlotResponse\"O\n\x1aJoinOfficialSandboxRequest\x12\x1d\n\nsandbox_id\x18\x01 \x01(\tR\tsandboxId\x12\x12\n\x04slot\x18\x02 \x01(\x05R\x04slot\"|\n\x1bJoinOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\x1d\n\x1bLeaveOfficialSandboxRequest\"}\n\x1cLeaveOfficialSandboxResponse\x12\x43\n\x06status\x18\x01 \x01(\x0e\x32+.submission.v1.OfficialSandboxCommandStatusR\x06status\x12\x18\n\x07message\x18\x02 \x01(\tR\x07message\"\x1e\n\x1cListRecentSubmissionsRequest\"\xde\x01\n\x13RecentSubmissionDto\x12#\n\rsubmission_id\x18\x01 \x01(\tR\x0csubmissionId\x12=\n\x0csubmitted_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampR\x0bsubmittedAt\x12,\n\x12\x61rchive_size_bytes\x18\x03 \x01(\x04R\x10\x61rchiveSizeBytes\x12%\n\x0b\x64\x65scription\x18\x04 \x01(\tH\x00R\x0b\x64\x65scription\x88\x01\x01\x42\x0e\n\x0c_description\"e\n\x1dListRecentSubmissionsResponse\x12\x44\n\x0bsubmissions\x18\x01 \x03(\x0b\x32\".submission.v1.RecentSubmissionDtoR\x0bsubmissions\"B\n\x1bGetSubmissionArchiveRequest\x12#\n\rsubmission_id\x18\x01 \x01(\tR\x0csubmissionId\"M\n\x1cGetSubmissionArchiveResponse\x12-\n\x13user_archive_tar_gz\x18\x01 \x01(\x0cR\x10userArchiveTarGz\"\xb9\x01\n\x07SlotDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scription\x12\x1a\n\x08selected\x18\x04 \x01(\x08R\x08selected\x12)\n\x10\x63urrently_loaded\x18\x05 \x01(\x08R\x0f\x63urrentlyLoadedB\x07\n\x05_slot\"y\n\x0eSlotSummaryDto\x12\x17\n\x04slot\x18\x01 \x01(\x05H\x00R\x04slot\x88\x01\x01\x12#\n\rsubmission_id\x18\x02 \x01(\tR\x0csubmissionId\x12 \n\x0b\x64\x65scription\x18\x03 \x01(\tR\x0b\x64\x65scriptionB\x07\n\x05_slot*\x8b\x01\n\x0bWrapperKind\x12\x1c\n\x18WRAPPER_KIND_UNSPECIFIED\x10\x00\x12\x17\n\x13WRAPPER_KIND_PYTHON\x10\x01\x12\x17\n\x13WRAPPER_KIND_CSHARP\x10\x02\x12\x14\n\x10WRAPPER_KIND_CPP\x10\x03\x12\x16\n\x12WRAPPER_KIND_JS_TS\x10\x04*\xb2\x01\n\x10SubmissionStatus\x12!\n\x1dSUBMISSION_STATUS_UNSPECIFIED\x10\x00\x12\x1c\n\x18SUBMISSION_STATUS_QUEUED\x10\x01\x12\x1e\n\x1aSUBMISSION_STATUS_BUILDING\x10\x02\x12\x1f\n\x1bSUBMISSION_STATUS_SUCCEEDED\x10\x03\x12\x1c\n\x18SUBMISSION_STATUS_FAILED\x10\x04*\xa3\x01\n\x1cOfficialSandboxCommandStatus\x12/\n+OFFICIAL_SANDBOX_COMMAND_STATUS_UNSPECIFIED\x10\x00\x12&\n\"OFFICIAL_SANDBOX_COMMAND_STATUS_OK\x10\x01\x12*\n&OFFICIAL_SANDBOX_COMMAND_STATUS_FAILED\x10\x02\x32\xdc\x02\n\x11SubmissionService\x12\x62\n\x11SubmitBuildStream\x12!.submission.v1.SubmitBuildRequest\x1a(.submission.v1.SubmitBuildStreamResponse0\x01\x12r\n\x15ListRecentSubmissions\x12+.submission.v1.ListRecentSubmissionsRequest\x1a,.submission.v1.ListRecentSubmissionsResponse\x12o\n\x14GetSubmissionArchive\x12*.submission.v1.GetSubmissionArchiveRequest\x1a+.submission.v1.GetSubmissionArchiveResponse2\xb7\x01\n\x10SlotQueryService\x12K\n\x08GetSlots\x12\x1e.submission.v1.GetSlotsRequest\x1a\x1f.submission.v1.GetSlotsResponse\x12V\n\x0bStreamSlots\x12!.submission.v1.StreamSlotsRequest\x1a\".submission.v1.StreamSlotsResponse0\x01\x32g\n\x12SlotCommandService\x12Q\n\nSelectSlot\x12 .submission.v1.SelectSlotRequest\x1a!.submission.v1.SelectSlotResponse2\xfe\x01\n\x1dOfficialSandboxCommandService\x12l\n\x13JoinOfficialSandbox\x12).submission.v1.JoinOfficialSandboxRequest\x1a*.submission.v1.JoinOfficialSandboxResponse\x12o\n\x14LeaveOfficialSandbox\x12*.submission.v1.LeaveOfficialSandboxRequest\x1a+.submission.v1.LeaveOfficialSandboxResponseB\x1a\xaa\x02\x17HA3.Proto.Submission.V1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,52 +33,62 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'hackarena.submission.v1.sub
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\027HA3.Proto.Submission.V1'
-  _globals['_WRAPPERKIND']._serialized_start=1553
-  _globals['_WRAPPERKIND']._serialized_end=1692
-  _globals['_SUBMISSIONSTATUS']._serialized_start=1695
-  _globals['_SUBMISSIONSTATUS']._serialized_end=1873
-  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_start=1876
-  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_end=2039
-  _globals['_SUBMITBUILDREQUEST']._serialized_start=60
-  _globals['_SUBMITBUILDREQUEST']._serialized_end=299
-  _globals['_BUILDSTARTED']._serialized_start=301
-  _globals['_BUILDSTARTED']._serialized_end=352
-  _globals['_BUILDLOG']._serialized_start=354
-  _globals['_BUILDLOG']._serialized_end=384
-  _globals['_BUILDFINISHED']._serialized_start=386
-  _globals['_BUILDFINISHED']._serialized_end=427
-  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_start=430
-  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_end=628
-  _globals['_STREAMSLOTSREQUEST']._serialized_start=630
-  _globals['_STREAMSLOTSREQUEST']._serialized_end=650
-  _globals['_STREAMSLOTSRESPONSE']._serialized_start=652
-  _globals['_STREAMSLOTSRESPONSE']._serialized_end=719
-  _globals['_GETSLOTSREQUEST']._serialized_start=721
-  _globals['_GETSLOTSREQUEST']._serialized_end=738
-  _globals['_GETSLOTSRESPONSE']._serialized_start=740
-  _globals['_GETSLOTSRESPONSE']._serialized_end=811
-  _globals['_SELECTSLOTREQUEST']._serialized_start=813
-  _globals['_SELECTSLOTREQUEST']._serialized_end=852
-  _globals['_SELECTSLOTRESPONSE']._serialized_start=854
-  _globals['_SELECTSLOTRESPONSE']._serialized_end=874
-  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_start=876
-  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_end=955
-  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_start=957
-  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_end=1081
-  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_start=1083
-  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_end=1112
-  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_start=1114
-  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_end=1239
-  _globals['_SLOTDTO']._serialized_start=1242
-  _globals['_SLOTDTO']._serialized_end=1427
-  _globals['_SLOTSUMMARYDTO']._serialized_start=1429
-  _globals['_SLOTSUMMARYDTO']._serialized_end=1550
-  _globals['_SUBMISSIONSERVICE']._serialized_start=2041
-  _globals['_SUBMISSIONSERVICE']._serialized_end=2160
-  _globals['_SLOTQUERYSERVICE']._serialized_start=2163
-  _globals['_SLOTQUERYSERVICE']._serialized_end=2346
-  _globals['_SLOTCOMMANDSERVICE']._serialized_start=2348
-  _globals['_SLOTCOMMANDSERVICE']._serialized_end=2451
-  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_start=2454
-  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_end=2708
+  _globals['_WRAPPERKIND']._serialized_start=2093
+  _globals['_WRAPPERKIND']._serialized_end=2232
+  _globals['_SUBMISSIONSTATUS']._serialized_start=2235
+  _globals['_SUBMISSIONSTATUS']._serialized_end=2413
+  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_start=2416
+  _globals['_OFFICIALSANDBOXCOMMANDSTATUS']._serialized_end=2579
+  _globals['_SUBMITBUILDREQUEST']._serialized_start=93
+  _globals['_SUBMITBUILDREQUEST']._serialized_end=332
+  _globals['_BUILDSTARTED']._serialized_start=334
+  _globals['_BUILDSTARTED']._serialized_end=385
+  _globals['_BUILDLOG']._serialized_start=387
+  _globals['_BUILDLOG']._serialized_end=417
+  _globals['_BUILDFINISHED']._serialized_start=419
+  _globals['_BUILDFINISHED']._serialized_end=460
+  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_start=463
+  _globals['_SUBMITBUILDSTREAMRESPONSE']._serialized_end=661
+  _globals['_STREAMSLOTSREQUEST']._serialized_start=663
+  _globals['_STREAMSLOTSREQUEST']._serialized_end=683
+  _globals['_STREAMSLOTSRESPONSE']._serialized_start=685
+  _globals['_STREAMSLOTSRESPONSE']._serialized_end=752
+  _globals['_GETSLOTSREQUEST']._serialized_start=754
+  _globals['_GETSLOTSREQUEST']._serialized_end=771
+  _globals['_GETSLOTSRESPONSE']._serialized_start=773
+  _globals['_GETSLOTSRESPONSE']._serialized_end=844
+  _globals['_SELECTSLOTREQUEST']._serialized_start=846
+  _globals['_SELECTSLOTREQUEST']._serialized_end=885
+  _globals['_SELECTSLOTRESPONSE']._serialized_start=887
+  _globals['_SELECTSLOTRESPONSE']._serialized_end=907
+  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_start=909
+  _globals['_JOINOFFICIALSANDBOXREQUEST']._serialized_end=988
+  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_start=990
+  _globals['_JOINOFFICIALSANDBOXRESPONSE']._serialized_end=1114
+  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_start=1116
+  _globals['_LEAVEOFFICIALSANDBOXREQUEST']._serialized_end=1145
+  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_start=1147
+  _globals['_LEAVEOFFICIALSANDBOXRESPONSE']._serialized_end=1272
+  _globals['_LISTRECENTSUBMISSIONSREQUEST']._serialized_start=1274
+  _globals['_LISTRECENTSUBMISSIONSREQUEST']._serialized_end=1304
+  _globals['_RECENTSUBMISSIONDTO']._serialized_start=1307
+  _globals['_RECENTSUBMISSIONDTO']._serialized_end=1529
+  _globals['_LISTRECENTSUBMISSIONSRESPONSE']._serialized_start=1531
+  _globals['_LISTRECENTSUBMISSIONSRESPONSE']._serialized_end=1632
+  _globals['_GETSUBMISSIONARCHIVEREQUEST']._serialized_start=1634
+  _globals['_GETSUBMISSIONARCHIVEREQUEST']._serialized_end=1700
+  _globals['_GETSUBMISSIONARCHIVERESPONSE']._serialized_start=1702
+  _globals['_GETSUBMISSIONARCHIVERESPONSE']._serialized_end=1779
+  _globals['_SLOTDTO']._serialized_start=1782
+  _globals['_SLOTDTO']._serialized_end=1967
+  _globals['_SLOTSUMMARYDTO']._serialized_start=1969
+  _globals['_SLOTSUMMARYDTO']._serialized_end=2090
+  _globals['_SUBMISSIONSERVICE']._serialized_start=2582
+  _globals['_SUBMISSIONSERVICE']._serialized_end=2930
+  _globals['_SLOTQUERYSERVICE']._serialized_start=2933
+  _globals['_SLOTQUERYSERVICE']._serialized_end=3116
+  _globals['_SLOTCOMMANDSERVICE']._serialized_start=3118
+  _globals['_SLOTCOMMANDSERVICE']._serialized_end=3221
+  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_start=3224
+  _globals['_OFFICIALSANDBOXCOMMANDSERVICE']._serialized_end=3478
 # @@protoc_insertion_point(module_scope)

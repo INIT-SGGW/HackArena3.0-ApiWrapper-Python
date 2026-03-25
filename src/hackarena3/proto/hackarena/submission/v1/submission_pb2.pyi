@@ -6,6 +6,7 @@ isort:skip_file
 from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 import builtins as _builtins
@@ -335,6 +336,101 @@ class LeaveOfficialSandboxResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___LeaveOfficialSandboxResponse: _TypeAlias = LeaveOfficialSandboxResponse  # noqa: Y015
+
+@_typing.final
+class ListRecentSubmissionsRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___ListRecentSubmissionsRequest: _TypeAlias = ListRecentSubmissionsRequest  # noqa: Y015
+
+@_typing.final
+class RecentSubmissionDto(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    SUBMITTED_AT_FIELD_NUMBER: _builtins.int
+    ARCHIVE_SIZE_BYTES_FIELD_NUMBER: _builtins.int
+    DESCRIPTION_FIELD_NUMBER: _builtins.int
+    submission_id: _builtins.str
+    """Submission identifier."""
+    archive_size_bytes: _builtins.int
+    """Archive payload size in bytes."""
+    description: _builtins.str
+    """Optional user-provided description."""
+    @_builtins.property
+    def submitted_at(self) -> _timestamp_pb2.Timestamp:
+        """Submission timestamp."""
+
+    def __init__(
+        self,
+        *,
+        submission_id: _builtins.str = ...,
+        submitted_at: _timestamp_pb2.Timestamp | None = ...,
+        archive_size_bytes: _builtins.int = ...,
+        description: _builtins.str | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "description", b"description", "submitted_at", b"submitted_at"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_description", b"_description", "archive_size_bytes", b"archive_size_bytes", "description", b"description", "submission_id", b"submission_id", "submitted_at", b"submitted_at"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__description: _TypeAlias = _typing.Literal["description"]  # noqa: Y015
+    _WhichOneofArgType__description: _TypeAlias = _typing.Literal["_description", b"_description"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__description) -> _WhichOneofReturnType__description | None: ...
+
+Global___RecentSubmissionDto: _TypeAlias = RecentSubmissionDto  # noqa: Y015
+
+@_typing.final
+class ListRecentSubmissionsResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SUBMISSIONS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def submissions(self) -> _containers.RepeatedCompositeFieldContainer[Global___RecentSubmissionDto]: ...
+    def __init__(
+        self,
+        *,
+        submissions: _abc.Iterable[Global___RecentSubmissionDto] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["submissions", b"submissions"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ListRecentSubmissionsResponse: _TypeAlias = ListRecentSubmissionsResponse  # noqa: Y015
+
+@_typing.final
+class GetSubmissionArchiveRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    submission_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        submission_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["submission_id", b"submission_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetSubmissionArchiveRequest: _TypeAlias = GetSubmissionArchiveRequest  # noqa: Y015
+
+@_typing.final
+class GetSubmissionArchiveResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    USER_ARCHIVE_TAR_GZ_FIELD_NUMBER: _builtins.int
+    user_archive_tar_gz: _builtins.bytes
+    def __init__(
+        self,
+        *,
+        user_archive_tar_gz: _builtins.bytes = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["user_archive_tar_gz", b"user_archive_tar_gz"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetSubmissionArchiveResponse: _TypeAlias = GetSubmissionArchiveResponse  # noqa: Y015
 
 @_typing.final
 class SlotDto(_message.Message):

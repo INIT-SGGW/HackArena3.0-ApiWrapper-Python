@@ -19,6 +19,16 @@ class SubmissionServiceStub(object):
                 request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.SerializeToString,
                 response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.FromString,
                 _registered_method=True)
+        self.ListRecentSubmissions = channel.unary_unary(
+                '/submission.v1.SubmissionService/ListRecentSubmissions',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsResponse.FromString,
+                _registered_method=True)
+        self.GetSubmissionArchive = channel.unary_unary(
+                '/submission.v1.SubmissionService/GetSubmissionArchive',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.FromString,
+                _registered_method=True)
 
 
 class SubmissionServiceServicer(object):
@@ -30,6 +40,21 @@ class SubmissionServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListRecentSubmissions(self, request, context):
+        """Returns recent submissions for the authenticated team.
+        Ordering: newest first by submitted_at.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetSubmissionArchive(self, request, context):
+        """Returns raw .tar.gz archive bytes for a submission in caller scope.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_SubmissionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -37,6 +62,16 @@ def add_SubmissionServiceServicer_to_server(servicer, server):
                     servicer.SubmitBuildStream,
                     request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.FromString,
                     response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.SerializeToString,
+            ),
+            'ListRecentSubmissions': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListRecentSubmissions,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsResponse.SerializeToString,
+            ),
+            'GetSubmissionArchive': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSubmissionArchive,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -66,6 +101,60 @@ class SubmissionService(object):
             '/submission.v1.SubmissionService/SubmitBuildStream',
             hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildRequest.SerializeToString,
             hackarena_dot_submission_dot_v1_dot_submission__pb2.SubmitBuildStreamResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListRecentSubmissions(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/submission.v1.SubmissionService/ListRecentSubmissions',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.ListRecentSubmissionsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetSubmissionArchive(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/submission.v1.SubmissionService/GetSubmissionArchive',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.FromString,
             options,
             channel_credentials,
             insecure,

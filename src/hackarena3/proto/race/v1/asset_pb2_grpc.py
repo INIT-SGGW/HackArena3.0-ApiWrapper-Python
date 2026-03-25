@@ -20,6 +20,11 @@ class AssetServiceStub(object):
                 request_serializer=race_dot_v1_dot_asset__pb2.ListMapsRequest.SerializeToString,
                 response_deserializer=race_dot_v1_dot_asset__pb2.ListMapsResponse.FromString,
                 _registered_method=True)
+        self.ListAllMaps = channel.unary_unary(
+                '/race.v1.AssetService/ListAllMaps',
+                request_serializer=race_dot_v1_dot_asset__pb2.ListAllMapsRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_asset__pb2.ListAllMapsResponse.FromString,
+                _registered_method=True)
         self.GetMapAssetBundleMeta = channel.unary_unary(
                 '/race.v1.AssetService/GetMapAssetBundleMeta',
                 request_serializer=race_dot_v1_dot_asset__pb2.GetMapAssetBundleMetaRequest.SerializeToString,
@@ -48,6 +53,13 @@ class AssetServiceServicer(object):
 
     def ListMaps(self, request, context):
         """Lists maps available for selection in UI/configuration.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListAllMaps(self, request, context):
+        """Admin-only: lists all maps available in backend catalog.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -90,6 +102,11 @@ def add_AssetServiceServicer_to_server(servicer, server):
                     servicer.ListMaps,
                     request_deserializer=race_dot_v1_dot_asset__pb2.ListMapsRequest.FromString,
                     response_serializer=race_dot_v1_dot_asset__pb2.ListMapsResponse.SerializeToString,
+            ),
+            'ListAllMaps': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListAllMaps,
+                    request_deserializer=race_dot_v1_dot_asset__pb2.ListAllMapsRequest.FromString,
+                    response_serializer=race_dot_v1_dot_asset__pb2.ListAllMapsResponse.SerializeToString,
             ),
             'GetMapAssetBundleMeta': grpc.unary_unary_rpc_method_handler(
                     servicer.GetMapAssetBundleMeta,
@@ -140,6 +157,33 @@ class AssetService(object):
             '/race.v1.AssetService/ListMaps',
             race_dot_v1_dot_asset__pb2.ListMapsRequest.SerializeToString,
             race_dot_v1_dot_asset__pb2.ListMapsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListAllMaps(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.AssetService/ListAllMaps',
+            race_dot_v1_dot_asset__pb2.ListAllMapsRequest.SerializeToString,
+            race_dot_v1_dot_asset__pb2.ListAllMapsResponse.FromString,
             options,
             channel_credentials,
             insecure,

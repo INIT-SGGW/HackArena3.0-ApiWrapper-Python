@@ -332,6 +332,37 @@ class ListMapsResponse(_message.Message):
 Global___ListMapsResponse: _TypeAlias = ListMapsResponse  # noqa: Y015
 
 @_typing.final
+class ListAllMapsRequest(_message.Message):
+    """Admin-only request for full map catalog listing."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___ListAllMapsRequest: _TypeAlias = ListAllMapsRequest  # noqa: Y015
+
+@_typing.final
+class ListAllMapsResponse(_message.Message):
+    """Admin-only response with all maps available in backend catalog."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    MAPS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def maps(self) -> _containers.RepeatedCompositeFieldContainer[Global___MapCatalogEntry]: ...
+    def __init__(
+        self,
+        *,
+        maps: _abc.Iterable[Global___MapCatalogEntry] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["maps", b"maps"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___ListAllMapsResponse: _TypeAlias = ListAllMapsResponse  # noqa: Y015
+
+@_typing.final
 class GetMapAssetBundleMetaRequest(_message.Message):
     """Request for map asset bundle metadata."""
 

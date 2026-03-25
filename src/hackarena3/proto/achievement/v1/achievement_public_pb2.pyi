@@ -56,6 +56,23 @@ GRANT_EASTER_EGG_FAIL_ALREADY_GRANTED: GrantEasterEggFailReason.ValueType  # 2
 GRANT_EASTER_EGG_FAIL_WRONG_CODE: GrantEasterEggFailReason.ValueType  # 3
 Global___GrantEasterEggFailReason: _TypeAlias = GrantEasterEggFailReason  # noqa: Y015
 
+class _GrantLogsFailReason:
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
+
+class _GrantLogsFailReasonEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_GrantLogsFailReason.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
+    GRANT_LOGS_FAIL_UNSPECIFIED: _GrantLogsFailReason.ValueType  # 0
+    GRANT_LOGS_FAIL_NONE: _GrantLogsFailReason.ValueType  # 1
+    GRANT_LOGS_FAIL_ALREADY_GRANTED: _GrantLogsFailReason.ValueType  # 2
+
+class GrantLogsFailReason(_GrantLogsFailReason, metaclass=_GrantLogsFailReasonEnumTypeWrapper): ...
+
+GRANT_LOGS_FAIL_UNSPECIFIED: GrantLogsFailReason.ValueType  # 0
+GRANT_LOGS_FAIL_NONE: GrantLogsFailReason.ValueType  # 1
+GRANT_LOGS_FAIL_ALREADY_GRANTED: GrantLogsFailReason.ValueType  # 2
+Global___GrantLogsFailReason: _TypeAlias = GrantLogsFailReason  # noqa: Y015
+
 @_typing.final
 class AchievementRepresentation(_message.Message):
     """Information about specific achievement."""
@@ -285,3 +302,43 @@ class GrantEasterEggAchievementResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___GrantEasterEggAchievementResponse: _TypeAlias = GrantEasterEggAchievementResponse  # noqa: Y015
+
+@_typing.final
+class GrantLogsAchievementRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team id."""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantLogsAchievementRequest: _TypeAlias = GrantLogsAchievementRequest  # noqa: Y015
+
+@_typing.final
+class GrantLogsAchievementResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    IS_GRANTED_SUCCESSFULLY_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    is_granted_successfully: _builtins.bool
+    """Represents grant status."""
+    reason: Global___GrantLogsFailReason.ValueType
+    """Fail reason. If is_granted_successfully is true
+    it is set to NONE.
+    """
+    def __init__(
+        self,
+        *,
+        is_granted_successfully: _builtins.bool = ...,
+        reason: Global___GrantLogsFailReason.ValueType = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["is_granted_successfully", b"is_granted_successfully", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GrantLogsAchievementResponse: _TypeAlias = GrantLogsAchievementResponse  # noqa: Y015

@@ -201,6 +201,12 @@ class TireSlipPerWheel:
 
 
 @dataclass(frozen=True, slots=True)
+class CommandCooldownState:
+    back_to_track_remaining_ms: int
+    emergency_pitstop_remaining_ms: int
+
+
+@dataclass(frozen=True, slots=True)
 class CarState:
     car_id: int
     position: Vec3
@@ -221,6 +227,8 @@ class CarState:
     pit_emergency_lock_remaining_ms: int
     last_pit_time_ms: int
     last_pit_source: PitEntrySource
+    last_pit_lap: int
+    command_cooldowns: CommandCooldownState
 
     @property
     def speed_kmh(self) -> float:

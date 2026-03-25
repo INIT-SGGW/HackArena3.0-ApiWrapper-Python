@@ -279,6 +279,32 @@ class PitRuntimeState(_message.Message):
 Global___PitRuntimeState: _TypeAlias = PitRuntimeState  # noqa: Y015
 
 @_typing.final
+class CommandCooldownState(_message.Message):
+    """Remaining cooldown time for selected one-shot participant commands.
+    Values > 0 mean active cooldown, 0 means command is ready.
+    This snapshot is the canonical current cooldown state for UI.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    BACK_TO_TRACK_REMAINING_MS_FIELD_NUMBER: _builtins.int
+    EMERGENCY_PITSTOP_REMAINING_MS_FIELD_NUMBER: _builtins.int
+    back_to_track_remaining_ms: _builtins.int
+    """Remaining cooldown for back-to-track command in milliseconds."""
+    emergency_pitstop_remaining_ms: _builtins.int
+    """Remaining cooldown for emergency pitstop command in milliseconds."""
+    def __init__(
+        self,
+        *,
+        back_to_track_remaining_ms: _builtins.int = ...,
+        emergency_pitstop_remaining_ms: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["back_to_track_remaining_ms", b"back_to_track_remaining_ms", "emergency_pitstop_remaining_ms", b"emergency_pitstop_remaining_ms"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___CommandCooldownState: _TypeAlias = CommandCooldownState  # noqa: Y015
+
+@_typing.final
 class PitHistoryEntry(_message.Message):
     """One pit history entry."""
 
@@ -419,6 +445,7 @@ class CarParticipantState(_message.Message):
     PIT_HISTORY_FIELD_NUMBER: _builtins.int
     NEXT_PIT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
     TIRE_SLIP_FIELD_NUMBER: _builtins.int
+    COMMAND_COOLDOWNS_FIELD_NUMBER: _builtins.int
     last_applied_client_seq: _builtins.int
     speed_mps: _builtins.float
     engine_rpm: _builtins.float
@@ -461,6 +488,10 @@ class CarParticipantState(_message.Message):
     def tire_slip(self) -> Global___TireSlipPerWheel:
         """Per-wheel tire slip values. > 1.0 indicates lost traction."""
 
+    @_builtins.property
+    def command_cooldowns(self) -> Global___CommandCooldownState:
+        """Remaining cooldowns for one-shot back_to_track / emergency_pitstop commands."""
+
     def __init__(
         self,
         *,
@@ -478,10 +509,11 @@ class CarParticipantState(_message.Message):
         pit_history: Global___PitHistoryState | None = ...,
         next_pit_tire_type: Global___TireType.ValueType = ...,
         tire_slip: Global___TireSlipPerWheel | None = ...,
+        command_cooldowns: Global___CommandCooldownState | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["command_cooldowns", b"command_cooldowns", "ghost_mode", b"ghost_mode", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_wear", b"tire_wear"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "next_pit_tire_type", b"next_pit_tire_type", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["command_cooldowns", b"command_cooldowns", "engine_rpm", b"engine_rpm", "gear", b"gear", "ghost_mode", b"ghost_mode", "last_applied_client_seq", b"last_applied_client_seq", "next_pit_tire_type", b"next_pit_tire_type", "pit_history", b"pit_history", "pit_runtime", b"pit_runtime", "pitstop_zone_flags", b"pitstop_zone_flags", "speed_mps", b"speed_mps", "tire_slip", b"tire_slip", "tire_temperature_celsius", b"tire_temperature_celsius", "tire_type", b"tire_type", "tire_wear", b"tire_wear", "wheels_in_pitstop", b"wheels_in_pitstop"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___CarParticipantState: _TypeAlias = CarParticipantState  # noqa: Y015

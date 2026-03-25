@@ -3,8 +3,10 @@
 isort:skip_file
 """
 
+from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
+from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from hackarena3.proto.race.v1 import telemetry_pb2 as _telemetry_pb2
 import builtins as _builtins
@@ -182,6 +184,10 @@ class _ParticipantCommandRejectReasonEnumTypeWrapper(_enum_type_wrapper._EnumTyp
     PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: _ParticipantCommandRejectReason.ValueType  # 1
     PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: _ParticipantCommandRejectReason.ValueType  # 2
     PARTICIPANT_COMMAND_REJECT_REASON_IN_PIT: _ParticipantCommandRejectReason.ValueType  # 3
+    PARTICIPANT_COMMAND_REJECT_REASON_COOLDOWN_ACTIVE: _ParticipantCommandRejectReason.ValueType  # 4
+    """Command-specific cooldown is currently active.
+    Cooldown check has precedence over other command validation reasons.
+    """
 
 class ParticipantCommandRejectReason(_ParticipantCommandRejectReason, metaclass=_ParticipantCommandRejectReasonEnumTypeWrapper):
     """Reject reason for participant one-shot commands."""
@@ -190,6 +196,10 @@ PARTICIPANT_COMMAND_REJECT_REASON_UNSPECIFIED: ParticipantCommandRejectReason.Va
 PARTICIPANT_COMMAND_REJECT_REASON_NOT_ALLOWED: ParticipantCommandRejectReason.ValueType  # 1
 PARTICIPANT_COMMAND_REJECT_REASON_RATE_LIMITED: ParticipantCommandRejectReason.ValueType  # 2
 PARTICIPANT_COMMAND_REJECT_REASON_IN_PIT: ParticipantCommandRejectReason.ValueType  # 3
+PARTICIPANT_COMMAND_REJECT_REASON_COOLDOWN_ACTIVE: ParticipantCommandRejectReason.ValueType  # 4
+"""Command-specific cooldown is currently active.
+Cooldown check has precedence over other command validation reasons.
+"""
 Global___ParticipantCommandRejectReason: _TypeAlias = ParticipantCommandRejectReason  # noqa: Y015
 
 @_typing.final
@@ -443,7 +453,9 @@ Global___ParticipantControlsInput: _TypeAlias = ParticipantControlsInput  # noqa
 
 @_typing.final
 class ParticipantBackToTrackCommand(_message.Message):
-    """One-shot command requesting teleport/resume back to track."""
+    """One-shot command requesting teleport/resume back to track.
+    Shares one cooldown bucket with frontend unary BackToTrack.
+    """
 
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -462,7 +474,9 @@ Global___ParticipantBackToTrackCommand: _TypeAlias = ParticipantBackToTrackComma
 
 @_typing.final
 class ParticipantEmergencyPitstopCommand(_message.Message):
-    """One-shot command requesting emergency teleport to pitstop area."""
+    """One-shot command requesting emergency teleport to pitstop area.
+    Shares one cooldown bucket with frontend unary EmergencyPitstop.
+    """
 
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -585,6 +599,7 @@ class ParticipantCommandAck(_message.Message):
     STATUS_FIELD_NUMBER: _builtins.int
     APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
     REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    COOLDOWN_REMAINING_MS_FIELD_NUMBER: _builtins.int
     client_seq: _builtins.int
     """Echoed client sequence from command input."""
     command_type: Global___ParticipantCommandType.ValueType
@@ -595,6 +610,11 @@ class ParticipantCommandAck(_message.Message):
     """Must be set only when status is REJECTED.
     For emergency_pitstop command, IN_PIT may be returned when vehicle is already in pit.
     """
+    cooldown_remaining_ms: _builtins.int
+    """Remaining cooldown in milliseconds for this command.
+    Must be > 0 only when status is REJECTED and rejected_reason is COOLDOWN_ACTIVE.
+    Must be 0 for accepted commands and non-cooldown rejections.
+    """
     def __init__(
         self,
         *,
@@ -603,8 +623,9 @@ class ParticipantCommandAck(_message.Message):
         status: Global___ParticipantCommandStatus.ValueType = ...,
         applies_from_tick: _builtins.int = ...,
         rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+        cooldown_remaining_ms: _builtins.int = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq", "command_type", b"command_type", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "client_seq", b"client_seq", "command_type", b"command_type", "cooldown_remaining_ms", b"cooldown_remaining_ms", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___ParticipantCommandAck: _TypeAlias = ParticipantCommandAck  # noqa: Y015
@@ -836,6 +857,7 @@ Global___FrontendSpectatorEvent: _TypeAlias = FrontendSpectatorEvent  # noqa: Y0
 class BackToTrackRequest(_message.Message):
     """Frontend command request: force controlled bot back to track.
     Target bot/runtime is derived by server from authenticated context.
+    Shares one cooldown bucket with participant back_to_track command.
     """
 
     DESCRIPTOR: _descriptor.Descriptor
@@ -855,19 +877,26 @@ class BackToTrackResponse(_message.Message):
     STATUS_FIELD_NUMBER: _builtins.int
     APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
     REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    COOLDOWN_REMAINING_MS_FIELD_NUMBER: _builtins.int
     status: Global___ParticipantCommandStatus.ValueType
     applies_from_tick: _builtins.int
     """Tick from which accepted command effects are applied."""
     rejected_reason: Global___ParticipantCommandRejectReason.ValueType
     """Must be set only when status is REJECTED."""
+    cooldown_remaining_ms: _builtins.int
+    """Remaining cooldown in milliseconds for back-to-track command.
+    Must be > 0 only when status is REJECTED and rejected_reason is COOLDOWN_ACTIVE.
+    Must be 0 for accepted calls and non-cooldown rejections.
+    """
     def __init__(
         self,
         *,
         status: Global___ParticipantCommandStatus.ValueType = ...,
         applies_from_tick: _builtins.int = ...,
         rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+        cooldown_remaining_ms: _builtins.int = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "cooldown_remaining_ms", b"cooldown_remaining_ms", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___BackToTrackResponse: _TypeAlias = BackToTrackResponse  # noqa: Y015
@@ -923,6 +952,7 @@ Global___RequestPitstopResponse: _TypeAlias = RequestPitstopResponse  # noqa: Y0
 class EmergencyPitstopRequest(_message.Message):
     """Frontend command request: force controlled bot teleport to pitstop.
     Target bot/runtime is derived by server from authenticated context.
+    Shares one cooldown bucket with participant emergency_pitstop command.
     """
 
     DESCRIPTOR: _descriptor.Descriptor
@@ -942,19 +972,26 @@ class EmergencyPitstopResponse(_message.Message):
     STATUS_FIELD_NUMBER: _builtins.int
     APPLIES_FROM_TICK_FIELD_NUMBER: _builtins.int
     REJECTED_REASON_FIELD_NUMBER: _builtins.int
+    COOLDOWN_REMAINING_MS_FIELD_NUMBER: _builtins.int
     status: Global___ParticipantCommandStatus.ValueType
     applies_from_tick: _builtins.int
     """Tick from which accepted command effects are applied."""
     rejected_reason: Global___ParticipantCommandRejectReason.ValueType
     """Must be set only when status is REJECTED."""
+    cooldown_remaining_ms: _builtins.int
+    """Remaining cooldown in milliseconds for emergency pitstop command.
+    Must be > 0 only when status is REJECTED and rejected_reason is COOLDOWN_ACTIVE.
+    Must be 0 for accepted calls and non-cooldown rejections.
+    """
     def __init__(
         self,
         *,
         status: Global___ParticipantCommandStatus.ValueType = ...,
         applies_from_tick: _builtins.int = ...,
         rejected_reason: Global___ParticipantCommandRejectReason.ValueType = ...,
+        cooldown_remaining_ms: _builtins.int = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applies_from_tick", b"applies_from_tick", "cooldown_remaining_ms", b"cooldown_remaining_ms", "rejected_reason", b"rejected_reason", "status", b"status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___EmergencyPitstopResponse: _TypeAlias = EmergencyPitstopResponse  # noqa: Y015
@@ -1004,3 +1041,129 @@ class SetNextPitTireTypeResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___SetNextPitTireTypeResponse: _TypeAlias = SetNextPitTireTypeResponse  # noqa: Y015
+
+@_typing.final
+class GetOfficialTeamBotLogsRequest(_message.Message):
+    """Frontend request for logs of currently running official team bot.
+    Team/runtime target is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___GetOfficialTeamBotLogsRequest: _TypeAlias = GetOfficialTeamBotLogsRequest  # noqa: Y015
+
+@_typing.final
+class GetOfficialTeamBotLogsResponse(_message.Message):
+    """Frontend response with latest log lines from currently running official team bot."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    LINES_FIELD_NUMBER: _builtins.int
+    TRUNCATED_FIELD_NUMBER: _builtins.int
+    truncated: _builtins.bool
+    """True when older lines were trimmed by server-side cap."""
+    @_builtins.property
+    def lines(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]:
+        """Returned log lines ordered from oldest to newest within this response window."""
+
+    def __init__(
+        self,
+        *,
+        lines: _abc.Iterable[_builtins.str] | None = ...,
+        truncated: _builtins.bool = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["lines", b"lines", "truncated", b"truncated"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetOfficialTeamBotLogsResponse: _TypeAlias = GetOfficialTeamBotLogsResponse  # noqa: Y015
+
+@_typing.final
+class StreamOfficialTeamBotLogsRequest(_message.Message):
+    """Frontend stream request for logs of currently running official team bot.
+    Team/runtime target is derived by server from authenticated context.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___StreamOfficialTeamBotLogsRequest: _TypeAlias = StreamOfficialTeamBotLogsRequest  # noqa: Y015
+
+@_typing.final
+class OfficialTeamBotLogsSnapshot(_message.Message):
+    """Initial log snapshot for stream subscribers."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    LINES_FIELD_NUMBER: _builtins.int
+    TRUNCATED_FIELD_NUMBER: _builtins.int
+    truncated: _builtins.bool
+    """True when older lines were trimmed by server-side cap."""
+    @_builtins.property
+    def lines(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]:
+        """Returned log lines ordered from oldest to newest within this snapshot window."""
+
+    def __init__(
+        self,
+        *,
+        lines: _abc.Iterable[_builtins.str] | None = ...,
+        truncated: _builtins.bool = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["lines", b"lines", "truncated", b"truncated"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___OfficialTeamBotLogsSnapshot: _TypeAlias = OfficialTeamBotLogsSnapshot  # noqa: Y015
+
+@_typing.final
+class OfficialTeamBotLogLine(_message.Message):
+    """Single appended log line event for stream subscribers."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    LINE_FIELD_NUMBER: _builtins.int
+    line: _builtins.str
+    def __init__(
+        self,
+        *,
+        line: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["line", b"line"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___OfficialTeamBotLogLine: _TypeAlias = OfficialTeamBotLogLine  # noqa: Y015
+
+@_typing.final
+class StreamOfficialTeamBotLogsResponse(_message.Message):
+    """Stream event envelope for official team bot logs.
+    First event must be snapshot, then server emits line events for newly appended logs.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SNAPSHOT_FIELD_NUMBER: _builtins.int
+    LINE_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def snapshot(self) -> Global___OfficialTeamBotLogsSnapshot: ...
+    @_builtins.property
+    def line(self) -> Global___OfficialTeamBotLogLine: ...
+    def __init__(
+        self,
+        *,
+        snapshot: Global___OfficialTeamBotLogsSnapshot | None = ...,
+        line: Global___OfficialTeamBotLogLine | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["line", b"line", "payload", b"payload", "snapshot", b"snapshot"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["line", b"line", "payload", b"payload", "snapshot", b"snapshot"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_payload: _TypeAlias = _typing.Literal["snapshot", "line"]  # noqa: Y015
+    _WhichOneofArgType_payload: _TypeAlias = _typing.Literal["payload", b"payload"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_payload) -> _WhichOneofReturnType_payload | None: ...
+
+Global___StreamOfficialTeamBotLogsResponse: _TypeAlias = StreamOfficialTeamBotLogsResponse  # noqa: Y015

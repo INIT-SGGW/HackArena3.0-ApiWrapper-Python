@@ -210,6 +210,16 @@ class RaceServiceStub(object):
                 request_serializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.SerializeToString,
                 response_deserializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.FromString,
                 _registered_method=True)
+        self.GetOfficialTeamBotLogs = channel.unary_unary(
+                '/race.v1.RaceService/GetOfficialTeamBotLogs',
+                request_serializer=race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsResponse.FromString,
+                _registered_method=True)
+        self.StreamOfficialTeamBotLogs = channel.unary_stream(
+                '/race.v1.RaceService/StreamOfficialTeamBotLogs',
+                request_serializer=race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsRequest.SerializeToString,
+                response_deserializer=race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsResponse.FromString,
+                _registered_method=True)
         self.StreamFrontendSpectator = channel.unary_stream(
                 '/race.v1.RaceService/StreamFrontendSpectator',
                 request_serializer=race_dot_v1_dot_race__pb2.GetFrontendSpectatorRequest.SerializeToString,
@@ -261,6 +271,21 @@ class RaceServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetOfficialTeamBotLogs(self, request, context):
+        """Returns latest logs for currently running official team bot (no pagination).
+        Server returns up to 5000 lines.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamOfficialTeamBotLogs(self, request, context):
+        """Streams official team bot logs: first snapshot (up to 5000 lines), then new lines.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def StreamFrontendSpectator(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -299,6 +324,16 @@ def add_RaceServiceServicer_to_server(servicer, server):
                     servicer.SetNextPitTireType,
                     request_deserializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.FromString,
                     response_serializer=race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.SerializeToString,
+            ),
+            'GetOfficialTeamBotLogs': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetOfficialTeamBotLogs,
+                    request_deserializer=race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsResponse.SerializeToString,
+            ),
+            'StreamOfficialTeamBotLogs': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamOfficialTeamBotLogs,
+                    request_deserializer=race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsRequest.FromString,
+                    response_serializer=race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsResponse.SerializeToString,
             ),
             'StreamFrontendSpectator': grpc.unary_stream_rpc_method_handler(
                     servicer.StreamFrontendSpectator,
@@ -468,6 +503,60 @@ class RaceService(object):
             '/race.v1.RaceService/SetNextPitTireType',
             race_dot_v1_dot_race__pb2.SetNextPitTireTypeRequest.SerializeToString,
             race_dot_v1_dot_race__pb2.SetNextPitTireTypeResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetOfficialTeamBotLogs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/race.v1.RaceService/GetOfficialTeamBotLogs',
+            race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.GetOfficialTeamBotLogsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StreamOfficialTeamBotLogs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/race.v1.RaceService/StreamOfficialTeamBotLogs',
+            race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsRequest.SerializeToString,
+            race_dot_v1_dot_race__pb2.StreamOfficialTeamBotLogsResponse.FromString,
             options,
             channel_credentials,
             insecure,

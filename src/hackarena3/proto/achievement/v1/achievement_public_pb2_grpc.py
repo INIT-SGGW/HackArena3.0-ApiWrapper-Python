@@ -40,6 +40,11 @@ class AchievementServiceStub(object):
                 request_serializer=achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementRequest.SerializeToString,
                 response_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementResponse.FromString,
                 _registered_method=True)
+        self.GrantLogsAchievement = channel.unary_unary(
+                '/achievement.v1.AchievementService/GrantLogsAchievement',
+                request_serializer=achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementRequest.SerializeToString,
+                response_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementResponse.FromString,
+                _registered_method=True)
 
 
 class AchievementServiceServicer(object):
@@ -83,6 +88,13 @@ class AchievementServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GrantLogsAchievement(self, request, context):
+        """Grant logs achievment
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AchievementServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -110,6 +122,11 @@ def add_AchievementServiceServicer_to_server(servicer, server):
                     servicer.GrantEasterEggAchievement,
                     request_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementRequest.FromString,
                     response_serializer=achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementResponse.SerializeToString,
+            ),
+            'GrantLogsAchievement': grpc.unary_unary_rpc_method_handler(
+                    servicer.GrantLogsAchievement,
+                    request_deserializer=achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementRequest.FromString,
+                    response_serializer=achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -248,6 +265,33 @@ class AchievementService(object):
             '/achievement.v1.AchievementService/GrantEasterEggAchievement',
             achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementRequest.SerializeToString,
             achievement_dot_v1_dot_achievement__public__pb2.GrantEasterEggAchievementResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GrantLogsAchievement(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/achievement.v1.AchievementService/GrantLogsAchievement',
+            achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementRequest.SerializeToString,
+            achievement_dot_v1_dot_achievement__public__pb2.GrantLogsAchievementResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -243,10 +243,12 @@ def _handle_command_ack(
             race_pb2.ParticipantCommandRejectReason,
             int(ack.rejected_reason),
         )
+        cooldown_remaining_ms = int(ack.cooldown_remaining_ms)
         print(
             "[ha3-wrapper] Participant command rejected: "
             f"seq={client_seq} command={pending.command_kind} "
-            f"command_type={command_type} reason={rejected_reason}",
+            f"command_type={command_type} reason={rejected_reason} "
+            f"cooldown_remaining_ms={cooldown_remaining_ms}",
             file=sys.stderr,
         )
 

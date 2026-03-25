@@ -6,6 +6,7 @@ from hackarena3.types import (
     CarDimensions,
     CarState,
     CenterlinePoint,
+    CommandCooldownState,
     DriveGear,
     GhostModeBlocker,
     GhostModePhase,
@@ -137,6 +138,17 @@ def _tire_slip_from_proto(value: object) -> TireSlipPerWheel:
     )
 
 
+def _command_cooldowns_from_proto(value: object) -> CommandCooldownState:
+    return CommandCooldownState(
+        back_to_track_remaining_ms=int(
+            getattr(value, "back_to_track_remaining_ms", 0)
+        ),
+        emergency_pitstop_remaining_ms=int(
+            getattr(value, "emergency_pitstop_remaining_ms", 0)
+        ),
+    )
+
+
 def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
     self_ghost = _ghost_mode_from_proto(raw.self.telemetry.ghost_mode)
 
@@ -159,6 +171,9 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
         raw.self.telemetry.tire_temperature_celsius
     )
     tire_slip = _tire_slip_from_proto(raw.self.telemetry.tire_slip)
+    command_cooldowns = _command_cooldowns_from_proto(
+        raw.self.telemetry.command_cooldowns
+    )
     pit_runtime = raw.self.telemetry.pit_runtime
 
     return RaceSnapshot(
@@ -184,6 +199,8 @@ def build_race_snapshot(raw: ParticipantSnapshot) -> RaceSnapshot:
             pit_emergency_lock_remaining_ms=int(pit_runtime.emergency_lock_remaining_ms),
             last_pit_time_ms=int(pit_runtime.last_pit_time_ms),
             last_pit_source=_pit_entry_source_from_raw(int(pit_runtime.last_pit_source)),
+            last_pit_lap=int(getattr(pit_runtime, "last_pit_lap", 0)),
+            command_cooldowns=command_cooldowns,
         ),
         opponents=tuple(opponents),
         raw=raw,

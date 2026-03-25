@@ -128,7 +128,7 @@ class TokenStandardClaims(_message.Message):
     iss: _builtins.str
     """Issuer (iss), for example: "ha3-auth" or "ha3-dev-auth"."""
     sub: _builtins.str
-    """Subject (sub), UUID whose meaning depends on token type:
+    """Subject (sub), identifier whose meaning depends on token type:
     - team_bot: sub is team_id
     - team_bot_dev: sub is user_id
     - spectator: sub is user_id
@@ -180,7 +180,7 @@ class TeamBotTokenClaims(_message.Message):
     STANDARD_FIELD_NUMBER: _builtins.int
     TEAM_ID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
-    """Team id claim (UUID). MUST be equal to standard.sub."""
+    """Team id claim. MUST be equal to standard.sub."""
     @_builtins.property
     def standard(self) -> Global___TokenStandardClaims: ...
     def __init__(
@@ -206,7 +206,7 @@ class TeamBotDevTokenClaims(_message.Message):
     TEAM_ID_FIELD_NUMBER: _builtins.int
     INSTANCE_UUID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
-    """Team id claim (UUID). For this token type, standard.sub is user_id."""
+    """Team id claim. For this token type, standard.sub is user_id."""
     instance_uuid: _builtins.str
     """Local runtime instance identifier."""
     @_builtins.property
@@ -255,7 +255,7 @@ class TeamSpectatorTokenClaims(_message.Message):
     STANDARD_FIELD_NUMBER: _builtins.int
     TEAM_ID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
-    """Team id claim (UUID). For this token type, standard.sub is user_id."""
+    """Team id claim. For this token type, standard.sub is user_id."""
     @_builtins.property
     def standard(self) -> Global___TokenStandardClaims: ...
     def __init__(
@@ -280,7 +280,7 @@ class TeamDevSpectatorTokenClaims(_message.Message):
     STANDARD_FIELD_NUMBER: _builtins.int
     TEAM_ID_FIELD_NUMBER: _builtins.int
     team_id: _builtins.str
-    """Team id claim (UUID). For this token type, standard.sub is user_id."""
+    """Team id claim. For this token type, standard.sub is user_id."""
     @_builtins.property
     def standard(self) -> Global___TokenStandardClaims: ...
     def __init__(
