@@ -57,11 +57,20 @@ def race_metadata(
     return token_provider.member_auth_metadata() + token_provider.grpc_metadata()
 
 
-def race_metadata_official(team_token: str) -> tuple[tuple[str, str], ...]:
-    token = team_token.strip()
-    if not token:
+def race_metadata_official(
+    team_token: str,
+    auth_token: str,
+) -> tuple[tuple[str, str], ...]:
+    game_token = team_token.strip()
+    if not game_token:
         raise RuntimeErrorWrapper("Team token is empty; cannot build stream metadata.")
-    return (("x-ha3-game-token", token),)
+    member_auth_token = auth_token.strip()
+    if not member_auth_token:
+        raise RuntimeErrorWrapper("Auth token is empty; cannot build stream metadata.")
+    return (
+        ("x-ha3-game-token", game_token),
+        ("cookie", f"auth_token={member_auth_token}"),
+    )
 
 
 def _prefixed_method(rpc_prefix: str, suffix: str) -> str:

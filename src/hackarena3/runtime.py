@@ -163,7 +163,7 @@ def _run_runtime_official(bot: BotProtocol, config: OfficialRuntimeConfig) -> No
 
     try:
         api = create_official_backend_api(config.grpc_target)
-        metadata = race_metadata_official(config.team_token)
+        metadata = race_metadata_official(config.team_token, config.auth_token)
         prepare_response = prepare_official_join(
             api,
             rpc_prefix=config.rpc_prefix,

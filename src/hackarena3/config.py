@@ -11,6 +11,7 @@ ENV_API_URL = "HA3_WRAPPER_API_URL"
 ENV_HA_AUTH_BIN = "HA3_WRAPPER_HA_AUTH_BIN"
 ENV_BACKEND_ENDPOINT = "HA3_WRAPPER_BACKEND_ENDPOINT"
 ENV_TEAM_TOKEN = "HA3_WRAPPER_TEAM_TOKEN"
+ENV_AUTH_TOKEN = "HA3_WRAPPER_AUTH_TOKEN"
 
 
 class ConfigError(RuntimeError):
@@ -22,6 +23,7 @@ class OfficialRuntimeConfig:
     grpc_target: str
     rpc_prefix: str
     team_token: str
+    auth_token: str
 
 
 def _strip_quotes(value: str) -> str:
@@ -76,6 +78,9 @@ def load_official_runtime_config() -> OfficialRuntimeConfig:
     team_token = str(os.environ.get(ENV_TEAM_TOKEN, "")).strip()
     if not team_token:
         raise ConfigError(f"Missing required runtime env: {ENV_TEAM_TOKEN}")
+    auth_token = str(os.environ.get(ENV_AUTH_TOKEN, "")).strip()
+    if not auth_token:
+        raise ConfigError(f"Missing required runtime env: {ENV_AUTH_TOKEN}")
 
     parsed = urlparse(endpoint)
     if parsed.scheme != "https":
@@ -117,4 +122,5 @@ def load_official_runtime_config() -> OfficialRuntimeConfig:
         grpc_target=grpc_target,
         rpc_prefix=rpc_prefix,
         team_token=team_token,
+        auth_token=auth_token,
     )
