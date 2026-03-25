@@ -34,6 +34,20 @@ def _read_project_version(pyproject_path: Path) -> str:
     raise RuntimeError("Cannot read [project].version from pyproject.toml")
 
 
+def _render_manifest_with_version(manifest_path: Path, version: str) -> bytes:
+    content = manifest_path.read_text(encoding="utf-8")
+    rendered, replacements = re.subn(
+        r'(?m)^template_version\s*=\s*"[^"]*"\s*$',
+        f'template_version = "{version}"',
+        content,
+    )
+    if replacements != 1:
+        raise RuntimeError(
+            "Cannot update template_version in template/system/manifest.toml"
+        )
+    return rendered.encode("utf-8")
+
+
 def _should_skip(rel_path: str, excludes: tuple[str, ...]) -> bool:
     for pattern in excludes:
         if fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(
@@ -43,10 +57,22 @@ def _should_skip(rel_path: str, excludes: tuple[str, ...]) -> bool:
     return False
 
 
-def _create_template_zip(repo_root: Path, output_zip: Path) -> int:
+def _create_template_zip(repo_root: Path, output_zip: Path, version: str) -> int:
     template_root = repo_root / "template"
     if not template_root.exists():
         print("Missing template/ directory.", file=sys.stderr)
+        return 1
+
+    manifest_rel = "system/manifest.toml"
+    manifest_path = template_root / manifest_rel
+    if not manifest_path.is_file():
+        print("Missing template/system/manifest.toml.", file=sys.stderr)
+        return 1
+
+    try:
+        manifest_bytes = _render_manifest_with_version(manifest_path, version)
+    except RuntimeError as exc:
+        print(str(exc), file=sys.stderr)
         return 1
 
     output_zip.parent.mkdir(parents=True, exist_ok=True)
@@ -58,7 +84,10 @@ def _create_template_zip(repo_root: Path, output_zip: Path) -> int:
             rel = path.relative_to(template_root).as_posix()
             if _should_skip(rel, DEFAULT_EXCLUDES):
                 continue
-            zf.write(path, arcname=rel)
+            if rel == manifest_rel:
+                zf.writestr(rel, manifest_bytes)
+            else:
+                zf.write(path, arcname=rel)
             added += 1
 
     if added == 0:
@@ -75,7 +104,7 @@ def main() -> int:
     version = _read_project_version(repo_root / "pyproject.toml")
     output_dir = (repo_root / "dist" / "release").resolve()
     output_zip = output_dir / f"wrapper-python-v{version}.zip"
-    return _create_template_zip(repo_root, output_zip)
+    return _create_template_zip(repo_root, output_zip, version)
 
 
 if __name__ == "__main__":

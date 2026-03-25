@@ -2,7 +2,7 @@ schema = 1
 
 [wrapper]
 language = "python"
-template_version = "0.1.0b4"
+template_version = "0.0.0"
 
 [runtime]
 engine = "python"

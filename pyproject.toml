@@ -1,6 +1,6 @@
 [project]
 name = "hackarena3"
-version = "0.1.0b5"
+version = "0.1.0b7"
 description = "HackArena 3.0 Python API Wrapper"
 readme = "README.md"
 requires-python = ">=3.10"
