@@ -146,7 +146,7 @@ class TrackLayout:
     pitstop: PitstopLayout
 
 
-@dataclass(slots=True)
+@dataclass(frozen=True, slots=True)
 class Controls:
     throttle: float
     brake: float
@@ -278,9 +278,7 @@ class _BotContextActions:
     set_controls: Callable[[Controls], None] = _unbound_set_controls
     request_back_to_track: Callable[[], None] = _unbound_command
     request_emergency_pitstop: Callable[[], None] = _unbound_command
-    set_next_pit_tire_type: Callable[[TireType], None] = (
-        _unbound_set_next_pit_tire_type
-    )
+    set_next_pit_tire_type: Callable[[TireType], None] = _unbound_set_next_pit_tire_type
 
 
 @dataclass(slots=True)
