@@ -12,6 +12,7 @@ ENV_HA_AUTH_BIN = "HA3_WRAPPER_HA_AUTH_BIN"
 ENV_BACKEND_ENDPOINT = "HA3_WRAPPER_BACKEND_ENDPOINT"
 ENV_TEAM_TOKEN = "HA3_WRAPPER_TEAM_TOKEN"
 ENV_AUTH_TOKEN = "HA3_WRAPPER_AUTH_TOKEN"
+DEFAULT_API_URL = "https://ha3-api.hackarena.pl"
 
 
 class ConfigError(RuntimeError):
@@ -52,11 +53,14 @@ def _required_api_addr() -> str:
     api_url = str(os.environ.get(ENV_API_URL, "")).strip()
     if api_url:
         return api_url
-    raise ConfigError(f"Missing required runtime env: {ENV_API_URL}")
+    return DEFAULT_API_URL
 
 
 def _optional_api_addr() -> str:
-    return str(os.environ.get(ENV_API_URL, "")).strip()
+    api_url = str(os.environ.get(ENV_API_URL, "")).strip()
+    if api_url:
+        return api_url
+    return DEFAULT_API_URL
 
 
 def load_runtime_config(*, require_api_addr: bool = True) -> RuntimeConfig:
