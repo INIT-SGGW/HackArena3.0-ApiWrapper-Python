@@ -41,6 +41,16 @@ def create_backend_api(backend: BackendTarget) -> RaceApi:
     )
 
 
+def create_direct_backend_api(grpc_target: str) -> RaceApi:
+    channel = open_insecure_channel(grpc_target)
+    return RaceApi(
+        channel=channel,
+        race=race_pb2_grpc.RaceServiceStub(channel),
+        participant=race_pb2_grpc.RaceParticipantServiceStub(channel),
+        track=track_pb2_grpc.TrackServiceStub(channel),
+    )
+
+
 def create_official_backend_api(grpc_target: str) -> RaceApi:
     channel = open_secure_channel(grpc_target)
     return RaceApi(
@@ -71,6 +81,17 @@ def race_metadata_official(
         ("x-ha3-game-token", game_token),
         ("cookie", f"auth_token={member_auth_token}"),
     )
+
+
+def race_metadata_standalone(
+    car_id: int,
+) -> tuple[tuple[str, str], ...]:
+    selected_car_id = int(car_id)
+    if selected_car_id <= 0:
+        raise RuntimeErrorWrapper(
+            "Standalone local race join returned invalid car_id; cannot build stream metadata."
+        )
+    return (("x-ha3-car-id", str(selected_car_id)),)
 
 
 def _prefixed_method(rpc_prefix: str, suffix: str) -> str:
@@ -117,6 +138,39 @@ def prepare_official_join(
     return response
 
 
+def local_race_join(
+    api: RaceApi,
+    *,
+    race_id: str,
+    display_name: str,
+) -> race_pb2.LocalRaceJoinResponse:
+    selected_race_id = race_id.strip()
+    if not selected_race_id:
+        raise RuntimeErrorWrapper(
+            "Standalone local race discovery returned empty race_id; cannot join."
+        )
+
+    try:
+        response = api.participant.LocalRaceJoin(  # type: ignore
+            race_pb2.LocalRaceJoinRequest(
+                race_id=selected_race_id,
+                display_name=display_name,
+            ),
+            timeout=RPC_TIMEOUT_SECONDS,
+        )
+    except grpc.RpcError as exc:
+        if exc.code() == grpc.StatusCode.UNIMPLEMENTED:
+            raise RuntimeErrorWrapper(
+                "Standalone local race join is unavailable (UNIMPLEMENTED). Check backend/api compatibility."
+            ) from exc
+        raise RuntimeErrorWrapper(
+            f"Standalone local race join failed: {exc.code().name} {exc.details()}"
+        ) from exc
+
+    assert isinstance(response, race_pb2.LocalRaceJoinResponse)
+    return response
+
+
 def fetch_track_data(
     api: RaceApi,
     token_provider: GameTokenProvider,
@@ -137,6 +191,30 @@ def fetch_track_data(
     except grpc.RpcError as exc:
         raise RuntimeErrorWrapper(
             f"GetTrackData failed: {exc.code().name} {exc.details()}"
+        ) from exc
+
+    assert isinstance(response, track_pb2.GetTrackDataResponse)
+    return response.track
+
+
+def fetch_track_data_direct(
+    api: RaceApi,
+    map_id: str,
+) -> track_pb2.TrackData:
+    if not map_id.strip():
+        raise RuntimeErrorWrapper(
+            "Standalone local race join returned empty map_id; cannot fetch track data."
+        )
+
+    request = track_pb2.GetTrackDataRequest(map_id=map_id)
+    try:
+        response = api.track.GetTrackData(  # type: ignore
+            request,
+            timeout=RPC_TIMEOUT_SECONDS,
+        )
+    except grpc.RpcError as exc:
+        raise RuntimeErrorWrapper(
+            f"GetTrackData (standalone local race) failed: {exc.code().name} {exc.details()}"
         ) from exc
 
     assert isinstance(response, track_pb2.GetTrackDataResponse)

@@ -9,7 +9,7 @@ import grpc
 
 from hackarena3.proto.hackarena.broker.v1 import broker_pb2
 from hackarena3.proto.hackarena.connect.v1 import connect_pb2, connect_pb2_grpc
-from hackarena3.proto.race.v1 import runtime_local_pb2
+from hackarena3.proto.race.v1 import runtime_local_pb2, runtime_local_race_pb2
 from hackarena3.runtime_common import (
     BROKER_GET_TEAM_BACKENDS_METHOD,
     RPC_TIMEOUT_SECONDS,
@@ -63,6 +63,13 @@ class DiscoveredSandbox:
 
 
 @dataclass(slots=True)
+class DiscoveredStandaloneRace:
+    race_id: str
+    race_name: str
+    endpoint: str
+
+
+@dataclass(slots=True)
 class BrokerApi:
     channel: grpc.Channel
     target: str
@@ -84,6 +91,54 @@ def create_broker_api(config: RuntimeConfig) -> BrokerApi:
             request_serializer=broker_pb2.GetTeamBackendsRequest.SerializeToString,
             response_deserializer=broker_pb2.GetTeamBackendsResponse.FromString,
         ),
+    )
+
+
+def discover_standalone_local_race(endpoint: str) -> DiscoveredStandaloneRace:
+    target = endpoint.strip()
+    if not target:
+        raise RuntimeErrorWrapper("Standalone local race endpoint is empty.")
+
+    channel = open_insecure_channel(target)
+    get_local_runtime_state = channel.unary_unary(
+        LOCAL_RUNTIME_STATE_METHOD,
+        request_serializer=runtime_local_pb2.GetLocalRuntimeStateRequest.SerializeToString,
+        response_deserializer=runtime_local_pb2.GetLocalRuntimeStateResponse.FromString,
+    )
+    try:
+        response = get_local_runtime_state(
+            runtime_local_pb2.GetLocalRuntimeStateRequest(),
+            timeout=RPC_TIMEOUT_SECONDS,
+        )
+    except grpc.RpcError as exc:
+        raise RuntimeErrorWrapper(
+            "Failed to query standalone local race runtime state: "
+            f"{exc.code().name} {exc.details() or 'no details'}"
+        ) from exc
+    finally:
+        channel.close()
+
+    state = response.state
+    if not state.HasField("active_race"):
+        raise RuntimeErrorWrapper(
+            "No joinable standalone local race is available. The active race must be in STAGING phase."
+        )
+
+    active_race = state.active_race
+    if int(active_race.phase) != int(runtime_local_race_pb2.LOCAL_RACE_PHASE_STAGING):
+        raise RuntimeErrorWrapper(
+            "No joinable standalone local race is available. The active race must be in STAGING phase."
+        )
+
+    race_id = active_race.race_id.strip()
+    if not race_id:
+        raise RuntimeErrorWrapper(
+            "No joinable standalone local race is available. The active race must be in STAGING phase."
+        )
+    return DiscoveredStandaloneRace(
+        race_id=race_id,
+        race_name=active_race.race_name,
+        endpoint=target,
     )
 
 
