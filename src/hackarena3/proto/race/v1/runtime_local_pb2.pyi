@@ -9,8 +9,9 @@ from google.protobuf import message as _message
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from hackarena3.proto.race.v1 import runtime_local_common_pb2 as _runtime_local_common_pb2
+from hackarena3.proto.race.v1 import runtime_local_race_pb2 as _runtime_local_race_pb2
 from hackarena3.proto.race.v1 import runtime_settings_pb2 as _runtime_settings_pb2
-from hackarena3.proto.weather.v1 import weather_pb2 as _weather_pb2
 import builtins as _builtins
 import sys
 import typing as _typing
@@ -21,28 +22,6 @@ else:
     from typing_extensions import TypeAlias as _TypeAlias
 
 DESCRIPTOR: _descriptor.FileDescriptor
-
-class _LocalTimeOfDayMode:
-    ValueType = _typing.NewType("ValueType", _builtins.int)
-    V: _TypeAlias = ValueType  # noqa: Y015
-
-class _LocalTimeOfDayModeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_LocalTimeOfDayMode.ValueType], _builtins.type):
-    DESCRIPTOR: _descriptor.EnumDescriptor
-    LOCAL_TIME_OF_DAY_MODE_UNSPECIFIED: _LocalTimeOfDayMode.ValueType  # 0
-    LOCAL_TIME_OF_DAY_MODE_FIXED_PRESET: _LocalTimeOfDayMode.ValueType  # 1
-    """Use fixed_preset from LocalTimeOfDaySettings."""
-    LOCAL_TIME_OF_DAY_MODE_AUTO_BY_LOCAL_TIME: _LocalTimeOfDayMode.ValueType  # 2
-    """Resolve preset from backend local system time."""
-
-class LocalTimeOfDayMode(_LocalTimeOfDayMode, metaclass=_LocalTimeOfDayModeEnumTypeWrapper):
-    """Local sandbox time-of-day resolution mode."""
-
-LOCAL_TIME_OF_DAY_MODE_UNSPECIFIED: LocalTimeOfDayMode.ValueType  # 0
-LOCAL_TIME_OF_DAY_MODE_FIXED_PRESET: LocalTimeOfDayMode.ValueType  # 1
-"""Use fixed_preset from LocalTimeOfDaySettings."""
-LOCAL_TIME_OF_DAY_MODE_AUTO_BY_LOCAL_TIME: LocalTimeOfDayMode.ValueType  # 2
-"""Resolve preset from backend local system time."""
-Global___LocalTimeOfDayMode: _TypeAlias = LocalTimeOfDayMode  # noqa: Y015
 
 class _LocalSandboxSpawnMode:
     ValueType = _typing.NewType("ValueType", _builtins.int)
@@ -75,50 +54,6 @@ LOCAL_SANDBOX_SPAWN_MODE_RANDOM_START_SLOT: LocalSandboxSpawnMode.ValueType  # 4
 Global___LocalSandboxSpawnMode: _TypeAlias = LocalSandboxSpawnMode  # noqa: Y015
 
 @_typing.final
-class LocalTimeOfDaySettings(_message.Message):
-    """Local sandbox time-of-day settings."""
-
-    DESCRIPTOR: _descriptor.Descriptor
-
-    MODE_FIELD_NUMBER: _builtins.int
-    FIXED_PRESET_FIELD_NUMBER: _builtins.int
-    mode: Global___LocalTimeOfDayMode.ValueType
-    fixed_preset: _runtime_settings_pb2.RuntimeTimeOfDayPreset.ValueType
-    """Used when mode is LOCAL_TIME_OF_DAY_MODE_FIXED_PRESET."""
-    def __init__(
-        self,
-        *,
-        mode: Global___LocalTimeOfDayMode.ValueType = ...,
-        fixed_preset: _runtime_settings_pb2.RuntimeTimeOfDayPreset.ValueType = ...,
-    ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["fixed_preset", b"fixed_preset", "mode", b"mode"]  # noqa: Y015
-    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-
-Global___LocalTimeOfDaySettings: _TypeAlias = LocalTimeOfDaySettings  # noqa: Y015
-
-@_typing.final
-class LocalWeatherSettings(_message.Message):
-    """Local sandbox weather settings."""
-
-    DESCRIPTOR: _descriptor.Descriptor
-
-    WEATHER_TYPE_FIELD_NUMBER: _builtins.int
-    TEMPERATURE_C_FIELD_NUMBER: _builtins.int
-    weather_type: _weather_pb2.WeatherType.ValueType
-    temperature_c: _builtins.int
-    """Air temperature in Celsius degrees."""
-    def __init__(
-        self,
-        *,
-        weather_type: _weather_pb2.WeatherType.ValueType = ...,
-        temperature_c: _builtins.int = ...,
-    ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["temperature_c", b"temperature_c", "weather_type", b"weather_type"]  # noqa: Y015
-    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-
-Global___LocalWeatherSettings: _TypeAlias = LocalWeatherSettings  # noqa: Y015
-
-@_typing.final
 class LocalSandboxConfigInput(_message.Message):
     """Local sandbox configuration payload."""
 
@@ -136,19 +71,19 @@ class LocalSandboxConfigInput(_message.Message):
     """Track/map identifier used by sandbox simulation."""
     spawn_mode: Global___LocalSandboxSpawnMode.ValueType
     @_builtins.property
-    def time_of_day(self) -> Global___LocalTimeOfDaySettings: ...
+    def time_of_day(self) -> _runtime_local_common_pb2.LocalTimeOfDaySettings: ...
     @_builtins.property
     def ghost_mode(self) -> _runtime_settings_pb2.GhostModeSettings: ...
     @_builtins.property
-    def weather(self) -> Global___LocalWeatherSettings: ...
+    def weather(self) -> _runtime_local_common_pb2.LocalWeatherSettings: ...
     def __init__(
         self,
         *,
         sandbox_name: _builtins.str = ...,
         map_id: _builtins.str = ...,
-        time_of_day: Global___LocalTimeOfDaySettings | None = ...,
+        time_of_day: _runtime_local_common_pb2.LocalTimeOfDaySettings | None = ...,
         ghost_mode: _runtime_settings_pb2.GhostModeSettings | None = ...,
-        weather: Global___LocalWeatherSettings | None = ...,
+        weather: _runtime_local_common_pb2.LocalWeatherSettings | None = ...,
         spawn_mode: Global___LocalSandboxSpawnMode.ValueType = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["ghost_mode", b"ghost_mode", "time_of_day", b"time_of_day", "weather", b"weather"]  # noqa: Y015
@@ -207,11 +142,11 @@ class LocalActiveSandboxRuntimeInfo(_message.Message):
     spawn_mode: Global___LocalSandboxSpawnMode.ValueType
     active_player_count: _builtins.int
     @_builtins.property
-    def time_of_day(self) -> Global___LocalTimeOfDaySettings: ...
+    def time_of_day(self) -> _runtime_local_common_pb2.LocalTimeOfDaySettings: ...
     @_builtins.property
     def ghost_mode(self) -> _runtime_settings_pb2.GhostModeSettings: ...
     @_builtins.property
-    def weather(self) -> Global___LocalWeatherSettings: ...
+    def weather(self) -> _runtime_local_common_pb2.LocalWeatherSettings: ...
     @_builtins.property
     def started_at_utc(self) -> _timestamp_pb2.Timestamp: ...
     def __init__(
@@ -221,9 +156,9 @@ class LocalActiveSandboxRuntimeInfo(_message.Message):
         sandbox_name: _builtins.str = ...,
         map_id: _builtins.str = ...,
         active_time_of_day_preset: _runtime_settings_pb2.RuntimeTimeOfDayPreset.ValueType = ...,
-        time_of_day: Global___LocalTimeOfDaySettings | None = ...,
+        time_of_day: _runtime_local_common_pb2.LocalTimeOfDaySettings | None = ...,
         ghost_mode: _runtime_settings_pb2.GhostModeSettings | None = ...,
-        weather: Global___LocalWeatherSettings | None = ...,
+        weather: _runtime_local_common_pb2.LocalWeatherSettings | None = ...,
         spawn_mode: Global___LocalSandboxSpawnMode.ValueType = ...,
         started_at_utc: _timestamp_pb2.Timestamp | None = ...,
         active_player_count: _builtins.int = ...,
@@ -244,6 +179,7 @@ class LocalRuntimeState(_message.Message):
     REVISION_FIELD_NUMBER: _builtins.int
     SERVER_TIME_UTC_FIELD_NUMBER: _builtins.int
     ACTIVE_SANDBOXES_FIELD_NUMBER: _builtins.int
+    ACTIVE_RACE_FIELD_NUMBER: _builtins.int
     revision: _builtins.int
     """Monotonic runtime revision used for optimistic concurrency."""
     @_builtins.property
@@ -252,16 +188,21 @@ class LocalRuntimeState(_message.Message):
 
     @_builtins.property
     def active_sandboxes(self) -> _containers.RepeatedCompositeFieldContainer[Global___LocalActiveSandboxRuntimeInfo]: ...
+    @_builtins.property
+    def active_race(self) -> _runtime_local_race_pb2.LocalRaceRuntimeInfo:
+        """Active standalone local race runtime. Unset when no local race is active."""
+
     def __init__(
         self,
         *,
         revision: _builtins.int = ...,
         server_time_utc: _timestamp_pb2.Timestamp | None = ...,
         active_sandboxes: _abc.Iterable[Global___LocalActiveSandboxRuntimeInfo] | None = ...,
+        active_race: _runtime_local_race_pb2.LocalRaceRuntimeInfo | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["server_time_utc", b"server_time_utc"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["active_race", b"active_race", "server_time_utc", b"server_time_utc"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_sandboxes", b"active_sandboxes", "revision", b"revision", "server_time_utc", b"server_time_utc"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["active_race", b"active_race", "active_sandboxes", b"active_sandboxes", "revision", b"revision", "server_time_utc", b"server_time_utc"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___LocalRuntimeState: _TypeAlias = LocalRuntimeState  # noqa: Y015
@@ -463,13 +404,13 @@ class UpdateLocalSandboxTimeOfDayRequest(_message.Message):
     """Must match current config revision, otherwise request is rejected."""
     sandbox_id: _builtins.str
     @_builtins.property
-    def time_of_day(self) -> Global___LocalTimeOfDaySettings: ...
+    def time_of_day(self) -> _runtime_local_common_pb2.LocalTimeOfDaySettings: ...
     def __init__(
         self,
         *,
         expected_revision: _builtins.int = ...,
         sandbox_id: _builtins.str = ...,
-        time_of_day: Global___LocalTimeOfDaySettings | None = ...,
+        time_of_day: _runtime_local_common_pb2.LocalTimeOfDaySettings | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["time_of_day", b"time_of_day"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
@@ -491,13 +432,13 @@ class UpdateLocalSandboxTimeOfDayResponse(_message.Message):
     """Monotonic config revision used for optimistic concurrency."""
     sandbox_id: _builtins.str
     @_builtins.property
-    def time_of_day(self) -> Global___LocalTimeOfDaySettings: ...
+    def time_of_day(self) -> _runtime_local_common_pb2.LocalTimeOfDaySettings: ...
     def __init__(
         self,
         *,
         revision: _builtins.int = ...,
         sandbox_id: _builtins.str = ...,
-        time_of_day: Global___LocalTimeOfDaySettings | None = ...,
+        time_of_day: _runtime_local_common_pb2.LocalTimeOfDaySettings | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["time_of_day", b"time_of_day"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
@@ -519,13 +460,13 @@ class UpdateLocalSandboxWeatherRequest(_message.Message):
     """Must match current config revision, otherwise request is rejected."""
     sandbox_id: _builtins.str
     @_builtins.property
-    def weather(self) -> Global___LocalWeatherSettings: ...
+    def weather(self) -> _runtime_local_common_pb2.LocalWeatherSettings: ...
     def __init__(
         self,
         *,
         expected_revision: _builtins.int = ...,
         sandbox_id: _builtins.str = ...,
-        weather: Global___LocalWeatherSettings | None = ...,
+        weather: _runtime_local_common_pb2.LocalWeatherSettings | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["weather", b"weather"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
@@ -547,13 +488,13 @@ class UpdateLocalSandboxWeatherResponse(_message.Message):
     """Monotonic config revision used for optimistic concurrency."""
     sandbox_id: _builtins.str
     @_builtins.property
-    def weather(self) -> Global___LocalWeatherSettings: ...
+    def weather(self) -> _runtime_local_common_pb2.LocalWeatherSettings: ...
     def __init__(
         self,
         *,
         revision: _builtins.int = ...,
         sandbox_id: _builtins.str = ...,
-        weather: Global___LocalWeatherSettings | None = ...,
+        weather: _runtime_local_common_pb2.LocalWeatherSettings | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["weather", b"weather"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...

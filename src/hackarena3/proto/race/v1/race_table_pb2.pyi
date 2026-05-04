@@ -69,6 +69,25 @@ class OfficialRaceTableTarget(_message.Message):
 Global___OfficialRaceTableTarget: _TypeAlias = OfficialRaceTableTarget  # noqa: Y015
 
 @_typing.final
+class LocalRaceTableTarget(_message.Message):
+    """Standalone local race target for race table query."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    RACE_ID_FIELD_NUMBER: _builtins.int
+    race_id: _builtins.str
+    """Target active local race identifier."""
+    def __init__(
+        self,
+        *,
+        race_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["race_id", b"race_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalRaceTableTarget: _TypeAlias = LocalRaceTableTarget  # noqa: Y015
+
+@_typing.final
 class RaceTableTarget(_message.Message):
     """Explicit race-table source target."""
 
@@ -76,21 +95,25 @@ class RaceTableTarget(_message.Message):
 
     SANDBOX_FIELD_NUMBER: _builtins.int
     OFFICIAL_RACE_FIELD_NUMBER: _builtins.int
+    LOCAL_RACE_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def sandbox(self) -> Global___SandboxRaceTableTarget: ...
     @_builtins.property
     def official_race(self) -> Global___OfficialRaceTableTarget: ...
+    @_builtins.property
+    def local_race(self) -> Global___LocalRaceTableTarget: ...
     def __init__(
         self,
         *,
         sandbox: Global___SandboxRaceTableTarget | None = ...,
         official_race: Global___OfficialRaceTableTarget | None = ...,
+        local_race: Global___LocalRaceTableTarget | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["sandbox", "official_race"]  # noqa: Y015
+    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["sandbox", "official_race", "local_race"]  # noqa: Y015
     _WhichOneofArgType_target: _TypeAlias = _typing.Literal["target", b"target"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_target) -> _WhichOneofReturnType_target | None: ...
 
@@ -122,6 +145,29 @@ class LocalBotIdentity(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___LocalBotIdentity: _TypeAlias = LocalBotIdentity  # noqa: Y015
+
+@_typing.final
+class LocalRaceParticipantIdentity(_message.Message):
+    """Identity for standalone local race participants."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    PARTICIPANT_INDEX_FIELD_NUMBER: _builtins.int
+    display_name: _builtins.str
+    """Display name provided when participant joined local race."""
+    participant_index: _builtins.int
+    """1-based participant index in local race join order."""
+    def __init__(
+        self,
+        *,
+        display_name: _builtins.str = ...,
+        participant_index: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["display_name", b"display_name", "participant_index", b"participant_index"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalRaceParticipantIdentity: _TypeAlias = LocalRaceParticipantIdentity  # noqa: Y015
 
 @_typing.final
 class TeamIdentity(_message.Message):
@@ -229,6 +275,56 @@ class OfficialRaceTableEntry(_message.Message):
 Global___OfficialRaceTableEntry: _TypeAlias = OfficialRaceTableEntry  # noqa: Y015
 
 @_typing.final
+class LocalRaceTableEntry(_message.Message):
+    """Single standalone local race table row."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CAR_ID_FIELD_NUMBER: _builtins.int
+    PARTICIPANT_FIELD_NUMBER: _builtins.int
+    POSITION_FIELD_NUMBER: _builtins.int
+    GAP_TO_LEADER_MS_FIELD_NUMBER: _builtins.int
+    LAPS_BEHIND_FIELD_NUMBER: _builtins.int
+    IN_PIT_FIELD_NUMBER: _builtins.int
+    STATUS_FIELD_NUMBER: _builtins.int
+    car_id: _builtins.int
+    """Vehicle identifier represented by this table row."""
+    position: _builtins.int
+    """1-based position in table ordering."""
+    gap_to_leader_ms: _builtins.int
+    """Time gap to current leader in milliseconds."""
+    laps_behind: _builtins.int
+    """Number of laps behind leader."""
+    in_pit: _builtins.bool
+    """True when entry vehicle is currently in pit."""
+    status: Global___RaceTableEntryStatus.ValueType
+    """Local race row status."""
+    @_builtins.property
+    def participant(self) -> Global___LocalRaceParticipantIdentity:
+        """Local race participant identity."""
+
+    def __init__(
+        self,
+        *,
+        car_id: _builtins.int = ...,
+        participant: Global___LocalRaceParticipantIdentity | None = ...,
+        position: _builtins.int = ...,
+        gap_to_leader_ms: _builtins.int | None = ...,
+        laps_behind: _builtins.int = ...,
+        in_pit: _builtins.bool = ...,
+        status: Global___RaceTableEntryStatus.ValueType = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_gap_to_leader_ms", b"_gap_to_leader_ms", "gap_to_leader_ms", b"gap_to_leader_ms", "participant", b"participant"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_gap_to_leader_ms", b"_gap_to_leader_ms", "car_id", b"car_id", "gap_to_leader_ms", b"gap_to_leader_ms", "in_pit", b"in_pit", "laps_behind", b"laps_behind", "participant", b"participant", "position", b"position", "status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__gap_to_leader_ms: _TypeAlias = _typing.Literal["gap_to_leader_ms"]  # noqa: Y015
+    _WhichOneofArgType__gap_to_leader_ms: _TypeAlias = _typing.Literal["_gap_to_leader_ms", b"_gap_to_leader_ms"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__gap_to_leader_ms) -> _WhichOneofReturnType__gap_to_leader_ms | None: ...
+
+Global___LocalRaceTableEntry: _TypeAlias = LocalRaceTableEntry  # noqa: Y015
+
+@_typing.final
 class SandboxRaceTableSnapshot(_message.Message):
     """Full sandbox race table snapshot.
     Rows are sorted by sandbox join time (oldest first).
@@ -290,6 +386,38 @@ class OfficialRaceTableSnapshot(_message.Message):
 Global___OfficialRaceTableSnapshot: _TypeAlias = OfficialRaceTableSnapshot  # noqa: Y015
 
 @_typing.final
+class LocalRaceTableSnapshot(_message.Message):
+    """Full standalone local race table snapshot.
+    Rows are sorted by backend classification:
+    - ACTIVE rows first (more completed laps first, then farther progress on current lap),
+    - then DNF rows.
+    Position field must match row order.
+    """
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TARGET_FIELD_NUMBER: _builtins.int
+    ENTRIES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def target(self) -> Global___LocalRaceTableTarget:
+        """Source target used to produce this snapshot."""
+
+    @_builtins.property
+    def entries(self) -> _containers.RepeatedCompositeFieldContainer[Global___LocalRaceTableEntry]: ...
+    def __init__(
+        self,
+        *,
+        target: Global___LocalRaceTableTarget | None = ...,
+        entries: _abc.Iterable[Global___LocalRaceTableEntry] | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["target", b"target"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["entries", b"entries", "target", b"target"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalRaceTableSnapshot: _TypeAlias = LocalRaceTableSnapshot  # noqa: Y015
+
+@_typing.final
 class RaceTableSnapshot(_message.Message):
     """Full race table snapshot."""
 
@@ -297,21 +425,25 @@ class RaceTableSnapshot(_message.Message):
 
     SANDBOX_FIELD_NUMBER: _builtins.int
     OFFICIAL_RACE_FIELD_NUMBER: _builtins.int
+    LOCAL_RACE_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def sandbox(self) -> Global___SandboxRaceTableSnapshot: ...
     @_builtins.property
     def official_race(self) -> Global___OfficialRaceTableSnapshot: ...
+    @_builtins.property
+    def local_race(self) -> Global___LocalRaceTableSnapshot: ...
     def __init__(
         self,
         *,
         sandbox: Global___SandboxRaceTableSnapshot | None = ...,
         official_race: Global___OfficialRaceTableSnapshot | None = ...,
+        local_race: Global___LocalRaceTableSnapshot | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "snapshot", b"snapshot"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "snapshot", b"snapshot"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "snapshot", b"snapshot"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "snapshot", b"snapshot"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_snapshot: _TypeAlias = _typing.Literal["sandbox", "official_race"]  # noqa: Y015
+    _WhichOneofReturnType_snapshot: _TypeAlias = _typing.Literal["sandbox", "official_race", "local_race"]  # noqa: Y015
     _WhichOneofArgType_snapshot: _TypeAlias = _typing.Literal["snapshot", b"snapshot"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_snapshot) -> _WhichOneofReturnType_snapshot | None: ...
 

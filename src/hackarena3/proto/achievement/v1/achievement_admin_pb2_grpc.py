@@ -37,6 +37,16 @@ class AchievementServiceAdminStub(object):
                 request_serializer=achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayRequest.SerializeToString,
                 response_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayResponse.FromString,
                 _registered_method=True)
+        self.GetAchievementGrants = channel.unary_unary(
+                '/achievement.v1.AchievementServiceAdmin/GetAchievementGrants',
+                request_serializer=achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsRequest.SerializeToString,
+                response_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsResponse.FromString,
+                _registered_method=True)
+        self.GetTeamStats = channel.unary_unary(
+                '/achievement.v1.AchievementServiceAdmin/GetTeamStats',
+                request_serializer=achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsRequest.SerializeToString,
+                response_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsResponse.FromString,
+                _registered_method=True)
 
 
 class AchievementServiceAdminServicer(object):
@@ -73,6 +83,20 @@ class AchievementServiceAdminServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAchievementGrants(self, request, context):
+        """Return all achievement grants
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetTeamStats(self, request, context):
+        """Return all team stats
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AchievementServiceAdminServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -95,6 +119,16 @@ def add_AchievementServiceAdminServicer_to_server(servicer, server):
                     servicer.UpdateAchievementDisplay,
                     request_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayRequest.FromString,
                     response_serializer=achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayResponse.SerializeToString,
+            ),
+            'GetAchievementGrants': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAchievementGrants,
+                    request_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsRequest.FromString,
+                    response_serializer=achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsResponse.SerializeToString,
+            ),
+            'GetTeamStats': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetTeamStats,
+                    request_deserializer=achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsRequest.FromString,
+                    response_serializer=achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -208,6 +242,60 @@ class AchievementServiceAdmin(object):
             '/achievement.v1.AchievementServiceAdmin/UpdateAchievementDisplay',
             achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayRequest.SerializeToString,
             achievement_dot_v1_dot_achievement__admin__pb2.UpdateAchievementDisplayResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetAchievementGrants(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/achievement.v1.AchievementServiceAdmin/GetAchievementGrants',
+            achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsRequest.SerializeToString,
+            achievement_dot_v1_dot_achievement__admin__pb2.GetAchievementGrantsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetTeamStats(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/achievement.v1.AchievementServiceAdmin/GetTeamStats',
+            achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsRequest.SerializeToString,
+            achievement_dot_v1_dot_achievement__admin__pb2.GetTeamStatsResponse.FromString,
             options,
             channel_credentials,
             insecure,

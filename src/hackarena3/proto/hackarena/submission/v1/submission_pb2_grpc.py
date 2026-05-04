@@ -29,6 +29,11 @@ class SubmissionServiceStub(object):
                 request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.SerializeToString,
                 response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.FromString,
                 _registered_method=True)
+        self.GetSubmissionLogs = channel.unary_unary(
+                '/submission.v1.SubmissionService/GetSubmissionLogs',
+                request_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsRequest.SerializeToString,
+                response_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsResponse.FromString,
+                _registered_method=True)
 
 
 class SubmissionServiceServicer(object):
@@ -55,6 +60,14 @@ class SubmissionServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetSubmissionLogs(self, request, context):
+        """Returns .tar.gz bytes containing build logs for all attempts of submission_id.
+        Returns NOT_FOUND when logs artifact does not exist for the submission.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_SubmissionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -72,6 +85,11 @@ def add_SubmissionServiceServicer_to_server(servicer, server):
                     servicer.GetSubmissionArchive,
                     request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.FromString,
                     response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.SerializeToString,
+            ),
+            'GetSubmissionLogs': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSubmissionLogs,
+                    request_deserializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsRequest.FromString,
+                    response_serializer=hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -155,6 +173,33 @@ class SubmissionService(object):
             '/submission.v1.SubmissionService/GetSubmissionArchive',
             hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveRequest.SerializeToString,
             hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionArchiveResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetSubmissionLogs(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/submission.v1.SubmissionService/GetSubmissionLogs',
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsRequest.SerializeToString,
+            hackarena_dot_submission_dot_v1_dot_submission__pb2.GetSubmissionLogsResponse.FromString,
             options,
             channel_credentials,
             insecure,

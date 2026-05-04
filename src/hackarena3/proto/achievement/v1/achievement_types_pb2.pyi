@@ -435,3 +435,65 @@ class NewAchievementDisplay(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___NewAchievementDisplay: _TypeAlias = NewAchievementDisplay  # noqa: Y015
+
+@_typing.final
+class AchievementGrant(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    ACHIEVEMENT_ID_FIELD_NUMBER: _builtins.int
+    GRANTED_AT_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team id"""
+    achievement_id: _builtins.str
+    """Represents achievement id"""
+    @_builtins.property
+    def granted_at(self) -> _timestamp_pb2.Timestamp:
+        """Real time of achievement grant"""
+
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+        achievement_id: _builtins.str = ...,
+        granted_at: _timestamp_pb2.Timestamp | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["granted_at", b"granted_at"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["achievement_id", b"achievement_id", "granted_at", b"granted_at", "team_id", b"team_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___AchievementGrant: _TypeAlias = AchievementGrant  # noqa: Y015
+
+@_typing.final
+class TeamStat(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_ID_FIELD_NUMBER: _builtins.int
+    TOTAL_DISTANCE_FIELD_NUMBER: _builtins.int
+    TOTAL_TIME_FIELD_NUMBER: _builtins.int
+    TOTAL_OVERTAKES_FIELD_NUMBER: _builtins.int
+    TOTAL_LAPS_FIELD_NUMBER: _builtins.int
+    team_id: _builtins.str
+    """Represents team id"""
+    total_distance: _builtins.int
+    """Represents total distance"""
+    total_time: _builtins.int
+    """Represents total time"""
+    total_overtakes: _builtins.int
+    """Represents total overtakes"""
+    total_laps: _builtins.int
+    """Represents total laps"""
+    def __init__(
+        self,
+        *,
+        team_id: _builtins.str = ...,
+        total_distance: _builtins.int = ...,
+        total_time: _builtins.int = ...,
+        total_overtakes: _builtins.int = ...,
+        total_laps: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_id", b"team_id", "total_distance", b"total_distance", "total_laps", b"total_laps", "total_overtakes", b"total_overtakes", "total_time", b"total_time"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___TeamStat: _TypeAlias = TeamStat  # noqa: Y015

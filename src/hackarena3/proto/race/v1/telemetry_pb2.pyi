@@ -18,6 +18,11 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import TypeAlias as _TypeAlias
 
+if sys.version_info >= (3, 13):
+    from warnings import deprecated as _deprecated
+else:
+    from typing_extensions import deprecated as _deprecated
+
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class _GhostModePhase:
@@ -313,23 +318,59 @@ class PitHistoryEntry(_message.Message):
     PIT_TIME_MS_FIELD_NUMBER: _builtins.int
     LAP_FIELD_NUMBER: _builtins.int
     SOURCE_FIELD_NUMBER: _builtins.int
-    NEW_TIRE_TYPE_FIELD_NUMBER: _builtins.int
+    TIRE_TYPE_AFTER_FIELD_NUMBER: _builtins.int
+    TIRE_TYPE_BEFORE_FIELD_NUMBER: _builtins.int
+    TIRE_WEAR_BEFORE_REPAIR_FIELD_NUMBER: _builtins.int
+    TIRE_TEMPERATURE_BEFORE_CELSIUS_FIELD_NUMBER: _builtins.int
+    TIRE_TEMPERATURE_AFTER_CELSIUS_FIELD_NUMBER: _builtins.int
+    BOT_SLOT_BEFORE_FIELD_NUMBER: _builtins.int
+    BOT_SLOT_AFTER_FIELD_NUMBER: _builtins.int
     pit_time_ms: _builtins.int
     """Timestamp (ms, Unix epoch UTC) when pit occurred."""
     lap: _builtins.int
     """Lap index at pit event."""
     source: Global___PitEntrySource.ValueType
-    new_tire_type: Global___TireType.ValueType
-    """Tire compound selected/applied in this pit."""
+    tire_type_after: Global___TireType.ValueType
+    """Tire compound after pit was completed."""
+    tire_type_before: Global___TireType.ValueType
+    """Tire compound before pit started.
+    If no tire compound change happened, this equals tire_type_after.
+    """
+    bot_slot_before: _builtins.int
+    """Active bot slot before pit, 1-based.
+    If slot did not change, this equals bot_slot_after.
+    """
+    bot_slot_after: _builtins.int
+    """Active bot slot after pit, 1-based."""
+    @_builtins.property
+    def tire_wear_before_repair(self) -> Global___TireWearPerWheel:
+        """Tire wear values captured immediately before pit repair/service."""
+
+    @_builtins.property
+    def tire_temperature_before_celsius(self) -> Global___TireTemperaturePerWheel:
+        """Tire temperatures captured immediately before pit service."""
+
+    @_builtins.property
+    def tire_temperature_after_celsius(self) -> Global___TireTemperaturePerWheel:
+        """Tire temperatures captured immediately after pit service."""
+
     def __init__(
         self,
         *,
         pit_time_ms: _builtins.int = ...,
         lap: _builtins.int = ...,
         source: Global___PitEntrySource.ValueType = ...,
-        new_tire_type: Global___TireType.ValueType = ...,
+        tire_type_after: Global___TireType.ValueType = ...,
+        tire_type_before: Global___TireType.ValueType = ...,
+        tire_wear_before_repair: Global___TireWearPerWheel | None = ...,
+        tire_temperature_before_celsius: Global___TireTemperaturePerWheel | None = ...,
+        tire_temperature_after_celsius: Global___TireTemperaturePerWheel | None = ...,
+        bot_slot_before: _builtins.int = ...,
+        bot_slot_after: _builtins.int = ...,
     ) -> None: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["lap", b"lap", "new_tire_type", b"new_tire_type", "pit_time_ms", b"pit_time_ms", "source", b"source"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["tire_temperature_after_celsius", b"tire_temperature_after_celsius", "tire_temperature_before_celsius", b"tire_temperature_before_celsius", "tire_wear_before_repair", b"tire_wear_before_repair"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["bot_slot_after", b"bot_slot_after", "bot_slot_before", b"bot_slot_before", "lap", b"lap", "pit_time_ms", b"pit_time_ms", "source", b"source", "tire_temperature_after_celsius", b"tire_temperature_after_celsius", "tire_temperature_before_celsius", b"tire_temperature_before_celsius", "tire_type_after", b"tire_type_after", "tire_type_before", b"tire_type_before", "tire_wear_before_repair", b"tire_wear_before_repair"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___PitHistoryEntry: _TypeAlias = PitHistoryEntry  # noqa: Y015
@@ -561,6 +602,10 @@ class FrontendCarFullState(_message.Message):
     INPUT_BRAKE_FIELD_NUMBER: _builtins.int
     CURRENT_BRAKE_BALANCER_FIELD_NUMBER: _builtins.int
     CURRENT_DIFFERENTIAL_LOCK_FIELD_NUMBER: _builtins.int
+    FRONTEND_NEXT_PIT_TIRE_OVERRIDE_FIELD_NUMBER: _builtins.int
+    CURRENT_LAP_ELAPSED_MS_FIELD_NUMBER: _builtins.int
+    LAST_LAP_TIME_MS_FIELD_NUMBER: _builtins.int
+    BEST_LAP_TIME_MS_FIELD_NUMBER: _builtins.int
     car_id: _builtins.int
     input_throttle: _builtins.float
     """Current bot throttle input used for spectator UI."""
@@ -570,6 +615,26 @@ class FrontendCarFullState(_message.Message):
     """Current brake balancer value used for spectator UI."""
     current_differential_lock: _builtins.float
     """Current differential lock value used for spectator UI."""
+    frontend_next_pit_tire_override: Global___TireType.ValueType
+    """Frontend-selected tire override for next pit stop.
+    UNSPECIFIED means auto mode (no frontend override).
+    Effective pit tire is:
+    - this override when value is HARD/SOFT/WET,
+    - otherwise telemetry.next_pit_tire_type (bot selection).
+    """
+    current_lap_elapsed_ms: _builtins.int
+    """Elapsed time of currently active lap in milliseconds.
+    Set for official race, local race, and official sandbox only when lap is active.
+    Unset before first lap starts and for local sandbox target.
+    """
+    last_lap_time_ms: _builtins.int
+    """Time of the most recently completed lap in milliseconds.
+    Unset until first completed lap.
+    """
+    best_lap_time_ms: _builtins.int
+    """Best completed lap time in milliseconds within current runtime session.
+    Unset until first completed lap.
+    """
     @_builtins.property
     def kinematics(self) -> Global___CarKinematics: ...
     @_builtins.property
@@ -587,11 +652,27 @@ class FrontendCarFullState(_message.Message):
         input_brake: _builtins.float = ...,
         current_brake_balancer: _builtins.float = ...,
         current_differential_lock: _builtins.float = ...,
+        frontend_next_pit_tire_override: Global___TireType.ValueType = ...,
+        current_lap_elapsed_ms: _builtins.int | None = ...,
+        last_lap_time_ms: _builtins.int | None = ...,
+        best_lap_time_ms: _builtins.int | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["kinematics", b"kinematics", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_best_lap_time_ms", b"_best_lap_time_ms", "_current_lap_elapsed_ms", b"_current_lap_elapsed_ms", "_last_lap_time_ms", b"_last_lap_time_ms", "best_lap_time_ms", b"best_lap_time_ms", "current_lap_elapsed_ms", b"current_lap_elapsed_ms", "kinematics", b"kinematics", "last_lap_time_ms", b"last_lap_time_ms", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "current_brake_balancer", b"current_brake_balancer", "current_differential_lock", b"current_differential_lock", "input_brake", b"input_brake", "input_throttle", b"input_throttle", "kinematics", b"kinematics", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_best_lap_time_ms", b"_best_lap_time_ms", "_current_lap_elapsed_ms", b"_current_lap_elapsed_ms", "_last_lap_time_ms", b"_last_lap_time_ms", "best_lap_time_ms", b"best_lap_time_ms", "car_id", b"car_id", "current_brake_balancer", b"current_brake_balancer", "current_differential_lock", b"current_differential_lock", "current_lap_elapsed_ms", b"current_lap_elapsed_ms", "frontend_next_pit_tire_override", b"frontend_next_pit_tire_override", "input_brake", b"input_brake", "input_throttle", b"input_throttle", "kinematics", b"kinematics", "last_lap_time_ms", b"last_lap_time_ms", "render", b"render", "telemetry", b"telemetry"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__best_lap_time_ms: _TypeAlias = _typing.Literal["best_lap_time_ms"]  # noqa: Y015
+    _WhichOneofArgType__best_lap_time_ms: _TypeAlias = _typing.Literal["_best_lap_time_ms", b"_best_lap_time_ms"]  # noqa: Y015
+    _WhichOneofReturnType__current_lap_elapsed_ms: _TypeAlias = _typing.Literal["current_lap_elapsed_ms"]  # noqa: Y015
+    _WhichOneofArgType__current_lap_elapsed_ms: _TypeAlias = _typing.Literal["_current_lap_elapsed_ms", b"_current_lap_elapsed_ms"]  # noqa: Y015
+    _WhichOneofReturnType__last_lap_time_ms: _TypeAlias = _typing.Literal["last_lap_time_ms"]  # noqa: Y015
+    _WhichOneofArgType__last_lap_time_ms: _TypeAlias = _typing.Literal["_last_lap_time_ms", b"_last_lap_time_ms"]  # noqa: Y015
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__best_lap_time_ms) -> _WhichOneofReturnType__best_lap_time_ms | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__current_lap_elapsed_ms) -> _WhichOneofReturnType__current_lap_elapsed_ms | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__last_lap_time_ms) -> _WhichOneofReturnType__last_lap_time_ms | None: ...
 
 Global___FrontendCarFullState: _TypeAlias = FrontendCarFullState  # noqa: Y015
 
@@ -626,9 +707,42 @@ class FrontendSpectatorSnapshot(_message.Message):
     SERVER_TIME_MS_FIELD_NUMBER: _builtins.int
     CARS_FIELD_NUMBER: _builtins.int
     DEBUG_FIELD_NUMBER: _builtins.int
+    RUNTIME_ELAPSED_SEC_FIELD_NUMBER: _builtins.int
+    OFFICIAL_RACE_LEADER_COMPLETED_LAPS_FIELD_NUMBER: _builtins.int
+    RUNTIME_REMAINING_SEC_FIELD_NUMBER: _builtins.int
+    RACE_LEADER_COMPLETED_LAPS_FIELD_NUMBER: _builtins.int
     tick: _builtins.int
     server_time_ms: _builtins.int
     """Milliseconds since Unix epoch (UTC)."""
+    runtime_elapsed_sec: _builtins.float
+    """Elapsed runtime time in seconds.
+    Set for local sandbox, official sandbox, and local race targets.
+    """
+    @_builtins.property
+    @_deprecated("""This field has been marked as deprecated using proto field options.""")
+    def official_race_leader_completed_laps(self) -> _builtins.int:
+        """Current completed lap count of official race leader.
+        Deprecated: use race_leader_completed_laps instead.
+        During migration, official race snapshots should set both fields to the same value.
+        """
+
+    @official_race_leader_completed_laps.setter
+    @_deprecated("""This field has been marked as deprecated using proto field options.""")
+    def official_race_leader_completed_laps(self, value: _builtins.int) -> None:
+        """Current completed lap count of official race leader.
+        Deprecated: use race_leader_completed_laps instead.
+        During migration, official race snapshots should set both fields to the same value.
+        """
+
+    runtime_remaining_sec: _builtins.float
+    """Remaining runtime time in seconds.
+    Set for official race and local race targets, and optionally for official sandbox target
+    when planned sandbox shutdown time is defined.
+    """
+    race_leader_completed_laps: _builtins.int
+    """Current completed lap count of active race leader.
+    Set for official race and local race targets.
+    """
     @_builtins.property
     def cars(self) -> _containers.RepeatedCompositeFieldContainer[Global___FrontendCarFullState]: ...
     @_builtins.property
@@ -642,11 +756,31 @@ class FrontendSpectatorSnapshot(_message.Message):
         server_time_ms: _builtins.int = ...,
         cars: _abc.Iterable[Global___FrontendCarFullState] | None = ...,
         debug: Global___FrontendSpectatorDebugInfo | None = ...,
+        runtime_elapsed_sec: _builtins.float | None = ...,
+        official_race_leader_completed_laps: _builtins.int | None = ...,
+        runtime_remaining_sec: _builtins.float | None = ...,
+        race_leader_completed_laps: _builtins.int | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["debug", b"debug"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_official_race_leader_completed_laps", b"_official_race_leader_completed_laps", "_race_leader_completed_laps", b"_race_leader_completed_laps", "_runtime_elapsed_sec", b"_runtime_elapsed_sec", "_runtime_remaining_sec", b"_runtime_remaining_sec", "debug", b"debug", "official_race_leader_completed_laps", b"official_race_leader_completed_laps", "race_leader_completed_laps", b"race_leader_completed_laps", "runtime_elapsed_sec", b"runtime_elapsed_sec", "runtime_remaining_sec", b"runtime_remaining_sec"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["cars", b"cars", "debug", b"debug", "server_time_ms", b"server_time_ms", "tick", b"tick"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_official_race_leader_completed_laps", b"_official_race_leader_completed_laps", "_race_leader_completed_laps", b"_race_leader_completed_laps", "_runtime_elapsed_sec", b"_runtime_elapsed_sec", "_runtime_remaining_sec", b"_runtime_remaining_sec", "cars", b"cars", "debug", b"debug", "official_race_leader_completed_laps", b"official_race_leader_completed_laps", "race_leader_completed_laps", b"race_leader_completed_laps", "runtime_elapsed_sec", b"runtime_elapsed_sec", "runtime_remaining_sec", b"runtime_remaining_sec", "server_time_ms", b"server_time_ms", "tick", b"tick"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__official_race_leader_completed_laps: _TypeAlias = _typing.Literal["official_race_leader_completed_laps"]  # noqa: Y015
+    _WhichOneofArgType__official_race_leader_completed_laps: _TypeAlias = _typing.Literal["_official_race_leader_completed_laps", b"_official_race_leader_completed_laps"]  # noqa: Y015
+    _WhichOneofReturnType__race_leader_completed_laps: _TypeAlias = _typing.Literal["race_leader_completed_laps"]  # noqa: Y015
+    _WhichOneofArgType__race_leader_completed_laps: _TypeAlias = _typing.Literal["_race_leader_completed_laps", b"_race_leader_completed_laps"]  # noqa: Y015
+    _WhichOneofReturnType__runtime_elapsed_sec: _TypeAlias = _typing.Literal["runtime_elapsed_sec"]  # noqa: Y015
+    _WhichOneofArgType__runtime_elapsed_sec: _TypeAlias = _typing.Literal["_runtime_elapsed_sec", b"_runtime_elapsed_sec"]  # noqa: Y015
+    _WhichOneofReturnType__runtime_remaining_sec: _TypeAlias = _typing.Literal["runtime_remaining_sec"]  # noqa: Y015
+    _WhichOneofArgType__runtime_remaining_sec: _TypeAlias = _typing.Literal["_runtime_remaining_sec", b"_runtime_remaining_sec"]  # noqa: Y015
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__official_race_leader_completed_laps) -> _WhichOneofReturnType__official_race_leader_completed_laps | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__race_leader_completed_laps) -> _WhichOneofReturnType__race_leader_completed_laps | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__runtime_elapsed_sec) -> _WhichOneofReturnType__runtime_elapsed_sec | None: ...
+    @_typing.overload
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__runtime_remaining_sec) -> _WhichOneofReturnType__runtime_remaining_sec | None: ...
 
 Global___FrontendSpectatorSnapshot: _TypeAlias = FrontendSpectatorSnapshot  # noqa: Y015
 

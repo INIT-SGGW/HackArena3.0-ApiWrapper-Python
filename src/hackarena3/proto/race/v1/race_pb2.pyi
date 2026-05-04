@@ -245,6 +245,60 @@ class LocalSandboxJoinResponse(_message.Message):
 Global___LocalSandboxJoinResponse: _TypeAlias = LocalSandboxJoinResponse  # noqa: Y015
 
 @_typing.final
+class LocalRaceJoinRequest(_message.Message):
+    """Request for joining an active standalone local race."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    RACE_ID_FIELD_NUMBER: _builtins.int
+    DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    race_id: _builtins.str
+    """Target active local race identifier."""
+    display_name: _builtins.str
+    """Display name shown in local race UI/table."""
+    def __init__(
+        self,
+        *,
+        race_id: _builtins.str = ...,
+        display_name: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["display_name", b"display_name", "race_id", b"race_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalRaceJoinRequest: _TypeAlias = LocalRaceJoinRequest  # noqa: Y015
+
+@_typing.final
+class LocalRaceJoinResponse(_message.Message):
+    """Join response with assigned local race participant vehicle data."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    CAR_ID_FIELD_NUMBER: _builtins.int
+    RACE_ID_FIELD_NUMBER: _builtins.int
+    MAP_ID_FIELD_NUMBER: _builtins.int
+    PARTICIPANT_INDEX_FIELD_NUMBER: _builtins.int
+    car_id: _builtins.int
+    """Assigned participant vehicle identifier."""
+    race_id: _builtins.str
+    """Joined local race identifier."""
+    map_id: _builtins.str
+    """Map identifier of the joined local race session."""
+    participant_index: _builtins.int
+    """1-based participant index in local race join order."""
+    def __init__(
+        self,
+        *,
+        car_id: _builtins.int = ...,
+        race_id: _builtins.str = ...,
+        map_id: _builtins.str = ...,
+        participant_index: _builtins.int = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["car_id", b"car_id", "map_id", b"map_id", "participant_index", b"participant_index", "race_id", b"race_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___LocalRaceJoinResponse: _TypeAlias = LocalRaceJoinResponse  # noqa: Y015
+
+@_typing.final
 class QuickJoinDevRequest(_message.Message):
     """Development-only quick join request for entering an active sandbox session."""
 
@@ -495,7 +549,10 @@ Global___ParticipantEmergencyPitstopCommand: _TypeAlias = ParticipantEmergencyPi
 
 @_typing.final
 class ParticipantSetNextPitTireTypeCommand(_message.Message):
-    """One-shot command setting tire compound for the next pit stop."""
+    """One-shot command setting bot tire preference for the next pit stop.
+    This setting is independent from frontend override.
+    When frontend override is set, frontend value has priority.
+    """
 
     DESCRIPTOR: _descriptor.Descriptor
 
@@ -782,6 +839,25 @@ class SpectatorOfficialRaceTarget(_message.Message):
 Global___SpectatorOfficialRaceTarget: _TypeAlias = SpectatorOfficialRaceTarget  # noqa: Y015
 
 @_typing.final
+class SpectatorLocalRaceTarget(_message.Message):
+    """Spectator target for streaming an active standalone local race."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    RACE_ID_FIELD_NUMBER: _builtins.int
+    race_id: _builtins.str
+    """Target active local race identifier."""
+    def __init__(
+        self,
+        *,
+        race_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["race_id", b"race_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___SpectatorLocalRaceTarget: _TypeAlias = SpectatorLocalRaceTarget  # noqa: Y015
+
+@_typing.final
 class GetFrontendSpectatorRequest(_message.Message):
     """Request for frontend spectator stream configuration."""
 
@@ -791,6 +867,7 @@ class GetFrontendSpectatorRequest(_message.Message):
     REQUESTED_VIEW_FIELD_NUMBER: _builtins.int
     SANDBOX_FIELD_NUMBER: _builtins.int
     OFFICIAL_RACE_FIELD_NUMBER: _builtins.int
+    LOCAL_RACE_FIELD_NUMBER: _builtins.int
     INCLUDE_DEBUG_FIELD_NUMBER: _builtins.int
     requested_hz: _builtins.int
     """Requested stream frequency for spectator updates."""
@@ -808,6 +885,10 @@ class GetFrontendSpectatorRequest(_message.Message):
     def official_race(self) -> Global___SpectatorOfficialRaceTarget:
         """Stream the active official race."""
 
+    @_builtins.property
+    def local_race(self) -> Global___SpectatorLocalRaceTarget:
+        """Stream the selected active standalone local race."""
+
     def __init__(
         self,
         *,
@@ -815,13 +896,14 @@ class GetFrontendSpectatorRequest(_message.Message):
         requested_view: Global___SpectatorView.ValueType = ...,
         sandbox: Global___SpectatorSandboxTarget | None = ...,
         official_race: Global___SpectatorOfficialRaceTarget | None = ...,
+        local_race: Global___SpectatorLocalRaceTarget | None = ...,
         include_debug: _builtins.bool = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_debug", b"include_debug", "official_race", b"official_race", "requested_hz", b"requested_hz", "requested_view", b"requested_view", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["include_debug", b"include_debug", "local_race", b"local_race", "official_race", b"official_race", "requested_hz", b"requested_hz", "requested_view", b"requested_view", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["sandbox", "official_race"]  # noqa: Y015
+    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["sandbox", "official_race", "local_race"]  # noqa: Y015
     _WhichOneofArgType_target: _TypeAlias = _typing.Literal["target", b"target"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_target) -> _WhichOneofReturnType_target | None: ...
 
@@ -1006,6 +1088,10 @@ class SetNextPitTireTypeRequest(_message.Message):
 
     NEXT_TIRE_TYPE_FIELD_NUMBER: _builtins.int
     next_tire_type: _telemetry_pb2.TireType.ValueType
+    """Frontend override for next pit tire.
+    UNSPECIFIED enables auto mode (no frontend override), so bot selection is used.
+    HARD/SOFT/WET enforce frontend-selected tire type.
+    """
     def __init__(
         self,
         *,

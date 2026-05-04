@@ -96,10 +96,16 @@ class TeamMember(_message.Message):
     ID_FIELD_NUMBER: _builtins.int
     IS_LEADER_FIELD_NUMBER: _builtins.int
     STATUS_FIELD_NUMBER: _builtins.int
+    DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    PREFERRED_USERNAME_FIELD_NUMBER: _builtins.int
     is_leader: _builtins.bool
     """Leader flag."""
     status: Global___TeamMemberStatus.ValueType
     """Membership status."""
+    display_name: _builtins.str
+    """Display name."""
+    preferred_username: _builtins.str
+    """Username-like identifier."""
     @_builtins.property
     def id(self) -> _types_pb2.Uuid:
         """User identifier."""
@@ -110,10 +116,12 @@ class TeamMember(_message.Message):
         id: _types_pb2.Uuid | None = ...,
         is_leader: _builtins.bool = ...,
         status: Global___TeamMemberStatus.ValueType = ...,
+        display_name: _builtins.str = ...,
+        preferred_username: _builtins.str = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["id", b"id"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "is_leader", b"is_leader", "status", b"status"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["display_name", b"display_name", "id", b"id", "is_leader", b"is_leader", "preferred_username", b"preferred_username", "status", b"status"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___TeamMember: _TypeAlias = TeamMember  # noqa: Y015

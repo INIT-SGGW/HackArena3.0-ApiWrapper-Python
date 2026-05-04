@@ -433,6 +433,38 @@ class GetSubmissionArchiveResponse(_message.Message):
 Global___GetSubmissionArchiveResponse: _TypeAlias = GetSubmissionArchiveResponse  # noqa: Y015
 
 @_typing.final
+class GetSubmissionLogsRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    SUBMISSION_ID_FIELD_NUMBER: _builtins.int
+    submission_id: _builtins.str
+    def __init__(
+        self,
+        *,
+        submission_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["submission_id", b"submission_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetSubmissionLogsRequest: _TypeAlias = GetSubmissionLogsRequest  # noqa: Y015
+
+@_typing.final
+class GetSubmissionLogsResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    BUILD_LOGS_TAR_GZ_FIELD_NUMBER: _builtins.int
+    build_logs_tar_gz: _builtins.bytes
+    def __init__(
+        self,
+        *,
+        build_logs_tar_gz: _builtins.bytes = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["build_logs_tar_gz", b"build_logs_tar_gz"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetSubmissionLogsResponse: _TypeAlias = GetSubmissionLogsResponse  # noqa: Y015
+
+@_typing.final
 class SlotDto(_message.Message):
     DESCRIPTOR: _descriptor.Descriptor
 

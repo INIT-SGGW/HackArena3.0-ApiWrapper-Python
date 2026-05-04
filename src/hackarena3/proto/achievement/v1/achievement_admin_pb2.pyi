@@ -270,3 +270,57 @@ class UpdateAchievementDisplayResponse(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___UpdateAchievementDisplayResponse: _TypeAlias = UpdateAchievementDisplayResponse  # noqa: Y015
+
+@_typing.final
+class GetAchievementGrantsRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___GetAchievementGrantsRequest: _TypeAlias = GetAchievementGrantsRequest  # noqa: Y015
+
+@_typing.final
+class GetAchievementGrantsResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    GRANTS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def grants(self) -> _containers.RepeatedCompositeFieldContainer[_achievement_types_pb2.AchievementGrant]: ...
+    def __init__(
+        self,
+        *,
+        grants: _abc.Iterable[_achievement_types_pb2.AchievementGrant] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["grants", b"grants"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetAchievementGrantsResponse: _TypeAlias = GetAchievementGrantsResponse  # noqa: Y015
+
+@_typing.final
+class GetTeamStatsRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+Global___GetTeamStatsRequest: _TypeAlias = GetTeamStatsRequest  # noqa: Y015
+
+@_typing.final
+class GetTeamStatsResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    TEAM_STATS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def team_stats(self) -> _containers.RepeatedCompositeFieldContainer[_achievement_types_pb2.TeamStat]: ...
+    def __init__(
+        self,
+        *,
+        team_stats: _abc.Iterable[_achievement_types_pb2.TeamStat] | None = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["team_stats", b"team_stats"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___GetTeamStatsResponse: _TypeAlias = GetTeamStatsResponse  # noqa: Y015

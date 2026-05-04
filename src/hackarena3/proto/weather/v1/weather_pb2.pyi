@@ -208,6 +208,25 @@ class WeatherOfficialRaceTarget(_message.Message):
 Global___WeatherOfficialRaceTarget: _TypeAlias = WeatherOfficialRaceTarget  # noqa: Y015
 
 @_typing.final
+class WeatherLocalRaceTarget(_message.Message):
+    """Weather target for active standalone local race session."""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    RACE_ID_FIELD_NUMBER: _builtins.int
+    race_id: _builtins.str
+    """Target active local race identifier."""
+    def __init__(
+        self,
+        *,
+        race_id: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["race_id", b"race_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___WeatherLocalRaceTarget: _TypeAlias = WeatherLocalRaceTarget  # noqa: Y015
+
+@_typing.final
 class WeatherTarget(_message.Message):
     """Explicit weather source target.
     Exactly one target must be set.
@@ -217,21 +236,25 @@ class WeatherTarget(_message.Message):
 
     OFFICIAL_RACE_FIELD_NUMBER: _builtins.int
     SANDBOX_FIELD_NUMBER: _builtins.int
+    LOCAL_RACE_FIELD_NUMBER: _builtins.int
     @_builtins.property
     def official_race(self) -> Global___WeatherOfficialRaceTarget: ...
     @_builtins.property
     def sandbox(self) -> Global___WeatherSandboxTarget: ...
+    @_builtins.property
+    def local_race(self) -> Global___WeatherLocalRaceTarget: ...
     def __init__(
         self,
         *,
         official_race: Global___WeatherOfficialRaceTarget | None = ...,
         sandbox: Global___WeatherSandboxTarget | None = ...,
+        local_race: Global___WeatherLocalRaceTarget | None = ...,
     ) -> None: ...
-    _HasFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _HasFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["local_race", b"local_race", "official_race", b"official_race", "sandbox", b"sandbox", "target", b"target"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
-    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["official_race", "sandbox"]  # noqa: Y015
+    _WhichOneofReturnType_target: _TypeAlias = _typing.Literal["official_race", "sandbox", "local_race"]  # noqa: Y015
     _WhichOneofArgType_target: _TypeAlias = _typing.Literal["target", b"target"]  # noqa: Y015
     def WhichOneof(self, oneof_group: _WhichOneofArgType_target) -> _WhichOneofReturnType_target | None: ...
 
