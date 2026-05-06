@@ -70,6 +70,15 @@ class DiscoveredStandaloneRace:
 
 
 @dataclass(slots=True)
+class DiscoveredStandaloneSandbox:
+    sandbox_id: str
+    sandbox_name: str
+    map_id: str
+    active_player_count: int
+    endpoint: str
+
+
+@dataclass(slots=True)
 class BrokerApi:
     channel: grpc.Channel
     target: str
@@ -140,6 +149,46 @@ def discover_standalone_local_race(endpoint: str) -> DiscoveredStandaloneRace:
         race_name=active_race.race_name,
         endpoint=target,
     )
+
+
+def discover_standalone_local_sandboxes(
+    endpoint: str,
+) -> list[DiscoveredStandaloneSandbox]:
+    target = endpoint.strip()
+    if not target:
+        raise RuntimeErrorWrapper("Standalone local sandbox endpoint is empty.")
+
+    channel = open_insecure_channel(target)
+    get_local_runtime_state = channel.unary_unary(
+        LOCAL_RUNTIME_STATE_METHOD,
+        request_serializer=runtime_local_pb2.GetLocalRuntimeStateRequest.SerializeToString,
+        response_deserializer=runtime_local_pb2.GetLocalRuntimeStateResponse.FromString,
+    )
+    try:
+        response = get_local_runtime_state(
+            runtime_local_pb2.GetLocalRuntimeStateRequest(),
+            timeout=RPC_TIMEOUT_SECONDS,
+        )
+    except grpc.RpcError as exc:
+        raise RuntimeErrorWrapper(
+            "Failed to query standalone local sandbox runtime state: "
+            f"{exc.code().name} {exc.details() or 'no details'}"
+        ) from exc
+    finally:
+        channel.close()
+
+    discovered: list[DiscoveredStandaloneSandbox] = []
+    for sandbox in response.state.active_sandboxes:
+        discovered.append(
+            DiscoveredStandaloneSandbox(
+                sandbox_id=sandbox.sandbox_id,
+                sandbox_name=sandbox.sandbox_name,
+                map_id=sandbox.map_id,
+                active_player_count=int(sandbox.active_player_count),
+                endpoint=target,
+            )
+        )
+    return discovered
 
 
 def _fetch_team_backends(
@@ -380,6 +429,61 @@ def choose_sandbox(
 
     while True:
         raw = input(f"Select sandbox [1-{len(discovered)}] (default 1): ").strip()
+        if not raw:
+            return discovered[0]
+        try:
+            index = int(raw)
+        except ValueError:
+            print("[ha3-wrapper] Invalid number. Try again.")
+            continue
+        if 1 <= index <= len(discovered):
+            return discovered[index - 1]
+        print("[ha3-wrapper] Selection out of range. Try again.")
+
+
+def choose_standalone_local_sandbox(
+    discovered: list[DiscoveredStandaloneSandbox],
+    sandbox_id: str | None = None,
+) -> DiscoveredStandaloneSandbox:
+    if not discovered:
+        raise RuntimeErrorWrapper("No active standalone local sandboxes found.")
+
+    configured_sandbox_id = str(sandbox_id or "").strip()
+    if configured_sandbox_id:
+        selected = next(
+            (item for item in discovered if item.sandbox_id == configured_sandbox_id),
+            None,
+        )
+        if selected is None:
+            available = ", ".join(item.sandbox_id for item in discovered)
+            raise RuntimeErrorWrapper(
+                f"Standalone local sandbox --sandbox_id={configured_sandbox_id!r} not found in active sandboxes. "
+                f"Available sandbox IDs: {available}"
+            )
+        return selected
+
+    if len(discovered) == 1:
+        return discovered[0]
+
+    print("[ha3-wrapper] Active standalone local sandboxes:")
+    for idx, entry in enumerate(discovered, start=1):
+        print(
+            f"[ha3-wrapper] {idx}. {entry.sandbox_name} | id={entry.sandbox_id} "
+            f"| map={entry.map_id} | players={entry.active_player_count} "
+            f"| endpoint={entry.endpoint}"
+        )
+
+    if not sys.stdin.isatty():
+        available = ", ".join(item.sandbox_id for item in discovered)
+        raise RuntimeErrorWrapper(
+            "Standalone local sandbox mode requires --sandbox_id when multiple active sandboxes are available. "
+            f"Available sandbox IDs: {available}"
+        )
+
+    while True:
+        raw = input(
+            f"Select standalone local sandbox [1-{len(discovered)}] (default 1): "
+        ).strip()
         if not raw:
             return discovered[0]
         try:

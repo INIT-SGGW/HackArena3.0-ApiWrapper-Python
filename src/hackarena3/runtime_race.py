@@ -83,13 +83,13 @@ def race_metadata_official(
     )
 
 
-def race_metadata_standalone(
+def direct_runtime_metadata(
     car_id: int,
 ) -> tuple[tuple[str, str], ...]:
     selected_car_id = int(car_id)
     if selected_car_id <= 0:
         raise RuntimeErrorWrapper(
-            "Standalone local race join returned invalid car_id; cannot build stream metadata."
+            "Standalone runtime join returned invalid car_id; cannot build stream metadata."
         )
     return (("x-ha3-car-id", str(selected_car_id)),)
 
@@ -171,6 +171,35 @@ def local_race_join(
     return response
 
 
+def local_sandbox_join_direct(
+    api: RaceApi,
+    *,
+    sandbox_id: str,
+) -> race_pb2.LocalSandboxJoinResponse:
+    selected_sandbox_id = sandbox_id.strip()
+    if not selected_sandbox_id:
+        raise RuntimeErrorWrapper(
+            "Standalone local sandbox discovery returned empty sandbox_id; cannot join."
+        )
+
+    try:
+        response = api.participant.LocalSandboxJoin(  # type: ignore
+            race_pb2.LocalSandboxJoinRequest(sandbox_id=selected_sandbox_id),
+            timeout=RPC_TIMEOUT_SECONDS,
+        )
+    except grpc.RpcError as exc:
+        if exc.code() == grpc.StatusCode.UNIMPLEMENTED:
+            raise RuntimeErrorWrapper(
+                "Standalone local sandbox join is unavailable (UNIMPLEMENTED). Check backend/api compatibility."
+            ) from exc
+        raise RuntimeErrorWrapper(
+            f"Standalone local sandbox join failed: {exc.code().name} {exc.details()}"
+        ) from exc
+
+    assert isinstance(response, race_pb2.LocalSandboxJoinResponse)
+    return response
+
+
 def fetch_track_data(
     api: RaceApi,
     token_provider: GameTokenProvider,
@@ -200,10 +229,12 @@ def fetch_track_data(
 def fetch_track_data_direct(
     api: RaceApi,
     map_id: str,
+    *,
+    context_label: str = "standalone runtime",
 ) -> track_pb2.TrackData:
     if not map_id.strip():
         raise RuntimeErrorWrapper(
-            "Standalone local race join returned empty map_id; cannot fetch track data."
+            f"{context_label} join returned empty map_id; cannot fetch track data."
         )
 
     request = track_pb2.GetTrackDataRequest(map_id=map_id)
@@ -214,7 +245,7 @@ def fetch_track_data_direct(
         )
     except grpc.RpcError as exc:
         raise RuntimeErrorWrapper(
-            f"GetTrackData (standalone local race) failed: {exc.code().name} {exc.details()}"
+            f"GetTrackData ({context_label}) failed: {exc.code().name} {exc.details()}"
         ) from exc
 
     assert isinstance(response, track_pb2.GetTrackDataResponse)

@@ -30,7 +30,9 @@ class OfficialRuntimeConfig:
 @dataclass(frozen=True, slots=True)
 class StandaloneRuntimeConfig:
     grpc_target: str
-    display_name: str
+    mode: str
+    display_name: str = ""
+    sandbox_id: str | None = None
 
 
 def _strip_quotes(value: str) -> str:

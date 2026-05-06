@@ -17,7 +17,9 @@ from hackarena3.runtime_common import (
 from hackarena3.runtime_convert import build_track_layout
 from hackarena3.runtime_discovery import (
     choose_sandbox,
+    choose_standalone_local_sandbox,
     discover_standalone_local_race,
+    discover_standalone_local_sandboxes,
     create_broker_api,
     discover_team_sandboxes,
 )
@@ -30,10 +32,11 @@ from hackarena3.runtime_race import (
     fetch_track_data,
     fetch_track_data_official,
     local_race_join,
+    local_sandbox_join_direct,
     prepare_official_join,
+    direct_runtime_metadata,
     race_metadata,
     race_metadata_official,
-    race_metadata_standalone,
 )
 from hackarena3.types import BotContext, CarDimensions
 
@@ -68,7 +71,15 @@ def run_runtime(
         _run_runtime_official(bot, official_config)
         return
     if standalone_config is not None:
-        _run_runtime_standalone(bot, standalone_config)
+        if standalone_config.mode == "race":
+            _run_runtime_standalone_race(bot, standalone_config)
+            return
+        if standalone_config.mode == "sandbox":
+            _run_runtime_standalone_sandbox(bot, standalone_config)
+            return
+        raise RuntimeErrorWrapper(
+            f"Unsupported standalone runtime mode: {standalone_config.mode!r}"
+        )
         return
     _run_runtime_sandbox(bot, config)
 
@@ -233,7 +244,9 @@ def _run_runtime_official(bot: BotProtocol, config: OfficialRuntimeConfig) -> No
             api.channel.close()
 
 
-def _run_runtime_standalone(bot: BotProtocol, config: StandaloneRuntimeConfig) -> None:
+def _run_runtime_standalone_race(
+    bot: BotProtocol, config: StandaloneRuntimeConfig
+) -> None:
     api: RaceApi | None = None
 
     try:
@@ -251,7 +264,11 @@ def _run_runtime_standalone(bot: BotProtocol, config: StandaloneRuntimeConfig) -
             race_id=discovered_race.race_id,
             display_name=config.display_name,
         )
-        track = fetch_track_data_direct(api, join_response.map_id)
+        track = fetch_track_data_direct(
+            api,
+            join_response.map_id,
+            context_label="standalone local race",
+        )
         try:
             track_layout = build_track_layout(track)
         except ValueError as exc:
@@ -283,7 +300,86 @@ def _run_runtime_standalone(bot: BotProtocol, config: StandaloneRuntimeConfig) -
         )
 
         def _metadata_provider() -> tuple[tuple[str, str], ...]:
-            return race_metadata_standalone(join_response.car_id)
+            return direct_runtime_metadata(join_response.car_id)
+
+        run_participant_loop(
+            bot,
+            api,
+            ctx,
+            metadata_provider=_metadata_provider,
+            token_provider=None,
+            allow_auth_refresh=False,
+            expected_map_id=join_response.map_id,
+        )
+    finally:
+        if api is not None:
+            api.channel.close()
+
+
+def _run_runtime_standalone_sandbox(
+    bot: BotProtocol, config: StandaloneRuntimeConfig
+) -> None:
+    api: RaceApi | None = None
+
+    try:
+        discovered = discover_standalone_local_sandboxes(config.grpc_target)
+        selected = choose_standalone_local_sandbox(discovered, sandbox_id=config.sandbox_id)
+        if config.sandbox_id is not None:
+            selection_mode = "explicit"
+        elif len(discovered) == 1:
+            selection_mode = "automatic"
+        else:
+            selection_mode = "interactive"
+        print(
+            "[ha3-wrapper] Standalone local sandbox selected: "
+            f"endpoint={config.grpc_target} sandbox_id={selected.sandbox_id} "
+            f"sandbox_name={selected.sandbox_name!r} map_id={selected.map_id} "
+            f"selection={selection_mode}",
+            file=sys.stderr,
+        )
+
+        api = create_direct_backend_api(config.grpc_target)
+        join_response = local_sandbox_join_direct(
+            api,
+            sandbox_id=selected.sandbox_id,
+        )
+        track = fetch_track_data_direct(
+            api,
+            join_response.map_id,
+            context_label="standalone local sandbox",
+        )
+        try:
+            track_layout = build_track_layout(track)
+        except ValueError as exc:
+            raise RuntimeErrorWrapper(str(exc)) from exc
+
+        pit_count = (
+            len(track_layout.pitstop.enter)
+            + len(track_layout.pitstop.fix)
+            + len(track_layout.pitstop.exit)
+        )
+        pit_length = track_layout.pitstop.length_m
+        print(
+            "[ha3-wrapper] Standalone local sandbox joined: "
+            f"car_id={join_response.car_id} sandbox_id={selected.sandbox_id} "
+            f"map_id={join_response.map_id} samples={len(track.centerline_samples)} "
+            f"lap_length_m={track.lap_length_m:.2f} pit_samples={pit_count} "
+            f"pit_length_m={pit_length:.2f}",
+            file=sys.stderr,
+        )
+
+        ctx = BotContext(
+            car_id=join_response.car_id,
+            map_id=join_response.map_id,
+            car_dimensions=CarDimensions(width_m=0.0, depth_m=0.0),
+            requested_hz=REQUESTED_HZ,
+            track=track_layout,
+            effective_hz=None,
+            tick=0,
+        )
+
+        def _metadata_provider() -> tuple[tuple[str, str], ...]:
+            return direct_runtime_metadata(join_response.car_id)
 
         run_participant_loop(
             bot,
